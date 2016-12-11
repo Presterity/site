@@ -28,6 +28,11 @@ module.exports = (request, data) =>
 
       a {
         color: #3572b0;
+        text-decoration: none;
+      }
+      a:hover,
+      a:focus {
+        text-decoration: underline;
       }
 
       p {
@@ -44,6 +49,7 @@ module.exports = (request, data) =>
   </head>
   <body>
     <div class="main">
+      <p class="breadcrumbs">${data.breadcrumbs}</p>
       <h1 class="pageTitle">${data.title}</h1>
       <div>
         ${data.body}

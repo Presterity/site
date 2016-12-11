@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const wiki = require('../wiki');
 const wikiRestUrl = `${wiki.baseUrl}/wiki/rest/api/content?spaceKey=DB&expand=space,ancestors,body.view`;
 const pageTemplate = require('./pageTemplate');
+const breadcrumbs = require('./breadcrumbs');
 
 
 module.exports = (request) => {
@@ -17,6 +18,7 @@ module.exports = (request) => {
     const result = json.results[0];
     const data = {
       title: result.title,
+      breadcrumbs: breadcrumbs(result.ancestors),
       body: adjustRelativeUrls(result.body.view.value)
     };
     return pageTemplate(request, data);
