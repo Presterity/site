@@ -12,6 +12,8 @@ const wikiRestUrl = `${wikiBaseUrl}/wiki/rest/api/content?spaceKey=DB&expand=spa
 app.get('/wiki/download/*', (request, response) => {
   const url = `${wikiBaseUrl}${request.url}`;
   console.log(`Download: ${url}`);
+  // TODO: This redirects to the wiki, which exposes an Atlassian URL.
+  // Instead, we should get the data from the wiki and serve it ourselves.
   response.redirect(url);
 });
 
@@ -39,6 +41,13 @@ function fetchWikiPageWithTitle(title) {
   .then(json => {
     const result = json.results[0];
     const body = result.body.view.value;
-    return body;
+    const adjusted = adjustRelativeUrls(body);
+    return adjusted;
   });
+}
+
+// Replace relative URLs on Atlassian with corresponding URLs on the site.
+function adjustRelativeUrls(html) {
+  const relativeUrlRegex = /\/wiki\/display\/DB\//g;
+  return html.replace(relativeUrlRegex, '/');
 }
