@@ -12,7 +12,7 @@ module.exports = (request, data) =>
         font-family: "Cabin", Helvetica, Arial, sans-serif;
         font-size: 16px;
         line-height: 1.7em;
-        margin: 0;
+        margin: 8px;
       }
 
       .main {
@@ -44,6 +44,10 @@ module.exports = (request, data) =>
         color: #707070;
         margin-left: 19px;
         padding: 10px 20px;
+      }
+
+      img {
+        max-width: 100%;
       }
     </style>
   </head>
