@@ -1,0 +1,13 @@
+{
+  "name": "site",
+  "repository": "git@github.com:Presterity/site.git",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "^4.14.0",
+    "node-fetch": "^1.6.3"
+  },
+  "engines": {
+    "node": "7.0.0",
+    "npm": "3.10.8"
+  }
+}
