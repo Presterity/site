@@ -5,6 +5,7 @@ module.exports = (request, data) =>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>${data.title} – Presterity</title>
+    <link rel="shortcut icon" href="/static/presterity.ico" type="image/x-icon" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin">
     <style>
       body {

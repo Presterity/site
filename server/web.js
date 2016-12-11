@@ -1,10 +1,14 @@
 console.log(`Starting server`);
 
+const path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8000;
 const wiki = require('./wiki');
 const wikiPage = require('./pages/wikiPage');
+
+const staticPath = path.join(__dirname, 'static');
+app.use('/static', express.static(staticPath));
 
 /* Wiki download (attachment) */
 app.get('/wiki/download/*', (request, response) => {
