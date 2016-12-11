@@ -7,10 +7,11 @@ const port = process.env.PORT || 8000;
 const wiki = require('./wiki');
 const wikiPage = require('./pages/wikiPage');
 
+/* Serve up static content from ./static folder. */
 const staticPath = path.join(__dirname, 'static');
 app.use('/static', express.static(staticPath));
 
-/* Wiki download (attachment) */
+/* Serve wiki download (attachment) */
 app.get('/wiki/download/*', (request, response) => {
   const url = `${wiki.baseUrl}${request.url}`;
   console.log(`Download: ${url}`);
@@ -19,7 +20,7 @@ app.get('/wiki/download/*', (request, response) => {
   response.redirect(url);
 });
 
-/* Wiki page */
+/* Serve wiki page */
 app.get('/*', (request, response) => {
   wikiPage(request)
   .then(result => {
