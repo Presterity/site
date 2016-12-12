@@ -16,10 +16,14 @@ module.exports = (request) => {
   .then(response => response.json())
   .then(json => {
     const result = json.results[0];
+    const area = result.ancestors[0] ?
+      result.ancestors[0].title :
+      result.title;
     const data = {
-      title: result.title,
+      area: area,
       breadcrumbs: breadcrumbs(result.ancestors),
-      body: adjustRelativeUrls(result.body.view.value)
+      body: adjustRelativeUrls(result.body.view.value),
+      title: result.title
     };
     return pageTemplate(request, data);
   });

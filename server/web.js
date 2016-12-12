@@ -1,5 +1,3 @@
-console.log(`Starting server`);
-
 const path = require('path');
 const express = require('express');
 const app = express();
@@ -29,5 +27,5 @@ app.get('/*', (request, response) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}!`);
+  console.log(`Server listening on http://localhost:${port}`);
 });
