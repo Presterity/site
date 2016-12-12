@@ -107,6 +107,17 @@ module.exports = (request, data) => {
             color: white;
             font-weight: bold;
           }
+
+          #reference {
+            display: none;
+          }
+
+          /* Desktop header */
+          @media screen and (min-width: 800px) {
+            #reference {
+              display: inline;
+            }
+          }
         </style>
       </head>
       <body area="${data.area}">
@@ -114,7 +125,7 @@ module.exports = (request, data) => {
           <div id="links">
             <a id="linkHome" href="/">
               <img id="logo" src="/static/presterity.jpg">
-              <div>Presterity Reference</div>
+              <div>Presterity<span id="reference"> Reference</span></div>
             </a>
             <a id="linkVolunteering" href="/Volunteering">Volunteering</a>
             <a id="linkAbout" href="/About">About</a>
