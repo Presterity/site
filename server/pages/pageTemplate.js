@@ -28,6 +28,10 @@ module.exports = (request, data) => {
             margin: 1em 0;
           }
 
+          h1, h2, h3, h4, h5, h6 {
+            line-height: initial;
+          }
+
           a {
             color: #3572b0;
             text-decoration: none;
