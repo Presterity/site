@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8000;
+const fetch = require('node-fetch');
 const wiki = require('./wiki');
 const wikiPage = require('./pages/wikiPage');
 
@@ -13,9 +14,9 @@ app.use('/static', express.static(staticPath));
 app.get('/wiki/download/*', (request, response) => {
   const url = `${wiki.baseUrl}${request.url}`;
   console.log(`Download: ${url}`);
-  // TODO: This redirects to the wiki, which exposes an Atlassian URL.
-  // Instead, we should get the data from the wiki and serve it ourselves.
-  response.redirect(url);
+  fetch(url)
+  .then(result => result.buffer())
+  .then(buffer => response.send(buffer));
 });
 
 /* Serve wiki page */
