@@ -72,12 +72,11 @@ module.exports = (request, data) => {
 
           #links {
             align-items: center;
-            display: flex;
             margin: 0 auto;
             max-width: 800px;
             width: 100%;
           }
-          #links > :not(:last-child) {
+          #areaLinks > :not(:last-child) {
             margin-right: 20px;
           }
 
@@ -93,6 +92,10 @@ module.exports = (request, data) => {
           }
           #linkHome div {
             display: inline-block;
+          }
+
+          #areaLinks {
+            padding: 6px;
           }
 
           body[area="Home"] #linkHome {
@@ -118,6 +121,12 @@ module.exports = (request, data) => {
 
           /* Desktop header */
           @media screen and (min-width: 800px) {
+            #links {
+              display: flex;
+            }
+            #linkHome {
+              margin-right: 20px;
+            }
             #reference {
               display: inline;
             }
@@ -131,9 +140,11 @@ module.exports = (request, data) => {
               <img id="logo" src="/static/presterity.jpg">
               <div>Presterity<span id="reference"> Reference</span></div>
             </a>
-            <a id="linkSubmissions" href="/Submissions">Submissions</a>
-            <a id="linkVolunteering" href="/Volunteering">Volunteering</a>
-            <a id="linkAbout" href="/About">About</a>
+            <div id="areaLinks">
+              <a id="linkSubmissions" href="/Submissions">Submissions</a>
+              <a id="linkVolunteering" href="/Volunteering">Volunteering</a>
+              <a id="linkAbout" href="/About">About</a>
+            </div>
           </div>
         </div>
         <div class="main">
