@@ -19,7 +19,7 @@ module.exports = (request, data) => {
           .main {
             margin: 0 auto;
             max-width: 800px;
-            padding: 8px;
+            padding: 8px 8px 100px 8px;
           }
 
           .pageTitle {
@@ -99,6 +99,10 @@ module.exports = (request, data) => {
             color: white;
             font-weight: bold;
           }
+          body[area="Submissions"] #linkSubmissions {
+            color: white;
+            font-weight: bold;
+          }
           body[area="Volunteering"] #linkVolunteering {
             color: white;
             font-weight: bold;
@@ -127,6 +131,7 @@ module.exports = (request, data) => {
               <img id="logo" src="/static/presterity.jpg">
               <div>Presterity<span id="reference"> Reference</span></div>
             </a>
+            <a id="linkSubmissions" href="/Submissions">Submissions</a>
             <a id="linkVolunteering" href="/Volunteering">Volunteering</a>
             <a id="linkAbout" href="/About">About</a>
           </div>
