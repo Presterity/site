@@ -6,6 +6,7 @@ module.exports = (request, data) => {
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>${data.title} – Presterity</title>
         <link rel="shortcut icon" href="/static/presterity.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:400,700">
         <style>
           body {
