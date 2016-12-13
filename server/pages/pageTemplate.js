@@ -19,7 +19,7 @@ module.exports = (request, data) => {
           .main {
             margin: 0 auto;
             max-width: 800px;
-            padding: 8px 8px 100px 8px;
+            padding: 12px 12px 100px 12px;
           }
 
           .pageTitle {
