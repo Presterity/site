@@ -6,10 +6,7 @@ const breadcrumbs = require('./breadcrumbs');
 
 
 module.exports = (request) => {
-  let title = request.url.substr(1); // Strip leading slash.
-  if (title === '') {
-    title = 'Home';
-  }
+  let title = request.params.title;
   const url = `${wikiRestUrl}&title=${title}`;
   console.log(`Page: ${url}`);
   return fetch(url)
@@ -31,6 +28,24 @@ module.exports = (request) => {
 
 // Replace relative URLs on Atlassian with corresponding URLs on the site.
 function adjustRelativeUrls(html) {
-  const relativeUrlRegex = /\/wiki\/display\/DB\//g;
-  return html.replace(relativeUrlRegex, '/');
+  // We treat certain top-level pages specially.
+  const topLevelPages = [
+    'Submissions',
+    'Volunteering',
+    'About'
+  ];
+  const relativeUrlRegex = /\/wiki\/display\/DB\/([^\/"]+)([^"]*)?/g;
+  let result = html.replace(relativeUrlRegex, (match, siteArea, rest) => {
+    if (siteArea === '/reference/Home') {
+      // Home page
+      return '/';
+    } else if (topLevelPages.indexOf(siteArea) >= 0) {
+      // Top-level page.
+      return `/${siteArea}`;
+    } else {
+      // All other pages are presented as if in a "/reference" area of the site.
+      return `/reference/${siteArea}`;
+    }
+  });
+  return result;
 }

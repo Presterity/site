@@ -19,12 +19,28 @@ app.get('/wiki/download/*', (request, response) => {
   .then(buffer => response.send(buffer));
 });
 
-/* Serve wiki page */
-app.get('/*', (request, response) => {
+/* Reference page */
+app.get('/reference/:title', (request, response) => {
   wikiPage(request)
-  .then(result => {
-    response.send(result);
-  });
+  .then(result => response.send(result));
+});
+
+/* Top-level of reference redirects to site home page. */
+app.get('/reference', (request, response) => {
+  response.redirect('/');
+});
+
+/* Serve other top-level page */
+app.get('/:title', (request, response) => {
+  wikiPage(request)
+  .then(result => response.send(result));
+});
+
+/* Serve up home page */
+app.get('/', (request, response) => {
+  request.params.title = 'Home';
+  wikiPage(request)
+  .then(result => response.send(result));
 });
 
 app.listen(port, () => {
