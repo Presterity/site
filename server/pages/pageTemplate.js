@@ -53,6 +53,10 @@ module.exports = (request, data) => {
             padding: 10px 20px;
           }
 
+          iframe {
+            border: none;
+          }
+
           img {
             max-width: 100%;
           }
