@@ -55,6 +55,7 @@ module.exports = (request, data) => {
 
           iframe {
             border: none;
+            max-width: 100%;
           }
 
           img {
