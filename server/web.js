@@ -6,9 +6,14 @@ const fetch = require('node-fetch');
 const wiki = require('./wiki');
 const wikiPage = require('./pages/wikiPage');
 
+const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
+const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
+
 /* Serve up static content from ./static folder. */
 const staticPath = path.join(__dirname, 'static');
-app.use('/static', express.static(staticPath));
+app.use('/static', express.static(staticPath, {
+  maxAge: CACHE_MAX_AGE_SECONDS * 1000 // Convert to milliseconds
+}));
 
 /* Serve wiki download (attachment) */
 app.get('/wiki/download/*', (request, response) => {
@@ -16,7 +21,12 @@ app.get('/wiki/download/*', (request, response) => {
   console.log(`Download: ${url}`);
   fetch(url)
   .then(result => result.buffer())
-  .then(buffer => response.send(buffer));
+  .then(buffer => {
+    response.set({
+      'Cache-Control': CACHE_CONTROL_VALUE
+    });
+    response.send(buffer);
+  });
 });
 
 /* Reference page */
@@ -54,7 +64,7 @@ function respondWithWikiPage(request, response) {
   .then(content => {
     // Return the content as the response.
     response.set({
-      'Cache-Control': 'public,max-age=300', // Cache for 5 minutes
+      'Cache-Control': CACHE_CONTROL_VALUE,
       'Content-Type': inferContentType(content)
     });
     response.send(content);
