@@ -3,6 +3,7 @@ const wiki = require('../wiki');
 const wikiRestUrl = `${wiki.baseUrl}/wiki/rest/api/content?spaceKey=DB&expand=space,ancestors,body.view`;
 const pageTemplate = require('./pageTemplate');
 const breadcrumbs = require('./breadcrumbs');
+const mapPageUrl = require('./mapPageUrl');
 
 
 module.exports = (request) => {
@@ -26,26 +27,10 @@ module.exports = (request) => {
   });
 };
 
-// Replace relative URLs on Atlassian with corresponding URLs on the site.
+// Find wiki URLs in HTML and replace them with equivalent site URLs.
 function adjustRelativeUrls(html) {
-  // We treat certain top-level pages specially.
-  const topLevelPages = [
-    'Submissions',
-    'Volunteering',
-    'About'
-  ];
-  const relativeUrlRegex = /\/wiki\/display\/DB\/([^\/"]+)([^"]*)?/g;
-  let result = html.replace(relativeUrlRegex, (match, siteArea, rest) => {
-    if (siteArea === '/reference/Home') {
-      // Home page
-      return '/';
-    } else if (topLevelPages.indexOf(siteArea) >= 0) {
-      // Top-level page.
-      return `/${siteArea}`;
-    } else {
-      // All other pages are presented as if in a "/reference" area of the site.
-      return `/reference/${siteArea}`;
-    }
-  });
+  const wikiUrlRegex = /\/wiki\/display\/DB(\/[^"]+)/g;
+  let result = html.replace(wikiUrlRegex, (match, wikiUrl) =>
+      mapPageUrl.wikiToSiteUrl(wikiUrl));
   return result;
 }

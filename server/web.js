@@ -39,8 +39,8 @@ app.get('/reference', (request, response) => {
   response.redirect('/');
 });
 
-/* Serve other top-level page */
-app.get('/:title', (request, response) => {
+/* Serve other top-level page, or page within another top-level area. */
+app.get(['/:title', '/:area/:title'], (request, response) => {
   respondWithWikiPage(request, response);
 });
 
