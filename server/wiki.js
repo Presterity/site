@@ -16,20 +16,37 @@ const mapPageTitleToSiteUrl = {
   'Code+of+Conduct': '/Volunteering/Code+of+Conduct'
 };
 
+function escapePageTitle(title) {
+  return title.replace(' ', '+');
+}
+
 
 module.exports = {
 
   baseUrl: BASE_URL,
 
+  escapePageTitle: escapePageTitle,
+
   /*
-   * Return an appropriate site URL for the page with the given title.
+   * Return the site URL for the label page for the given label.
    */
-  pageTitleToSiteUrl: function(title) {
+  labelToSiteUrl(label) {
     // Use hand-mapped URL if it exists.
-    // All other pages are presented in the "/reference" area of the site.
-    return mapPageTitleToSiteUrl[title] || `/reference/${title}`;
+    return `/reference/label/${label}`;
   },
 
-  restUrl: `${BASE_URL}/wiki/rest/api/content?spaceKey=DB&expand=space,ancestors,body.view`
+  /*
+   * Return the site URL for the regular page with the given title.
+   */
+  pageTitleToSiteUrl(title) {
+    // Use hand-mapped URL if it exists.
+    // All other pages are presented in the "/reference" area of the site.
+    const escaped = escapePageTitle(title);
+    return mapPageTitleToSiteUrl[escaped] || `/reference/${escaped}`;
+  },
+
+  restUrl: `${BASE_URL}/wiki/rest/api/content?spaceKey=DB`,
+
+  searchUrl: `${BASE_URL}/wiki/rest/api/content/search?spaceKey=DB`
 
 };

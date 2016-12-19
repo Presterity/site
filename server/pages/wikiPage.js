@@ -8,10 +8,10 @@ const wiki = require('../wiki');
  * request.
  */
 module.exports = (request) => {
-  let title = request.params.title;
-  const url = `${wiki.restUrl}&title=${title}`;
-  console.log(`Page: ${url}`);
-  return fetch(url)
+  const title = request.params.title;
+  const query = `${wiki.restUrl}&expand=space,ancestors,body.view&title=${title}`;
+  console.log(`Page: ${query}`);
+  return fetch(query)
   .then(response => response.json())
   .then(json => {
     const result = json.results[0];
@@ -28,9 +28,18 @@ module.exports = (request) => {
   });
 };
 
-// Find wiki page titles in HTML and replace them with equivalent site URLs.
+// TODO: Should use a real HTML parser.
 function adjustRelativeUrls(html) {
-  const wikiUrlRegex = /\/wiki\/display\/DB\/([^"]+)/g;
-  return html.replace(wikiUrlRegex, (match, title) =>
+
+  // Replace links to label pages with equivalent site URLs.
+  const labelUrlRegex = new RegExp(`${wiki.baseUrl}/wiki/label/DB/([^"]+)`, 'g');
+  let result = html.replace(labelUrlRegex, (match, label) =>
+      wiki.labelToSiteUrl(label));
+
+  // Replace links to regular pages with equivalent site URLs.
+  const pageUrlRegex = new RegExp(`/wiki/display/DB/([^"]+)`, 'g');
+  result = result.replace(pageUrlRegex, (match, title) =>
       wiki.pageTitleToSiteUrl(title));
+
+  return result;
 }

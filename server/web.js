@@ -9,7 +9,9 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8000;
+
 const fetch = require('node-fetch');
+const labelPage = require('./pages/labelPage');
 const wiki = require('./wiki');
 const wikiPage = require('./pages/wikiPage');
 
@@ -47,6 +49,18 @@ app.get(['/:title', '/:area/:title'], (request, response) => {
   respondWithWikiPage(request, response);
 });
 
+/* Serve a label page. */
+app.get('/reference/label/:label', (request, response) => {
+  labelPage(request)
+  .then(content => {
+    response.set({
+      'Cache-Control': CACHE_CONTROL_VALUE,
+      'Content-Type': inferContentType(content)
+    });
+    response.send(content);
+  });
+});
+
 /* Serve up home page */
 app.get('/', (request, response) => {
   request.params.title = 'Home';
@@ -61,7 +75,7 @@ app.listen(port, () => {
 // Handle a web request by returning a wiki page.
 function respondWithWikiPage(request, response) {
   // Render the request as content, or a promise for content.
-  let result = wikiPage(request);
+  const result = wikiPage(request);
   // If the result's not already a promise, cast it to a promise.
   Promise.resolve(result)
   .then(content => {
