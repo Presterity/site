@@ -1,14 +1,15 @@
-const fetch = require('node-fetch');
-const wiki = require('../wiki');
-const wikiRestUrl = `${wiki.baseUrl}/wiki/rest/api/content?spaceKey=DB&expand=space,ancestors,body.view`;
-const pageTemplate = require('./pageTemplate');
 const breadcrumbs = require('./breadcrumbs');
-const mapPageUrl = require('./mapPageUrl');
+const fetch = require('node-fetch');
+const pageTemplate = require('./pageTemplate');
+const wiki = require('../wiki');
 
-
+/*
+ * Return a formatted version of the wiki page indicated by the given HTTP
+ * request.
+ */
 module.exports = (request) => {
   let title = request.params.title;
-  const url = `${wikiRestUrl}&title=${title}`;
+  const url = `${wiki.restUrl}&title=${title}`;
   console.log(`Page: ${url}`);
   return fetch(url)
   .then(response => response.json())
@@ -27,10 +28,9 @@ module.exports = (request) => {
   });
 };
 
-// Find wiki URLs in HTML and replace them with equivalent site URLs.
+// Find wiki page titles in HTML and replace them with equivalent site URLs.
 function adjustRelativeUrls(html) {
-  const wikiUrlRegex = /\/wiki\/display\/DB(\/[^"]+)/g;
-  let result = html.replace(wikiUrlRegex, (match, wikiUrl) =>
-      mapPageUrl.wikiToSiteUrl(wikiUrl));
-  return result;
+  const wikiUrlRegex = /\/wiki\/display\/DB\/([^"]+)/g;
+  return html.replace(wikiUrlRegex, (match, title) =>
+      wiki.pageTitleToSiteUrl(title));
 }

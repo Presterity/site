@@ -1,3 +1,10 @@
+/*
+ * Express web server.
+ *
+ * This mostly just fronts the Atlassian Confluence wiki, presenting the wiki
+ * content in a read-only format branded with the project's identity.
+ */
+
 const path = require('path');
 const express = require('express');
 const app = express();
@@ -8,6 +15,7 @@ const wikiPage = require('./pages/wikiPage');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
 const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
+
 
 /* Serve up static content from ./static folder. */
 const staticPath = path.join(__dirname, 'static');
@@ -29,17 +37,12 @@ app.get('/wiki/download/*', (request, response) => {
   });
 });
 
-/* Reference page */
-app.get('/reference/:title', (request, response) => {
-  respondWithWikiPage(request, response);
-});
-
 /* Top-level of reference redirects to site home page. */
 app.get('/reference', (request, response) => {
   response.redirect('/');
 });
 
-/* Serve other top-level page, or page within another top-level area. */
+/* Serve a top-level page, or page within a top-level area. */
 app.get(['/:title', '/:area/:title'], (request, response) => {
   respondWithWikiPage(request, response);
 });
