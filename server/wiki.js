@@ -3,7 +3,7 @@
  */
 
 
- const BASE_URL = 'https://presterity.atlassian.net';
+const BASE_URL = 'https://presterity.atlassian.net';
 
 
 // Map certain wiki page titles -> site URLs by hand.
@@ -47,6 +47,6 @@ module.exports = {
 
   restUrl: `${BASE_URL}/wiki/rest/api/content?spaceKey=DB`,
 
-  searchUrl: `${BASE_URL}/wiki/rest/api/content/search?spaceKey=DB`
+  searchUrl: `${BASE_URL}/wiki/rest/api/content/search?cql=space=DB and `
 
 };
