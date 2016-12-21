@@ -12,6 +12,7 @@ const port = process.env.PORT || 8000;
 
 const fetch = require('node-fetch');
 const labelPage = require('./pages/labelPage');
+const searchResultsPage = require('./pages/searchResultsPage');
 const wiki = require('./wiki');
 const wikiPage = require('./pages/wikiPage');
 
@@ -42,6 +43,18 @@ app.get('/wiki/download/*', (request, response) => {
 /* Top-level of reference redirects to site home page. */
 app.get('/reference', (request, response) => {
   response.redirect('/');
+});
+
+/* Serve a search page. */
+app.get('/search', (request, response) => {
+  searchResultsPage(request)
+  .then(content => {
+    response.set({
+      'Cache-Control': CACHE_CONTROL_VALUE,
+      'Content-Type': inferContentType(content)
+    });
+    response.send(content);
+  });
 });
 
 /* Serve a top-level page, or page within a top-level area. */

@@ -17,7 +17,7 @@ const mapPageTitleToSiteUrl = {
 };
 
 function escapePageTitle(title) {
-  return title.replace(' ', '+');
+  return title.replace(/ /g, '+');
 }
 
 

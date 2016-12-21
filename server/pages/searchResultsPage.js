@@ -5,13 +5,12 @@ const searchResultsList = require('./searchResultsList');
 const wiki = require('../wiki');
 
 /*
- * Return a formatted version of the label page indicated by the given HTTP
- * request.
+ * Return a page that searches for a given text string.
  */
 module.exports = (request) => {
-  const label = request.params.label;
-  const query = `${wiki.searchUrl}label=${label}`;
-  console.log(`Label page: ${query}`);
+  const searchText = request.query.q;
+  const query = `${wiki.searchUrl}text~${searchText}`;
+  console.log(`Search page: ${query}`);
   return fetch(query)
   .then(response => response.json())
   .then(json => {
@@ -21,7 +20,7 @@ module.exports = (request) => {
       area: area,
       breadcrumbs: breadcrumbs(ancestors),
       body: searchResultsList(json.results),
-      title: `Pages tagged with "${label}"`
+      title: `Pages containing "${searchText}"`
     };
     return pageTemplate(request, data);
   });
