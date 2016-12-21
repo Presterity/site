@@ -12,7 +12,7 @@ const port = process.env.PORT || 8000;
 
 const fetch = require('node-fetch');
 const labelPage = require('./pages/labelPage');
-const searchResultsPage = require('./pages/searchResultsPage');
+const searchPage = require('./pages/searchPage');
 const wiki = require('./wiki');
 const wikiPage = require('./pages/wikiPage');
 
@@ -47,37 +47,23 @@ app.get('/reference', (request, response) => {
 
 /* Serve a search page. */
 app.get('/search', (request, response) => {
-  searchResultsPage(request)
-  .then(content => {
-    response.set({
-      'Cache-Control': CACHE_CONTROL_VALUE,
-      'Content-Type': inferContentType(content)
-    });
-    response.send(content);
-  });
+  respondWithPage(request, searchPage, response);
 });
 
 /* Serve a top-level page, or page within a top-level area. */
 app.get(['/:title', '/:area/:title'], (request, response) => {
-  respondWithWikiPage(request, response);
+  respondWithPage(request, wikiPage, response);
 });
 
 /* Serve a label page. */
 app.get('/reference/label/:label', (request, response) => {
-  labelPage(request)
-  .then(content => {
-    response.set({
-      'Cache-Control': CACHE_CONTROL_VALUE,
-      'Content-Type': inferContentType(content)
-    });
-    response.send(content);
-  });
+  respondWithPage(request, labelPage, response);
 });
 
 /* Serve up home page */
 app.get('/', (request, response) => {
   request.params.title = 'Home';
-  respondWithWikiPage(request, response);
+  respondWithPage(request, wikiPage, response);
 });
 
 app.listen(port, () => {
@@ -85,10 +71,10 @@ app.listen(port, () => {
 });
 
 
-// Handle a web request by returning a wiki page.
-function respondWithWikiPage(request, response) {
-  // Render the request as content, or a promise for content.
-  const result = wikiPage(request);
+// Handle a web request by returning an instance of the indicated page.
+function respondWithPage(request, page, response) {
+  // Render the request as page content, or a promise for content.
+  const result = page(request);
   // If the result's not already a promise, cast it to a promise.
   Promise.resolve(result)
   .then(content => {
