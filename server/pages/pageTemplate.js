@@ -125,6 +125,14 @@ module.exports = (request, data) => {
             display: none;
           }
 
+          /* Hide some boring macro output */
+          .content-by-label > li > div {
+            display: none; /* Hide most macro bulllet content */
+          }
+          .content-by-label > li > div.details {
+            display: inherit; /* Just show the key bits */
+          }
+
           /* Desktop header */
           @media screen and (min-width: 800px) {
             #links {
