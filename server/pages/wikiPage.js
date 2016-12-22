@@ -1,4 +1,5 @@
 const breadcrumbs = require('./breadcrumbs');
+const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const pageTemplate = require('./pageTemplate');
 const wiki = require('../wiki');
@@ -21,25 +22,46 @@ module.exports = (request) => {
     const data = {
       area: area,
       breadcrumbs: breadcrumbs(result.ancestors),
-      body: adjustRelativeUrls(result.body.view.value),
+      body: rewriteUrls(result.body.view.value),
       title: result.title
     };
     return pageTemplate(request, data);
   });
 };
 
-// TODO: Should use a real HTML parser.
-function adjustRelativeUrls(html) {
 
-  // Replace links to label pages with equivalent site URLs.
-  const labelUrlRegex = new RegExp(`${wiki.baseUrl}/wiki/label/DB/([^"]+)`, 'g');
-  let result = html.replace(labelUrlRegex, (match, label) =>
-      wiki.labelToSiteUrl(label));
+// Replace links to label pages with equivalent site URLs.
+const labelUrlRegex = new RegExp(`${wiki.baseUrl}/wiki/label/DB/([^"]+)`);
 
-  // Replace links to regular pages with equivalent site URLs.
-  const pageUrlRegex = new RegExp(`/wiki/display/DB/([^"]+)`, 'g');
-  result = result.replace(pageUrlRegex, (match, title) =>
-      wiki.pageTitleToSiteUrl(title));
+// Replace links to regular pages with equivalent site URLs.
+const pageUrlRegex = new RegExp(`/wiki/display/DB/([^"]+)`);
 
-  return result;
+// Rewrite the indicated attribute of the given element if necessary.
+function rewriteElementAttribute($element, attributeName) {
+
+  const attributeValue = $element.attr(attributeName);
+
+  const labelUrlMatch = labelUrlRegex.exec(attributeValue);
+  if (labelUrlMatch) {
+    const label = labelUrlMatch[1];
+    const rewritten = wiki.labelToSiteUrl(label);
+    $element.attr(attributeName, rewritten);
+    return; // No more processing necessary.
+  }
+
+  const pageUrlMatch = pageUrlRegex.exec(attributeValue);
+  if (pageUrlMatch) {
+    const title = pageUrlMatch[1];
+    const rewritten = wiki.pageTitleToSiteUrl(title);
+    $element.attr(attributeName, rewritten);
+  }
+}
+
+// Rewrite URLs using Cheerio's jQuery-style parser/manipulator.
+function rewriteUrls(html) {
+  const $ = cheerio.load(html); // Parse HTML
+  $('a[href]').each((index, element) => {
+    rewriteElementAttribute($(element), 'href');
+  });
+  return $.html(); // Return rewritten HTML
 }

@@ -3,6 +3,7 @@
   "repository": "git@github.com:Presterity/site.git",
   "version": "0.0.1",
   "dependencies": {
+    "cheerio": "^0.22.0",
     "express": "^4.14.0",
     "node-fetch": "^1.6.3"
   },
