@@ -14,13 +14,26 @@ module.exports = (request) => {
   return fetch(query)
   .then(response => response.json())
   .then(json => {
-    const area = 'Home';
+    const area = 'Search';
     const ancestors = [{ title: 'Home' }];
+    let searchHeader = json.results.length > 0 ?
+      `Pages containing "${searchText}"` :
+      `No pages found`;
+    const searchResults = searchResultsList(json.results);
+    const body = `
+      <form>
+        Search for:
+        <input name="q" type="text" value="${searchText}">
+        <input type="submit" value="Search">
+      </form>
+      <h3>${searchHeader}</h3>
+      ${searchResults}
+    `;
     const data = {
       area: area,
       breadcrumbs: breadcrumbs(ancestors),
-      body: searchResultsList(json.results),
-      title: `Pages containing "${searchText}"`
+      body: body,
+      title: `Search`
     };
     return pageTemplate(request, data);
   });

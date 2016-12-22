@@ -11,10 +11,15 @@ module.exports = (request, data) => {
         <style>
           body {
             color: #424242;
-            font-family: "Cabin", Helvetica, Arial, sans-serif;
-            font-size: 16px;
             line-height: 1.7em;
             margin: 0;
+          }
+
+          body,
+          input,
+          button {
+            font-family: "Cabin", Helvetica, Arial, sans-serif;
+            font-size: 16px;
           }
 
           .main {
@@ -108,6 +113,10 @@ module.exports = (request, data) => {
             color: white;
             font-weight: bold;
           }
+          body[area="Search"] #linkSearch {
+            color: white;
+            font-weight: bold;
+          }
           body[area="Submissions"] #linkSubmissions {
             color: white;
             font-weight: bold;
@@ -119,10 +128,6 @@ module.exports = (request, data) => {
           body[area="About"] #linkAbout {
             color: white;
             font-weight: bold;
-          }
-
-          #reference {
-            display: none;
           }
 
           /* Hide some boring macro output */
@@ -141,9 +146,6 @@ module.exports = (request, data) => {
             #linkHome {
               margin-right: 20px;
             }
-            #reference {
-              display: inline;
-            }
           }
         </style>
       </head>
@@ -152,9 +154,10 @@ module.exports = (request, data) => {
           <div id="links">
             <a id="linkHome" href="/">
               <img id="logo" src="/static/presterity.jpg">
-              <div>Presterity<span id="reference"> Reference</span></div>
+              <div>Presterity</div>
             </a>
             <div id="areaLinks">
+              <a id="linkSearch" href="/search">Search</a>
               <a id="linkSubmissions" href="/Submissions">Submissions</a>
               <a id="linkVolunteering" href="/Volunteering">Volunteering</a>
               <a id="linkAbout" href="/About">About</a>
