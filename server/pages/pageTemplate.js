@@ -69,7 +69,7 @@ module.exports = (request, data) => {
 
           #navigation {
             background: #666;
-            padding: 6px;
+            padding: 6px 12px;
             text-transform: uppercase;
           }
 
@@ -83,30 +83,25 @@ module.exports = (request, data) => {
 
           #links {
             align-items: center;
+            display: flex;
+            flex-direction: row;
             margin: 0 auto;
             max-width: 800px;
             width: 100%;
           }
-          #areaLinks > :not(:last-child) {
-            margin-right: 20px;
-          }
 
-          #linkHome {
-            align-items: center;
-            display: flex;
-          }
           #logo {
-            display: inline-block;
+            display: block;
             height: 36px;
-            margin: 6px;
             width: 36px;
-          }
-          #linkHome div {
-            display: inline-block;
           }
 
           #areaLinks {
-            padding: 6px;
+            flex: 1;
+            padding: 6px 0 6px 12px;
+          }
+          #areaLinks > :not(:last-child) {
+            margin-right: 20px;
           }
 
           body[area="Home"] #linkHome {
@@ -137,29 +132,19 @@ module.exports = (request, data) => {
           .content-by-label > li > div.details {
             display: inherit; /* Just show the key bits */
           }
-
-          /* Desktop header */
-          @media screen and (min-width: 800px) {
-            #links {
-              display: flex;
-            }
-            #linkHome {
-              margin-right: 20px;
-            }
-          }
         </style>
       </head>
       <body area="${data.area}">
         <div id="navigation">
           <div id="links">
-            <a id="linkHome" href="/">
+            <a href="/">
               <img id="logo" src="/static/presterity.jpg">
-              <div>Presterity</div>
             </a>
             <div id="areaLinks">
+              <a id="linkHome" href="/">Presterity</a>
               <a id="linkSearch" href="/search">Search</a>
-              <a id="linkSubmissions" href="/Submissions">Submissions</a>
-              <a id="linkVolunteering" href="/Volunteering">Volunteering</a>
+              <a id="linkSubmissions" href="/Submissions">Submit</a>
+              <a id="linkVolunteering" href="/Volunteering">Volunteer</a>
               <a id="linkAbout" href="/About">About</a>
             </div>
           </div>
