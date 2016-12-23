@@ -97,7 +97,7 @@ function rewriteHtml(html) {
     const text = $element.text().trim();
     const isInternalNote = text.startsWith('(') && text.endsWith(')');
     if (isInternalNote) {
-      $(element).addClass('internal-note');
+      $element.remove();
     }
   });
 
