@@ -83,9 +83,24 @@ function rewriteElementAttribute($element, attributeName) {
 // Rewrite HTML for public consumption.
 function rewriteHtml(html) {
   const $ = cheerio.load(html); // Parse HTML
+
+  // Rewrite wiki-relative links in `href` attributes.
   $('a[href]').each((index, element) => {
     rewriteElementAttribute($(element), 'href');
   });
+
+  // Remove internal project notes.
+  // These are indicated as `em` (italics) nodes that begin and end with
+  // parentheses.
+  $('em').each((index, element) => {
+    const $element = $(element);
+    const text = $element.text().trim();
+    const isInternalNote = text.startsWith('(') && text.endsWith(')');
+    if (isInternalNote) {
+      $(element).addClass('internal-note');
+    }
+  });
+
   return $.html(); // Return rewritten HTML
 }
 

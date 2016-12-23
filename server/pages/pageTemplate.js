@@ -125,7 +125,12 @@ module.exports = (request, data) => {
             font-weight: bold;
           }
 
-          /* Hide some boring macro output */
+          /* Hide boring internal project notes */
+          .internal-note {
+            display: none;
+          }
+
+          /* Hide boring macro output */
           .content-by-label > li > div {
             display: none; /* Hide most macro bulllet content */
           }
