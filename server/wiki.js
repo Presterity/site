@@ -12,14 +12,19 @@ const cheerio = require('cheerio');
 
 
 const BASE_URL = 'https://presterity.atlassian.net';
-const REST_URL = `${BASE_URL}/wiki/rest/api/content?spaceKey=DB`;
-const SEARCH_URL = `${BASE_URL}/wiki/rest/api/content/search?cql=space=DB and `;
+const REST_URL = `${BASE_URL}/wiki/rest/api/content`;
+const SEARCH_URL = `${REST_URL}/search?cql=space=DB and `;
 
 // Replace links to label pages with equivalent site URLs.
 const labelUrlRegex = new RegExp(`${BASE_URL}/wiki/label/DB/([^"]+)`);
 
 // Replace links to regular pages with equivalent site URLs.
-const pageUrlRegex = new RegExp(`/wiki/display/DB/([^"]+)`);
+const pageUrlRegex = /\/wiki\/display\/DB\/([^"]+)/;
+
+// Replace links to viewpage.action URLs.
+// Confluence uses such links if a page's title contains odd characters.
+const viewpageUrlRegex = /\/wiki\/pages\/viewpage\.action\?pageId=(\d+)/;
+
 
 // Map certain wiki page titles -> site URLs by hand.
 const mapPageTitleToSiteUrl = {
@@ -76,6 +81,14 @@ function rewriteElementAttribute($element, attributeName) {
   if (pageUrlMatch) {
     const title = pageUrlMatch[1];
     const rewritten = pageTitleToSiteUrl(title);
+    $element.attr(attributeName, rewritten);
+    return;
+  }
+
+  const viewpageUrlMatch = viewpageUrlRegex.exec(attributeValue);
+  if (viewpageUrlMatch) {
+    const pageId = viewpageUrlMatch[1];
+    const rewritten = `/reference/id/${pageId}`;
     $element.attr(attributeName, rewritten);
   }
 }

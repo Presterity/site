@@ -50,6 +50,11 @@ app.get('/search', (request, response) => {
   respondWithPage(request, searchPage, response);
 });
 
+/* Redirect pages by ID to their title equivalent. */
+app.get('/reference/id/:pageId', (request, response) => {
+  redirectIdToTitle(request, response);
+});
+
 /* Serve a top-level page, or page within a top-level area. */
 app.get(['/:title', '/:area/:title'], (request, response) => {
   respondWithPage(request, wikiPage, response);
@@ -70,6 +75,20 @@ app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });
 
+
+// Redirect a request for a page by ID to a request for page by title.
+function redirectIdToTitle(request, response) {
+  const pageId = request.params.pageId;
+  const query = `${wiki.restUrl}/${pageId}`;
+  return fetch(query)
+  .then(response => response.json())
+  .then(json => {
+    const title = wiki.escapePageTitle(json.title);
+    console.log(`Redirecting page by ID ${pageId} to title "${title}"`);
+    const url = `/reference/${title}`;
+    response.redirect(url);
+  });
+}
 
 // Handle a web request by returning an instance of the indicated page.
 function respondWithPage(request, page, response) {

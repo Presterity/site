@@ -8,13 +8,15 @@ const wiki = require('../wiki');
  * request.
  */
 module.exports = (request) => {
+
   const title = request.params.title;
-  const query = `${wiki.restUrl}&expand=space,ancestors,body.view&title=${title}`;
+  const query = `${wiki.restUrl}?spaceKey=DB&title=${title}&expand=space,ancestors,body.view`;
+
   console.log(`Page: ${query}`);
   return fetch(query)
   .then(response => response.json())
   .then(json => {
-    const result = json.results[0];
+    const result = json.results instanceof Array ? json.results[0] : json;
     const area = result.ancestors[0] ?
       result.ancestors[0].title :
       result.title;
