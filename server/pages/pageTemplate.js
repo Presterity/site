@@ -125,6 +125,29 @@ module.exports = (request, data) => {
             font-weight: bold;
           }
 
+          /* Tables */
+
+          table.confluenceTable {
+            border-collapse: collapse;
+          }
+
+          table.confluenceTable tr {
+            border-bottom: 1px solid #d0d0d0;
+          }
+
+          th.confluenceTh {
+            background: #eee;
+            text-align: left;
+          }
+
+          th.confluenceTh > * {
+            margin: 4px;
+          }
+
+          td.confluenceTd > * {
+            margin: 0;
+          }
+
           /* Hide boring macro output */
           .content-by-label > li > div {
             display: none; /* Hide most macro bulllet content */
