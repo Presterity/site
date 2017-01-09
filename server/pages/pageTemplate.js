@@ -34,6 +34,18 @@ module.exports = (request, data) => {
             margin: 1em 0;
           }
 
+          footer {
+            display: none;
+            font-size: smaller;
+            line-height: initial;
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 12px;
+          }
+          body[area="Home"] footer {
+            display: block;
+          }
+
           h1, h2, h3, h4, h5, h6 {
             line-height: initial;
           }
@@ -158,7 +170,7 @@ module.exports = (request, data) => {
         </style>
       </head>
       <body area="${data.area}">
-        <div id="navigation">
+        <header id="navigation">
           <div id="links">
             <a href="/">
               <img id="logo" src="/static/presterity.jpg">
@@ -171,7 +183,7 @@ module.exports = (request, data) => {
               <a id="linkAbout" href="/About">About</a>
             </div>
           </div>
-        </div>
+        </header>
         <div class="main">
           <p class="breadcrumbs">${data.breadcrumbs}</p>
           <h1 class="pageTitle">${data.title}</h1>
@@ -179,6 +191,10 @@ module.exports = (request, data) => {
             ${data.body}
           </div>
         </div>
+        <footer>
+          This work is licensed under a
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+        </footer>
       </body>
     </html>
   `;
