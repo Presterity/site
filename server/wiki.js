@@ -117,6 +117,10 @@ function rewriteHtml(html) {
   return $.html(); // Return rewritten HTML
 }
 
+function unescapePageTitle(escapedPageTitle) {
+  return escapedPageTitle.replace(/\+/g, ' ');
+}
+
 
 module.exports = {
   baseUrl: BASE_URL,
@@ -125,5 +129,6 @@ module.exports = {
   pageTitleToSiteUrl: pageTitleToSiteUrl,
   restUrl: REST_URL,
   rewriteHtml: rewriteHtml,
-  searchUrl: SEARCH_URL
+  searchUrl: SEARCH_URL,
+  unescapePageTitle: unescapePageTitle
 };
