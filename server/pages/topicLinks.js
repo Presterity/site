@@ -17,7 +17,24 @@ module.exports = (topic) => {
         domain = domain.slice(4); // Remove "www."
       }
       const { date, text } = parseLinkTitle(item.title);
-      return `<tr><td>${date}</td><td>${text} <a href="${item.link}">${domain}</a></td></tr>`;
+
+      // Construct list of all tags except the one matching the topic.
+      const tags = item.tags
+          .filter(tag => tag !== topic)
+          .map(tag => `<a href="/reference/${tag}">${tag}</a>`);
+      let tagsHtml = tags.join(', ');
+      if (tagsHtml.trim().length > 0) {
+        tagsHtml = `(See also ${tagsHtml})`;
+      }
+
+      return `<tr>
+        <td>${date}</td>
+        <td>
+          ${text}
+          <a href="${item.link}">${domain}</a>
+          ${tagsHtml}
+        </td>
+      </tr>`;
     });
     const linksHtml = links.join('\n');
     return `<table class="topicLinks">
