@@ -7,7 +7,7 @@ module.exports = (request, data) => {
         <title>${data.title} – Presterity</title>
         <link rel="shortcut icon" href="/static/presterity.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:400,700">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
         <style>
           body {
             color: #424242;
@@ -135,6 +135,21 @@ module.exports = (request, data) => {
           body[area="About"] #linkAbout {
             color: white;
             font-weight: bold;
+          }
+
+          /* Topic links */
+          table.topicLinks {
+            font-size: 15px;
+            line-height: 1.5em;
+          }
+          table.topicLinks td {
+            padding-bottom: 0.5em;
+          }
+          table.topicLinks td:first-child {
+            color: gray;
+            padding-right: 1em;
+            vertical-align: top;
+            white-space: nowrap;
           }
 
           /* Tables */

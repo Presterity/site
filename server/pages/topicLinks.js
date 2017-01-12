@@ -16,14 +16,31 @@ module.exports = (topic) => {
       if (domain.startsWith('www.')) {
         domain = domain.slice(4); // Remove "www."
       }
-      return `<li>${item.title} <a href="${item.link}">${domain}</a></li>`;
+      const { date, text } = parseLinkTitle(item.title);
+      return `<tr><td>${date}</td><td>${text} <a href="${item.link}">${domain}</a></td></tr>`;
     });
     const linksHtml = links.join('\n');
-    return `<ul>
+    return `<table class="topicLinks">
       ${linksHtml}
-    </ul>`;
+    </table>`;
   })
   .catch(exception => {
     console.log(`Exception: ${exception}`);
   });
 };
+
+
+function parseLinkTitle(title) {
+  const linkPartsRegex = /([\d-]+) (.*)/;
+  const match = linkPartsRegex.exec(title);
+  let date;
+  let text;
+  if (match) {
+    date = match[1];
+    text = match[2];
+  } else {
+    date = '';
+    text = title;
+  }
+  return { date, text };
+}

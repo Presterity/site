@@ -27,7 +27,7 @@ module.exports = (request) => {
       result.ancestors[0].title :
       result.title;
     const pageMarkup = result.body.view.value;
-    const pageMarkupWithLinks = pageMarkup.replace('<em>(Topic links go here)</em>', formattedTopicLinks);
+    const pageMarkupWithLinks = pageMarkup.replace('<em>(Topic links will automatically appear here.)</em>', formattedTopicLinks);
     const body = wiki.rewriteHtml(pageMarkupWithLinks);
     const data = {
       area: area,
