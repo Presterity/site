@@ -26,14 +26,21 @@ module.exports = (request) => {
     const area = result.ancestors[0] ?
       result.ancestors[0].title :
       result.title;
+    const title = result.title === 'Home' ?
+      'Presterity' : 
+       `${result.title} - Presterity`;
+    const heading = result.title === 'Home' ?
+      'Presterity' :
+      result.title;
     const pageMarkup = result.body.view.value;
     const pageMarkupWithLinks = pageMarkup.replace('<em>(Topic links will automatically appear here.)</em>', formattedTopicLinks);
     const body = wiki.rewriteHtml(pageMarkupWithLinks);
     const data = {
       area: area,
-      breadcrumbs: breadcrumbs(result.ancestors),
       body: body,
-      title: result.title
+      breadcrumbs: breadcrumbs(result.ancestors),
+      heading: heading,
+      title: title
     };
     return pageTemplate(request, data);
   });
