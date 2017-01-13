@@ -36,12 +36,17 @@ function formatLinkForBookmark(bookmark, topic) {
     tagsHtml = `(See also ${tagsHtml})`;
   }
 
+  const excerpt = bookmark.excerpt ?
+    `<br><div class="excerpt">${bookmark.excerpt}</div>` :
+    '';
+
   return `<tr>
     <td>${date}</td>
     <td>
       ${text}
       <a href="${bookmark.link}">${domain}</a>
       ${tagsHtml}
+      ${excerpt}
     </td>
   </tr>`;
 

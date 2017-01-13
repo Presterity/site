@@ -14,6 +14,7 @@ const RAINDROP_REST_URL = `https://raindrop.io/api/raindrops/2021037`;
 
 function bookmarksForTopic(topic) {
   const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${topic}"}]&sort="title"`;
+  console.log(`Bookmarks: ${url}`);
   return fetch(url)
   .then(response => response.json())
   .then(json => {

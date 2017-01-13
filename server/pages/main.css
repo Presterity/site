@@ -140,6 +140,9 @@ table.topicLinks td:first-child {
   vertical-align: top;
   white-space: nowrap;
 }
+table.topicLinks .excerpt {
+  color: gray;
+}
 
 /* Tables */
 
