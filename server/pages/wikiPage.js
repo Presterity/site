@@ -1,5 +1,5 @@
-const breadcrumbs = require('./breadcrumbs');
 const fetch = require('node-fetch');
+const notFoundPage = require('./notFoundPage');
 const pageTemplate = require('./pageTemplate');
 const topicLinks = require('./topicLinks');
 const wiki = require('../connectors/wiki');
@@ -7,6 +7,8 @@ const wiki = require('../connectors/wiki');
 /*
  * Return a formatted version of the wiki page indicated by the given HTTP
  * request.
+ *
+ * If the wiki page isn't found, this returns a "Not Found" page.
  */
 module.exports = (request) => {
 
@@ -23,11 +25,18 @@ module.exports = (request) => {
     const json = values[0];
     const formattedTopicLinks = values[1];
     const result = json.results instanceof Array ? json.results[0] : json;
-    const area = result.ancestors[0] ?
-      result.ancestors[0].title :
+
+    if (!result) {
+      // Not found.
+      return notFoundPage(request, topic);
+    }
+
+    const ancestors = result.ancestors;
+    const area = ancestors[0] ?
+      ancestors[0].title :
       result.title;
     const title = result.title === 'Home' ?
-      'Presterity' : 
+      'Presterity' :
        `${result.title} - Presterity`;
     const heading = result.title === 'Home' ?
       'Presterity' :
@@ -35,12 +44,13 @@ module.exports = (request) => {
     const pageMarkup = result.body.view.value;
     const pageMarkupWithLinks = pageMarkup.replace('<em>(Topic links will automatically appear here.)</em>', formattedTopicLinks);
     const body = wiki.rewriteHtml(pageMarkupWithLinks);
+    
     const data = {
-      area: area,
-      body: body,
-      breadcrumbs: breadcrumbs(result.ancestors),
-      heading: heading,
-      title: title
+      ancestors,
+      area,
+      body,
+      heading,
+      title
     };
     return pageTemplate(request, data);
   });

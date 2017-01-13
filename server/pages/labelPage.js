@@ -1,4 +1,3 @@
-const breadcrumbs = require('./breadcrumbs');
 const fetch = require('node-fetch');
 const pageTemplate = require('./pageTemplate');
 const searchResultsList = require('./searchResultsList');
@@ -16,12 +15,11 @@ module.exports = (request) => {
   .then(response => response.json())
   .then(json => {
     const area = 'Home';
-    const ancestors = [{ title: 'Home' }];
     const data = {
       area: area,
-      breadcrumbs: breadcrumbs(ancestors),
       body: searchResultsList(json.results),
-      title: `Pages tagged with "${label}"`
+      heading: `Pages tagged with "${label}"`,
+      title: `${label}`
     };
     return pageTemplate(request, data);
   });

@@ -54,6 +54,11 @@ app.get('/search', (request, response) => {
   respondWithPage(request, searchPage, response);
 });
 
+/* Serve an error page (for testing). */
+app.get('/error', (request, response) => {
+  respondWithPage(request, errorPage, response);
+});
+
 /* Redirect pages by ID to their title equivalent. */
 app.get('/reference/id/:pageId', (request, response) => {
   redirectIdToTitle(request, response);

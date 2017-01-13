@@ -1,4 +1,3 @@
-const breadcrumbs = require('./breadcrumbs');
 const fetch = require('node-fetch');
 const pageTemplate = require('./pageTemplate');
 const searchResultsList = require('./searchResultsList');
@@ -8,22 +7,19 @@ const wiki = require('../connectors/wiki');
  * Return a page that searches for a given text string.
  */
 module.exports = (request) => {
-  let searchText = request.query.q;
+  const searchText = request.query.q;
   let searchPromise;
   const isNewSearch = typeof searchText === 'undefined';
   if (isNewSearch) {
-    console.log(`Search page`);
     searchPromise = Promise.resolve({});
   } else {
     const query = `${wiki.searchUrl}text~${searchText}`;
-    console.log(`Search page: ${query}`);
+    console.log(`Search for: ${query}`);
     searchPromise = fetch(query).then(response => response.json());
   }
 
   return searchPromise
   .then(json => {
-
-    const ancestors = [{ title: 'Home' }];
 
     let searchValue;
     let searchResults;
@@ -52,9 +48,8 @@ module.exports = (request) => {
 
     const data = {
       area: 'Search',
-      breadcrumbs: breadcrumbs(ancestors),
       body: body,
-      title: `Search Presterity`
+      heading: 'Search'
     };
 
     return pageTemplate(request, data);

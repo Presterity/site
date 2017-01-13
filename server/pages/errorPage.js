@@ -9,8 +9,7 @@ module.exports = (request) => {
     body: `
       Sorry, something went wrong. 😞
     `,
-    heading: 'Oops',
-    title: 'Oops - Presterity'
+    heading: 'Oops'
   };
 
   return pageTemplate(request, data);
