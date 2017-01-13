@@ -53,7 +53,12 @@ function formatLinkForBookmark(bookmark, topic) {
 }
 
 function parseLinkTitle(title) {
-  const linkPartsRegex = /([\d\.-]+) (.*)/;
+  // Find link parts:
+  // * optional whitespace to start
+  // * date in 2017.01.17 format, can also use hyphens
+  // * whitespace
+  // * remaining text
+  const linkPartsRegex = /^\s*([\d\.-]+)\s+(.*)/;
   const match = linkPartsRegex.exec(title);
   let date;
   let text;
