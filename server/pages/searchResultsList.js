@@ -1,4 +1,4 @@
-const wiki = require('../wiki');
+const wiki = require('../connectors/wiki');
 
 
 /*

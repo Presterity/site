@@ -2,7 +2,7 @@ const breadcrumbs = require('./breadcrumbs');
 const fetch = require('node-fetch');
 const pageTemplate = require('./pageTemplate');
 const searchResultsList = require('./searchResultsList');
-const wiki = require('../wiki');
+const wiki = require('../connectors/wiki');
 
 /*
  * Return a formatted version of the label page indicated by the given HTTP

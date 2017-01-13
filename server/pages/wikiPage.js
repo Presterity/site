@@ -2,7 +2,7 @@ const breadcrumbs = require('./breadcrumbs');
 const fetch = require('node-fetch');
 const pageTemplate = require('./pageTemplate');
 const topicLinks = require('./topicLinks');
-const wiki = require('../wiki');
+const wiki = require('../connectors/wiki');
 
 /*
  * Return a formatted version of the wiki page indicated by the given HTTP

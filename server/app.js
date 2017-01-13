@@ -13,7 +13,7 @@ const port = process.env.PORT || 8000;
 const fetch = require('node-fetch');
 const labelPage = require('./pages/labelPage');
 const searchPage = require('./pages/searchPage');
-const wiki = require('./wiki');
+const wiki = require('./connectors/wiki');
 const wikiPage = require('./pages/wikiPage');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
