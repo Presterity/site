@@ -1,25 +1,25 @@
-const fetch = require('node-fetch');
+/*
+ * Given a topic, renders the bookmarks tagged with that topic as HTML links.
+ */
 
 
-const RAINDROP_REST_URL = `https://raindrop.io/api/raindrops/2021037`;
+const bookmarks = require('../connectors/bookmarks');
+
 
 module.exports = (topic) => {
-  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${topic}"}]&sort="title"`;
-  return fetch(url)
-  .then(response => response.json())
-  .then(json => {
-    // Results come sorted reverse chronologically; flip that.
-    const items = json.items.reverse();
+  return bookmarks.bookmarksForTopic(topic)
+  .then(bookmarks => {
 
-    const links = items.map(item => {
-      let domain = item.domain;
+    const links = bookmarks.map(bookmark => {
+
+      let domain = bookmark.domain;
       if (domain.startsWith('www.')) {
         domain = domain.slice(4); // Remove "www."
       }
-      const { date, text } = parseLinkTitle(item.title);
+      const { date, text } = parseLinkTitle(bookmark.title);
 
       // Construct list of all tags except the one matching the topic.
-      const tags = item.tags
+      const tags = bookmark.tags
           .filter(tag => tag !== topic)
           .map(tag => `<a href="/reference/${tag}">${tag}</a>`);
       let tagsHtml = tags.join(', ');
@@ -31,11 +31,12 @@ module.exports = (topic) => {
         <td>${date}</td>
         <td>
           ${text}
-          <a href="${item.link}">${domain}</a>
+          <a href="${bookmark.link}">${domain}</a>
           ${tagsHtml}
         </td>
       </tr>`;
     });
+    
     const linksHtml = links.join('\n');
     return `<table class="topicLinks">
       ${linksHtml}
