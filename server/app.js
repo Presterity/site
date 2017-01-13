@@ -15,6 +15,7 @@ const labelPage = require('./pages/labelPage');
 const searchPage = require('./pages/searchPage');
 const wiki = require('./connectors/wiki');
 const wikiPage = require('./pages/wikiPage');
+const errorPage = require('./pages/errorPage');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
 const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
@@ -37,6 +38,9 @@ app.get('/wiki/download/*', (request, response) => {
       'Cache-Control': CACHE_CONTROL_VALUE
     });
     response.send(buffer);
+  })
+  .catch(exception => {
+    log(exception);
   });
 });
 
@@ -87,6 +91,9 @@ function redirectIdToTitle(request, response) {
     console.log(`Redirecting page by ID ${pageId} to title "${title}"`);
     const url = `/reference/${title}`;
     response.redirect(url);
+  })
+  .catch(exception => {
+    log(exception);
   });
 }
 
@@ -103,6 +110,12 @@ function respondWithPage(request, page, response) {
       'Content-Type': inferContentType(content)
     });
     response.send(content);
+  })
+  .catch(exception => {
+    log(exception);
+    if (page !== errorPage) {
+      respondWithPage(request, errorPage, response);
+    }
   });
 }
 
@@ -117,4 +130,8 @@ function inferContentType(content) {
   } else {
     return 'text/plain';
   }
+}
+
+function log(exception) {
+  console.log(`*** Exception: ${exception}`);
 }
