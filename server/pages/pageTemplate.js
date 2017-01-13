@@ -2,18 +2,9 @@
  * Main page template for all web site pages.
  */
 
-const fs = require('fs');
-const path= require('path');
-const promisify = require('../promisify');
-const readFileAsync = promisify(fs.readFile);
 const breadcrumbLinks = require('./breadcrumbLinks');
 
-// Load static includes.
-// These let us keep things like CSS in separate files for easier editing.
-let css;
-const cssPromise = readStaticInclude('main.css').then(result => css = result);
-
-module.exports = (request, data) => cssPromise.then(() => {
+module.exports = (request, data) => {
 
   // Pick defaults for any values not specified in data.
   const area = data.area || '';
@@ -37,8 +28,8 @@ module.exports = (request, data) => cssPromise.then(() => {
         <title>${title}</title>
         <link rel="shortcut icon" href="/static/presterity.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
+        <link rel="stylesheet" href="/static/main.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
-        <style>${css}</style>
         ${head}
       </head>
       <body area="${area}">
@@ -69,10 +60,4 @@ module.exports = (request, data) => cssPromise.then(() => {
         </footer>
       </body>
     </html>`;
-});
-
-
-function readStaticInclude(relativePath) {
-  const filePath = path.join(__dirname, relativePath);
-  return readFileAsync(filePath);
-}
+};
