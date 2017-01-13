@@ -36,7 +36,7 @@ module.exports = (request, data) => {
         <header id="navigation">
           <div id="links">
             <a href="/">
-              <img id="logo" src="/static/presterity.jpg">
+              <img id="logo" src="/static/presterity.ico">
             </a>
             <div id="areaLinks">
               <a id="linkHome" href="/">Presterity</a>
