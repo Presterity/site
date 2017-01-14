@@ -12,3 +12,5 @@ We prefer using [Yarn](https://yarnpkg.com/) for installs.
 
 1. `yarn install` (preferred) or `npm install`
 2. `node server/web`
+
+This will display a localhost URL at which you can view the site.
