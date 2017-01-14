@@ -14,3 +14,19 @@ We prefer using [Yarn](https://yarnpkg.com/) for installs.
 2. `node server/web`
 
 This will display a localhost URL at which you can view the site.
+
+# Deploy
+
+Our deployed site is hosted at Heroku: https://dashboard.heroku.com/apps/presterity.
+If you need to deploy, you'll need to be invited as a collaborator.
+
+* In your local git clone of this repo, add a remote for "production":
+
+    git remote add production https://git.heroku.com/presterity.git
+
+* All deployments are done from the master branch, which by definition should
+  always be in a deploy-able state.
+
+* Deploy by pushing to that production remote:
+
+    git push production
