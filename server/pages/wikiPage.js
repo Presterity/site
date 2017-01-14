@@ -44,11 +44,26 @@ module.exports = (request) => {
     const pageMarkup = result.body.view.value;
     const pageMarkupWithLinks = pageMarkup.replace('<em>(Topic links will automatically appear here.)</em>', formattedTopicLinks);
     const body = wiki.rewriteHtml(pageMarkupWithLinks);
-    
+
+    const footer = `
+      <p>
+        See something wrong or missing on this page?
+        Ping us at
+        <a href="https://twitter.com/presterity">@presterity</a>
+        or
+        <a href="/Volunteering">help us fix it</a>!
+      </p>
+      <p>
+        This work is licensed under a
+        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+      </p>
+    `;
+
     const data = {
       ancestors,
       area,
       body,
+      footer,
       heading,
       title
     };

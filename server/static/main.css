@@ -24,15 +24,11 @@ button {
 }
 
 footer {
-  display: none;
   font-size: smaller;
   line-height: initial;
   margin: 0 auto;
   max-width: 800px;
   padding: 12px;
-}
-body[area="Home"] footer {
-  display: block;
 }
 
 h1, h2, h3, h4, h5, h6 {

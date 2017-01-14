@@ -7,9 +7,10 @@ const breadcrumbLinks = require('./breadcrumbLinks');
 module.exports = (request, data) => {
 
   // Pick defaults for any values not specified in data.
-  const area = data.area || '';
   const ancestors = data.ancestors || [{ title :'Home' }];
+  const area = data.area || '';
   const body = data.body || '';
+  const footer = data.footer || '';
   const head = data.head || '';
   const heading = data.heading || data.title || '';
   const title = data.title ?
@@ -54,10 +55,7 @@ module.exports = (request, data) => {
             ${body}
           </div>
         </div>
-        <footer>
-          This work is licensed under a
-          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
-        </footer>
+        <footer>${footer}</footer>
       </body>
     </html>`;
 };
