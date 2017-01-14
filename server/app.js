@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const fetch = require('node-fetch');
-const labelPage = require('./pages/labelPage');
+const wikiLabelPage = require('./pages/wikiLabelPage');
 const searchPage = require('./pages/searchPage');
 const wiki = require('./connectors/wiki');
 const wikiPage = require('./pages/wikiPage');
@@ -21,13 +21,46 @@ const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
 const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
 
 
-/* Serve up static content from ./static folder. */
+// Tell Express to serve up static content from the ./static folder.
 const staticPath = path.join(__dirname, 'static');
 app.use('/static', express.static(staticPath, {
   maxAge: CACHE_MAX_AGE_SECONDS * 1000 // Convert to milliseconds
 }));
 
-/* Serve wiki download (attachment) */
+//
+// Route handlers.
+// These should generally go from most- to least-specific routes.
+//
+
+// Serve an error page.
+app.get('/error', (request, response) => {
+  respondWithPage(request, errorPage, response);
+});
+
+// Top-level of reference redirects to site home page.
+app.get('/reference', (request, response) => {
+  response.redirect('/');
+});
+
+// Redirect pages by ID to their title equivalent.
+// There are cases where a wiki page link will refer to a page by ID.
+// This seems to happen if the wiki page title includes punctuation.
+app.get('/reference/id/:pageId', (request, response) => {
+  redirectIdToTitle(request, response);
+});
+
+// Serve a label page.
+// Labels are tags on wiki pages. Certain wiki links will point to these.
+app.get('/reference/label/:label', (request, response) => {
+  respondWithPage(request, wikiLabelPage, response);
+});
+
+// Serve a search page.
+app.get('/search', (request, response) => {
+  respondWithPage(request, searchPage, response);
+});
+
+// Serve an image or other page attachment from the wiki.
 app.get('/wiki/download/*', (request, response) => {
   const url = `${wiki.baseUrl}${request.url}`;
   console.log(`Download: ${url}`);
@@ -44,46 +77,34 @@ app.get('/wiki/download/*', (request, response) => {
   });
 });
 
-/* Top-level of reference redirects to site home page. */
-app.get('/reference', (request, response) => {
-  response.redirect('/');
-});
-
-/* Serve a search page. */
-app.get('/search', (request, response) => {
-  respondWithPage(request, searchPage, response);
-});
-
-/* Serve an error page (for testing). */
-app.get('/error', (request, response) => {
-  respondWithPage(request, errorPage, response);
-});
-
-/* Redirect pages by ID to their title equivalent. */
-app.get('/reference/id/:pageId', (request, response) => {
-  redirectIdToTitle(request, response);
-});
-
-/* Serve a top-level page, or page within a top-level area. */
+// Serve a top-level page, or page within a top-level area.
 app.get(['/:title', '/:area/:title'], (request, response) => {
   respondWithPage(request, wikiPage, response);
 });
 
-/* Serve a label page. */
-app.get('/reference/label/:label', (request, response) => {
-  respondWithPage(request, labelPage, response);
-});
-
-/* Serve up home page */
+// Serve up home page
 app.get('/', (request, response) => {
   request.params.title = 'Home';
   respondWithPage(request, wikiPage, response);
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
 
+//
+// Helpers
+//
+
+// Given textual content to return, infer its Content-Type.
+function inferContentType(content) {
+  if (content.startsWith('<!DOCTYPE html>')) {
+    return 'text/html';
+  } else if (content.startsWith('<?xml')) {
+    return 'text/xml';
+  } else if (content.startsWith('{')) {
+    return 'application/json';
+  } else {
+    return 'text/plain';
+  }
+}
 
 // Redirect a request for a page by ID to a request for page by title.
 function redirectIdToTitle(request, response) {
@@ -109,7 +130,7 @@ function respondWithPage(request, page, response) {
   // If the result's not already a promise, cast it to a promise.
   Promise.resolve(result)
   .then(content => {
-    // Return the content as the response.
+    // Return the page content as the response.
     response.set({
       'Cache-Control': CACHE_CONTROL_VALUE,
       'Content-Type': inferContentType(content)
@@ -124,19 +145,13 @@ function respondWithPage(request, page, response) {
   });
 }
 
-// Given textual content to return, infer its Content-Type.
-function inferContentType(content) {
-  if (content.startsWith('<!DOCTYPE html>')) {
-    return 'text/html';
-  } else if (content.startsWith('<?xml')) {
-    return 'text/xml';
-  } else if (content.startsWith('{')) {
-    return 'application/json';
-  } else {
-    return 'text/plain';
-  }
-}
-
+// Log an error message.
 function log(exception) {
   console.log(`*** Exception: ${exception}`);
 }
+
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server listening on http://localhost:${port}`);
+});

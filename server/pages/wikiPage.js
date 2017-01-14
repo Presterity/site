@@ -17,38 +17,52 @@ module.exports = (request) => {
   const query = `${wiki.restUrl}?spaceKey=DB&title=${title}&expand=space,ancestors,body.view`;
 
   console.log(`Page: ${query}`);
+
+  // Get the content of the corresponding wiki page.
   const pagePromise = fetch(query).then(response => response.json());
 
-  // Only ask for topic links for reference pages.
+  // On pages in the /reference area, ask for bookmarks in the form of links.
   const topicLinksPromise = request.params.area === 'reference' ?
     topicLinks(topic) :
     Promise.resolve('');
 
+  // Once we've got the wiki page and topic links, put the page together.
   return Promise.all([pagePromise, topicLinksPromise])
   .then(values => {
-    const json = values[0];
-    const formattedTopicLinks = values[1];
-    const result = json.results instanceof Array ? json.results[0] : json;
 
-    if (!result) {
-      // Not found.
+    const { wikiResults, formattedTopicLinks } = values;
+    const wikiPageJson = wikiResults.results instanceof Array ?
+      wikiResults.results[0] :
+      wikiResults;
+
+    if (!wikiPageJson) {
+      // We couldn't find a wiki page with that name.
+      // Serve up a "Not found" page instead.
       return notFoundPage(request, topic);
     }
 
-    const ancestors = result.ancestors;
+    // Extract the bits of the page we care about.
+
+    const ancestors = wikiPageJson.ancestors;
     const area = ancestors[0] ?
       ancestors[0].title :
-      result.title;
-    const title = result.title === 'Home' ?
+      wikiPageJson.title;
+    const title = wikiPageJson.title === 'Home' ?
       'Presterity' :
-       `${result.title} - Presterity`;
-    const heading = result.title === 'Home' ?
+       `${wikiPageJson.title} - Presterity`;
+    const heading = wikiPageJson.title === 'Home' ?
       'Presterity' :
-      result.title;
-    const pageMarkup = result.body.view.value;
+      wikiPageJson.title;
+
+    // Construct the page body, inserting the formatted topic links.
+    const pageMarkup = wikiPageJson.body.view.value;
     const pageMarkupWithLinks = pageMarkup.replace('<em>(Topic links will automatically appear here.)</em>', formattedTopicLinks);
+
+    // The page markup will include link which are relative to the wiki.
+    // We fix those up so they refer to URLs on our site instead.
     const body = wiki.rewriteHtml(pageMarkupWithLinks);
 
+    // Add a footer that's specific to the reference area.
     const footer = `
       <p>
         See something wrong or missing on this page?
@@ -63,14 +77,14 @@ module.exports = (request) => {
       </p>
     `;
 
-    const data = {
+    // Pour all that into our standard page template.
+    return pageTemplate(request, {
       ancestors,
       area,
       body,
       footer,
       heading,
       title
-    };
-    return pageTemplate(request, data);
+    });
   });
 };

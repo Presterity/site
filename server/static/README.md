@@ -1,0 +1,1 @@
+These are static resources (images, etc.) that don't change very often.

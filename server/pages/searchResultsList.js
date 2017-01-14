@@ -2,7 +2,7 @@ const wiki = require('../connectors/wiki');
 
 
 /*
- * Format Atlassian Confluence CQL search results as a bulleted list of
+ * Given Atlassian Confluence search results, return them as a bulleted list of
  * clickable links.
  */
 module.exports = (results) => {

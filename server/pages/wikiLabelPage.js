@@ -4,7 +4,7 @@ const searchResultsList = require('./searchResultsList');
 const wiki = require('../connectors/wiki');
 
 /*
- * Return a formatted version of the label page indicated by the given HTTP
+ * Return a formatted version of the wiki label page indicated by the given HTTP
  * request.
  */
 module.exports = (request) => {

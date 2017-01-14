@@ -5,8 +5,18 @@ const wiki = require('../connectors/wiki');
 
 /*
  * Return a page that searches for a given text string.
+ *
+ * The search page is used in two modes. If the request doesn't include a query,
+ * the search page just shows a search box. If the request does include a query,
+ * the search box is prepopulated with that query, and the results of that query
+ * are shown below that.
+ *
  */
 module.exports = (request) => {
+
+  // Construct a search query in Atlassian Confluence CQL.
+  // https://developer.atlassian.com/confdev/confluence-server-rest-api/advanced-searching-using-cql
+  // TODO: move creation of this wiki-specific query to the wiki connector.
   const searchText = request.query.q;
   let searchPromise;
   const isNewSearch = typeof searchText === 'undefined';
@@ -20,6 +30,8 @@ module.exports = (request) => {
 
   return searchPromise
   .then(json => {
+
+    // Process the search results.
 
     let searchValue;
     let searchResults;
