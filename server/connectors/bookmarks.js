@@ -10,10 +10,11 @@
 const fetch = require('node-fetch');
 
 const RAINDROP_REST_URL = `https://raindrop.io/api/raindrops/2021037`;
+const MAX_BOOKMARKS_PER_PAGE = 40; // Limit imposed by Raindrop.
 
 
 function bookmarksForTopic(topic) {
-  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${topic}"}]`;
+  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${topic}"}]&perpage=${MAX_BOOKMARKS_PER_PAGE}`;
   console.log(`Bookmarks: ${url}`);
   return fetch(url)
   .then(response => response.json())
