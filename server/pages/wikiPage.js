@@ -30,11 +30,12 @@ module.exports = (request) => {
   return Promise.all([pagePromise, topicLinksPromise])
   .then(values => {
 
-    const { wikiResults, formattedTopicLinks } = values;
+    const wikiResults = values[0]; // from pagePromise
+    const formattedTopicLinks = values[1]; // from topicLinksPromise
+    
     const wikiPageJson = wikiResults.results instanceof Array ?
       wikiResults.results[0] :
       wikiResults;
-
     if (!wikiPageJson) {
       // We couldn't find a wiki page with that name.
       // Serve up a "Not found" page instead.
