@@ -13,14 +13,29 @@ const RAINDROP_REST_URL = `https://raindrop.io/api/raindrops/2021037`;
 
 
 function bookmarksForTopic(topic) {
-  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${topic}"}]&sort="title"`;
+  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${topic}"}]`;
   console.log(`Bookmarks: ${url}`);
   return fetch(url)
   .then(response => response.json())
   .then(json => {
-    // Results come sorted reverse chronologically; flip that.
-    return json.items.reverse();
+    const sorted = json.items.sort(compareItems);
+    return sorted;
   });
+}
+
+// Sort two items by title.
+// Since the title should start with a date like 2017.01.13, sorting by title
+// should produce a chronological sort.
+function compareItems(a, b) {
+  const aValue = a.title ? a.title.toLowerCase() : '';
+  const bValue = b.title ? b.title.toLowerCase() : '';
+  if (aValue < bValue) {
+    return -1;
+  }
+  if (aValue > bValue) {
+    return 1;
+  }
+  return 0;
 }
 
 module.exports = {
