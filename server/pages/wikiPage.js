@@ -18,7 +18,11 @@ module.exports = (request) => {
 
   console.log(`Page: ${query}`);
   const pagePromise = fetch(query).then(response => response.json());
-  const topicLinksPromise = topicLinks(topic);
+
+  // Only ask for topic links for reference pages.
+  const topicLinksPromise = request.params.area === 'reference' ?
+    topicLinks(topic) :
+    Promise.resolve('');
 
   return Promise.all([pagePromise, topicLinksPromise])
   .then(values => {
