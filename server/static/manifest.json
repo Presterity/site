@@ -1,0 +1,12 @@
+{
+  "short_name": "Presterity",
+  "name": "Presterity",
+  "icons": [
+    {
+      "src": "/static/presterity.jpg",
+      "sizes": "240x240",
+      "type": "image/jpeg"
+    }
+  ],
+  "start_url": "/"
+}
