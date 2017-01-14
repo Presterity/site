@@ -11,7 +11,7 @@ client-side JavaScript.
 We prefer using [Yarn](https://yarnpkg.com/) for installs.
 
 1. `yarn install` (preferred) or `npm install`
-2. `node server/web`
+2. `node server/app`
 
 This will display a localhost URL at which you can view the site.
 
