@@ -1,8 +1,8 @@
 /*
- * The site's connection to, and represetation of, the Raindrop bookmark API.
+ * The site's connection to, and representation of, the Raindrop bookmark API.
  *
  * The general principle is that this module isolates anything specific to
- * Raindrop. If we were to change to a different wiki back-end, this module
+ * Raindrop. If we were to change to a different bookmarks back-end, this module
  * would get replaced, but much of the rest of the server could stay the same.
  */
 

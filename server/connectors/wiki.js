@@ -1,5 +1,5 @@
 /*
- * The site's connection to, and represetation of, the Atlassian Confluence wiki.
+ * The site's connection to, and representation of, the Atlassian Confluence wiki.
  *
  * The general principle is that this module isolates anything specific to
  * Confluence. If we were to change to a different wiki back-end, this module
