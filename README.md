@@ -6,8 +6,8 @@ This is a very simple web server that retrieves pages from the
 [Presterity wiki](https://presterity.atlassian.net/wiki/discover/all-updates)
 and renders them in a page template.
 
-At the moment, all pages are rendered on the server. There is, as yet, no
-client-side JavaScript.
+At the moment, all pages are rendered on the server.
+There is, as yet, no client-side JavaScript.
 
 # To run locally
 
