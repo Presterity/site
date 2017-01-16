@@ -90,7 +90,8 @@ function compareBookmarks(bookmark1, bookmark2) {
 
 // Return a promise for the indicated page of results for the given topic.
 function getResultsForPage(topic, pageNumber) {
-  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${topic}"}]&perpage=${MAX_BOOKMARKS_PER_PAGE}&page=${pageNumber}`;
+  const escapedTopic = encodeURIComponent(topic);
+  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${escapedTopic}"}]&perpage=${MAX_BOOKMARKS_PER_PAGE}&page=${pageNumber}`;
   console.log(`Bookmarks: ${url}`);
   return fetch(url)
   .then(response => response.json());
