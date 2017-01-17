@@ -50,16 +50,12 @@ module.exports = (request, data) => {
         </nav>
         <div class="main">
           <header id="topNavigation">
-            <div id="links">
-              <div id="areaLinks">
-                <a id="linkSearch" href="/search">Search</a>
-                <a id="linkSubmissions" href="/Submissions">Submit</a>
-                <a id="linkVolunteering" href="/Volunteering">Volunteer</a>
-                <a id="linkAbout" href="/About">About</a>
-              </div>
-            </div>
+            <a id="linkAbout" href="/About">ABOUT THIS PROJECT</a>
+            <a id="linkVolunteering" href="/Volunteering">VOLUNTEER</a>
+            <a id="linkSearch" href="/search">SEARCH</a>
+            <a id="linkSubmissions" href="/Submissions">SUBMIT NEWS</a>
           </header>
-          <p class="breadcrumbs">${breadcrumbs}</p>
+          <div class="breadcrumbs">${breadcrumbs}</div>
           <div class="articleContainer">
             <div class="gutter"></div>
             <article class="wikiContent">
@@ -67,9 +63,9 @@ module.exports = (request, data) => {
               <div>
                 ${body}
               </div>
+              <footer>${footer}</footer>
             </article>
           </div>
-          <footer>${footer}</footer>
         </div>
       </body>
     </html>`;

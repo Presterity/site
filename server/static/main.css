@@ -19,7 +19,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: #3572b0;
+  color: #2b9ceb;
   text-decoration: none;
 }
 a:hover,
@@ -57,6 +57,22 @@ img {
   padding: 78px 12px 12px 12px;
 }
 
+#logoBlock {
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+#linkHome {
+  color: #e4cf5b;
+}
+
+#logo {
+  display: block;
+  height: 36px;
+  margin: 0 auto;
+  width: 36px;
+}
+
 .sideNavigation p {
   /* Hide paragraphs that crop up before and after the link list. */
   display: none;
@@ -91,7 +107,9 @@ img {
 /* Top navigation */
 
 #topNavigation {
-  padding: 6px 12px;
+  font-size: smaller;
+  font-weight: bold;
+  padding: 56px 65px;
   text-transform: uppercase;
 }
 
@@ -100,36 +118,7 @@ img {
   text-decoration: none;
 }
 
-#links {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  margin: 0 auto;
-  max-width: 800px;
-  width: 100%;
-}
-
-#logoBlock {
-  margin-bottom: 60px;
-  text-align: center;
-}
-
-#linkHome {
-  color: #e4cf5b;
-}
-
-#logo {
-  display: block;
-  height: 36px;
-  margin: 0 auto;
-  width: 36px;
-}
-
-#areaLinks {
-  flex: 1;
-  padding: 6px 0 6px 12px;
-}
-#areaLinks > :not(:last-child) {
+#topNavigation a:not(:last-child) {
   margin-right: 20px;
 }
 
@@ -159,7 +148,7 @@ body[area="About"] #linkAbout {
 .pageTitle {
   color: black;
   font-size: 2.5em;
-  margin: 1em 0;
+  font-weight: normal;
 }
 
 .articleContainer {
@@ -170,9 +159,17 @@ body[area="About"] #linkAbout {
   flex: 1;
 }
 
+.breadcrumbs {
+  color: #2b9ceb;
+  font-size: 14px;
+  padding: 28px 65px;
+}
+
+
 
 /* Main article content */
 article {
+  font-family: "Georgia", "Times New Roman", serif;
   flex: 8;
 }
 
@@ -234,9 +231,7 @@ td.confluenceTd > * {
 footer {
   font-size: smaller;
   line-height: initial;
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 12px;
+  padding: 12px 12px 12px 0;
 }
 
 
