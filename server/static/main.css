@@ -16,6 +16,20 @@ button {
 
 h1, h2, h3, h4, h5, h6 {
   line-height: initial;
+  position: relative;
+}
+
+/* h1 headings a little border separator above them. */
+h1:not(.pageTitle) {
+  margin-top: 65px;
+}
+h1:not(.pageTitle):before {
+  background-color: #2b9ceb;
+  content:'';
+  height: 7px;
+  position: absolute;
+  top: -24px;
+  width: 48px;
 }
 
 a {
@@ -162,7 +176,7 @@ body[area="About"] #linkAbout {
 .breadcrumbs {
   color: #2b9ceb;
   font-size: 14px;
-  padding: 28px 65px;
+  padding: 28px 65px 12px 65px;
 }
 
 
@@ -171,6 +185,7 @@ body[area="About"] #linkAbout {
 article {
   font-family: "Georgia", "Times New Roman", serif;
   flex: 8;
+  padding-right: 24px;
 }
 
 
