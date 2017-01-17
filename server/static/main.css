@@ -13,26 +13,6 @@ button {
   font-size: 16px;
 }
 
-.main {
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 12px 12px 100px 12px;
-}
-
-.pageTitle {
-  color: black;
-  font-size: 2.5em;
-  margin: 1em 0;
-}
-
-footer {
-  font-size: smaller;
-  line-height: initial;
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 12px;
-}
-
 h1, h2, h3, h4, h5, h6 {
   line-height: initial;
 }
@@ -131,12 +111,21 @@ body[area="About"] #linkAbout {
 /* Main page area */
 .main {
   display: flex;
+  padding: 12px 12px 100px 12px;
 }
+
+.pageTitle {
+  color: black;
+  font-size: 2.5em;
+  margin: 1em 0;
+}
+
 
 /* Side navigation */
 
 .sideNavigation {
   display: none; /* Default for mobile; media query below enables on desktop. */
+  flex: 4;
   padding-right: 12px;
 }
 
@@ -157,6 +146,12 @@ body[area="About"] #linkAbout {
 
 .sideNavigation li {
   list-style-type: none;
+}
+
+
+/* Main article content */
+article {
+  flex: 8;
 }
 
 
@@ -209,6 +204,17 @@ td.confluenceTd > * {
 }
 .content-by-label > li > div.details {
   display: inherit; /* Just show the key bits */
+}
+
+
+/* Footer */
+
+footer {
+  font-size: smaller;
+  line-height: initial;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 12px;
 }
 
 
