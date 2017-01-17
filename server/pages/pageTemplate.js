@@ -13,6 +13,7 @@ module.exports = (request, data) => {
   const footer = data.footer || '';
   const head = data.head || '';
   const heading = data.heading || data.title || '';
+  const navigation = data.navigation || '';
   const title = data.title ?
     data.title :
     data.heading ?
@@ -35,7 +36,7 @@ module.exports = (request, data) => {
         ${head}
       </head>
       <body area="${area}">
-        <header id="navigation">
+        <header id="topNavigation">
           <div id="links">
             <a href="/">
               <img id="logo" src="/static/presterity.jpg">
@@ -50,11 +51,16 @@ module.exports = (request, data) => {
           </div>
         </header>
         <div class="main">
-          <p class="breadcrumbs">${breadcrumbs}</p>
-          <h1 class="pageTitle">${heading}</h1>
-          <div>
-            ${body}
-          </div>
+          <nav class="sideNavigation">
+            ${navigation}
+          </nav>
+          <article class="wikiContent">
+            <p class="breadcrumbs">${breadcrumbs}</p>
+            <h1 class="pageTitle">${heading}</h1>
+            <div>
+              ${body}
+            </div>
+          </article>
         </div>
         <footer>${footer}</footer>
       </body>

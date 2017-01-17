@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const navigationPane = require('./navigationPane');
 const notFoundPage = require('./notFoundPage');
 const pageTemplate = require('./pageTemplate');
 const topicLinks = require('./topicLinks');
@@ -26,13 +27,19 @@ module.exports = (request) => {
     topicLinks(topic) :
     Promise.resolve('');
 
+  // On pages in the /reference area, show a navigation pane.
+  const navigationPanePromise = request.params.area === 'reference' ?
+    navigationPane() :
+    Promise.resolve('');
+
   // Once we've got the wiki page and topic links, put the page together.
-  return Promise.all([pagePromise, topicLinksPromise])
+  return Promise.all([pagePromise, topicLinksPromise, navigationPanePromise])
   .then(values => {
 
     const wikiResults = values[0]; // from pagePromise
-    const formattedTopicLinks = values[1]; // from topicLinksPromise
-    
+    const topicLinksHtml = values[1]; // from topicLinksPromise
+    const navigation = values[2]; // from navigationPanePromise
+
     const wikiPageJson = wikiResults.results instanceof Array ?
       wikiResults.results[0] :
       wikiResults;
@@ -55,13 +62,13 @@ module.exports = (request) => {
       'Presterity' :
       wikiPageJson.title;
 
-    // Construct the page body, inserting the formatted topic links.
-    const pageMarkup = wikiPageJson.body.view.value;
-    const pageMarkupWithLinks = pageMarkup.replace('<em>(Topic links will automatically appear here.)</em>', formattedTopicLinks);
+    // The main page content with be the wiki page + formatted topic links.
+    const wikiHtml = wikiPageJson.body.view.value;
+    const mainPaneHtml = wikiHtml.replace('<em>(Topic links will automatically appear here.)</em>', topicLinksHtml);
 
-    // The page markup will include link which are relative to the wiki.
+    // The body will include link which are relative to the wiki.
     // We fix those up so they refer to URLs on our site instead.
-    const body = wiki.rewriteHtml(pageMarkupWithLinks);
+    const body = wiki.rewriteHtml(mainPaneHtml);
 
     // Add a footer that's specific to the reference area.
     const footer = `
@@ -85,6 +92,7 @@ module.exports = (request) => {
       body,
       footer,
       heading,
+      navigation,
       title
     });
   });
