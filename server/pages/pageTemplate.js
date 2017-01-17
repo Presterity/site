@@ -40,7 +40,7 @@ module.exports = (request, data) => {
           <div id="logoBlock">
             <a id="linkHome" href="/">
               <img id="logo" src="/static/presterity.jpg">
-              <div>Presterity</div>
+              <div>PRESTERITY</div>
             </a>
           </div>
           <p>

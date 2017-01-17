@@ -91,16 +91,12 @@ img {
 /* Top navigation */
 
 #topNavigation {
-  background: #666;
   padding: 6px 12px;
   text-transform: uppercase;
 }
 
 #topNavigation a {
-  color: #eee;
-}
-#topNavigation a:hover,
-#topNavigation a:active {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -113,9 +109,19 @@ img {
   width: 100%;
 }
 
+#logoBlock {
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+#linkHome {
+  color: #e4cf5b;
+}
+
 #logo {
   display: block;
   height: 36px;
+  margin: 0 auto;
   width: 36px;
 }
 
@@ -127,10 +133,6 @@ img {
   margin-right: 20px;
 }
 
-body[area="Home"] #linkHome {
-  color: white;
-  font-weight: bold;
-}
 body[area="Search"] #linkSearch {
   color: white;
   font-weight: bold;
