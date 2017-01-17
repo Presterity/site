@@ -1,9 +1,14 @@
 /* General styles */
 
+html {
+  height: 100%;
+
+}
 body {
   color: #424242;
   display: flex;
   line-height: 1.7em;
+  min-height: 100%;
   margin: 0;
 }
 
@@ -68,10 +73,10 @@ img {
   background: #1b243b;
   display: none; /* Default for mobile; media query below enables on desktop. */
   flex: 3;
-  padding: 78px 12px 12px 12px;
 }
 
 #logoBlock {
+  margin-top: 78px;
   margin-bottom: 60px;
   text-align: center;
 }
@@ -92,17 +97,31 @@ img {
   display: none;
 }
 
-/* Level 1 of hierarchy */
+/* Top-level navigation list */
 .sideNavigation > ul {
   margin: 0;
+  padding: 0;
 }
-/* Level 2 */
+
+/* Top-level navigation items */
+.sideNavigation > ul > li {
+  padding-left: 77px;
+}
+
+/* Navigation sublist */
 .sideNavigation > ul > li > ul {
-  padding: 12px;
+  padding: 12px 0;
 }
 
 .sideNavigation li {
+  line-height: 1.2em;
+  margin-bottom: 0.5em;
   list-style-type: none;
+}
+
+/* By default, hide sublists. */
+.sideNavigation > ul > li > ul {
+  display: none;
 }
 
 .sideNavigation,
@@ -137,20 +156,16 @@ img {
 }
 
 body[area="Search"] #linkSearch {
-  color: white;
-  font-weight: bold;
+  border-bottom: 1px solid;
 }
 body[area="Submissions"] #linkSubmissions {
-  color: white;
-  font-weight: bold;
+  border-bottom: 1px solid;
 }
 body[area="Volunteering"] #linkVolunteering {
-  color: white;
-  font-weight: bold;
+  border-bottom: 1px solid;
 }
 body[area="About"] #linkAbout {
-  color: white;
-  font-weight: bold;
+  border-bottom: 1px solid;
 }
 
 

@@ -1,3 +1,4 @@
+const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const wiki = require('../connectors/wiki');
 
@@ -20,8 +21,26 @@ module.exports = () => {
     const body = wikiPageJson.body.view.value;
 
     // Map wiki-relative URLs to our own routes.
-    const navigationPaneHtml = wiki.rewriteHtml(body);
+    const rewrittenHtml = wiki.rewriteHtml(body);
 
+    // For each list item in the navigation pane, add an attribute on it that
+    // will help us reflect the user's current position in the outline using
+    // styling applied with CSS that matches that attribute. The goal of this
+    // is to avoid having to update the navigation links for individual pages.
+    const $ = cheerio.load(rewrittenHtml); // Parse HTML
+    // Find all list items.
+    $('li').each((index, li) => {
+      const $li = $(li); // Get list item.
+      const $a = $($li.children('a')[0]); // Get the anchor tag within it.
+      if ($a) {
+        // Get the anchor's text. This will be the page title.
+        const text = $a.text();
+        // Expose that text on the list item as an attribute.
+        $li.attr('navigation-item', text);
+      }
+    });
+
+    const navigationPaneHtml = $.html();
     return navigationPaneHtml;
   });
 };

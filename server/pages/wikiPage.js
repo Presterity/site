@@ -27,8 +27,10 @@ module.exports = (request) => {
     topicLinks(topic) :
     Promise.resolve('');
 
-  // On pages in the /reference area, show a navigation pane.
-  const navigationPanePromise = request.params.area === 'reference' ?
+  // On the home page or reference pages, show a navigation pane.
+  const showNavigationPane = request.params.title === 'Home' ||
+      request.params.area === 'reference';
+  const navigationPanePromise = showNavigationPane ?
     navigationPane() :
     Promise.resolve('');
 
@@ -62,6 +64,27 @@ module.exports = (request) => {
       'Presterity' :
       wikiPageJson.title;
 
+    // For pages with side navigation, inject styling that will highlight the
+    // current area.
+    let head;
+    const currentReferenceArea = ancestors.length > 1 ?
+      ancestors[1].title :
+      null;
+    if (showNavigationPane && currentReferenceArea) {
+      head = `
+        <style>
+          .sideNavigation > ul > li[navigation-item="${currentReferenceArea}"] {
+            background: #51a2e6;
+          }
+          .sideNavigation > ul > li[navigation-item="${currentReferenceArea}"] > ul {
+            display: block;
+          }
+        </style>
+      `;
+    } else {
+      head = '';
+    }
+
     // The main page content with be the wiki page + formatted topic links.
     const wikiHtml = wikiPageJson.body.view.value;
     const mainPaneHtml = wikiHtml.replace('<em>(Topic links will automatically appear here.)</em>', topicLinksHtml);
@@ -91,6 +114,7 @@ module.exports = (request) => {
       area,
       body,
       footer,
+      head,
       heading,
       navigation,
       title
