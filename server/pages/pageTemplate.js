@@ -32,7 +32,6 @@ module.exports = (request, data) => {
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="manifest" href="/static/manifest.json">
         <link rel="stylesheet" href="/static/main.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
         ${head}
       </head>
       <body area="${area}">

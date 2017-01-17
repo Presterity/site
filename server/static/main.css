@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|PT+Serif:400,400i,700,700i');
+
 /* General styles */
 
 html {
@@ -202,7 +204,8 @@ body[area="About"] #linkAbout {
 
 /* Main article content */
 article {
-  font-family: "Georgia", "Times New Roman", serif;
+  /* font-family: "Georgia", "Times New Roman", serif; */
+   font-family: "PT Serif", "Times New Roman", serif;
   flex: 8;
   padding-right: 24px;
 }
