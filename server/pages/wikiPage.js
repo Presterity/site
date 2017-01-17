@@ -67,17 +67,42 @@ module.exports = (request) => {
     // For pages with side navigation, inject styling that will highlight the
     // current area.
     let head;
-    const currentReferenceArea = ancestors.length > 1 ?
-      ancestors[1].title :
-      null;
-    if (showNavigationPane && currentReferenceArea) {
+    if (showNavigationPane && ancestors.length > 0) {
+      let areaLevel1 = '';
+      let areaLevel2 = '';
+      if (ancestors.length === 1) {
+        // Top-level page beneath Home
+        areaLevel1 = wikiPageJson.title;
+      } else if (ancestors.length === 2) {
+        // Second-level page beneath a top-level area
+        areaLevel1 = ancestors[1].title;
+        areaLevel2 = wikiPageJson.title;
+      } else if (ancestors.length > 2) {
+        // Third-level page or deeper
+        areaLevel1 = ancestors[1].title;
+        areaLevel2 = ancestors[2].title;
+      }
+      const currentAreaSelector =
+          `.sideNavigation > ul > li[navigation-item="${areaLevel1}"]`;
       head = `
         <style>
-          .sideNavigation > ul > li[navigation-item="${currentReferenceArea}"] {
+          ${currentAreaSelector} {
             background: #51a2e6;
+            list-style-type: disc;
+            padding-top: 1.5em;
           }
-          .sideNavigation > ul > li[navigation-item="${currentReferenceArea}"] > ul {
+
+          ${currentAreaSelector} > a {
+            color: #1c243c;
+          }
+
+          ${currentAreaSelector} > ul {
             display: block;
+            color: white;
+          }
+
+          ${currentAreaSelector} > ul > li[navigation-item="${areaLevel2}"] {
+            list-style-type: disc;
           }
         </style>
       `;

@@ -105,23 +105,27 @@ img {
 
 /* Top-level navigation items */
 .sideNavigation > ul > li {
+  list-style-type: none;
+  margin: 1.5em 0;
   padding-left: 77px;
 }
 
 /* Navigation sublist */
+/* By default, hide sublists. */
 .sideNavigation > ul > li > ul {
+  margin-left: 1.2em;
   padding: 12px 0;
+  display: none;
+}
+
+/* Navigation subitems */
+.sideNavigation > ul > li > ul > li {
+  list-style-type: none;
 }
 
 .sideNavigation li {
   line-height: 1.2em;
   margin-bottom: 0.5em;
-  list-style-type: none;
-}
-
-/* By default, hide sublists. */
-.sideNavigation > ul > li > ul {
-  display: none;
 }
 
 .sideNavigation,
