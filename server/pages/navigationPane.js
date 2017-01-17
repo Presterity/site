@@ -17,7 +17,11 @@ module.exports = () => {
   .then(response => response.json())
   .then(wikiResults => {
     const wikiPageJson = wikiResults.results[0];
-    const navigationPaneHtml = wikiPageJson.body.view.value;
+    const body = wikiPageJson.body.view.value;
+
+    // Map wiki-relative URLs to our own routes.
+    const navigationPaneHtml = wiki.rewriteHtml(body);
+
     return navigationPaneHtml;
   });
 };

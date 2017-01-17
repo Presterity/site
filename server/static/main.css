@@ -2,6 +2,7 @@
 
 body {
   color: #424242;
+  display: flex;
   line-height: 1.7em;
   margin: 0;
 }
@@ -44,6 +45,46 @@ iframe {
 
 img {
   max-width: 100%;
+}
+
+
+/* Side navigation */
+
+.sideNavigation {
+  background: #1b243b;
+  display: none; /* Default for mobile; media query below enables on desktop. */
+  flex: 3;
+  padding: 78px 12px 12px 12px;
+}
+
+.sideNavigation p {
+  /* Hide paragraphs that crop up before and after the link list. */
+  display: none;
+}
+
+/* Level 1 of hierarchy */
+.sideNavigation > ul {
+  margin: 0;
+}
+/* Level 2 */
+.sideNavigation > ul > li > ul {
+  padding: 12px;
+}
+
+.sideNavigation li {
+  list-style-type: none;
+}
+
+.sideNavigation,
+.sideNavigation a {
+  color: #dfe0e1;
+}
+.sideNavigation a {
+  text-decoration: none;
+}
+.sideNavigation a:hover,
+.sideNavigation a:focus {
+  text-decoration: initial;
 }
 
 
@@ -110,8 +151,7 @@ body[area="About"] #linkAbout {
 
 /* Main page area */
 .main {
-  display: flex;
-  padding: 12px 12px 100px 12px;
+  flex: 9;
 }
 
 .pageTitle {
@@ -120,32 +160,12 @@ body[area="About"] #linkAbout {
   margin: 1em 0;
 }
 
-
-/* Side navigation */
-
-.sideNavigation {
-  display: none; /* Default for mobile; media query below enables on desktop. */
-  flex: 4;
-  padding-right: 12px;
+.articleContainer {
+  display: flex;
 }
 
-.sideNavigation p {
-  /* Hide paragraphs that crop up before and after the link list. */
-  display: none;
-}
-
-/* Level 1 of hierarchy */
-.sideNavigation > ul {
-  margin: 0;
-  padding: 0;
-}
-/* Level 2 */
-.sideNavigation > ul > li > ul {
-  padding: 12px;
-}
-
-.sideNavigation li {
-  list-style-type: none;
+.gutter {
+  flex: 1;
 }
 
 

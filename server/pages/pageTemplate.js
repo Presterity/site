@@ -36,33 +36,41 @@ module.exports = (request, data) => {
         ${head}
       </head>
       <body area="${area}">
-        <header id="topNavigation">
-          <div id="links">
-            <a href="/">
+        <nav class="sideNavigation">
+          <div id="logoBlock">
+            <a id="linkHome" href="/">
               <img id="logo" src="/static/presterity.jpg">
+              <div>Presterity</div>
             </a>
-            <div id="areaLinks">
-              <a id="linkHome" href="/">Presterity</a>
-              <a id="linkSearch" href="/search">Search</a>
-              <a id="linkSubmissions" href="/Submissions">Submit</a>
-              <a id="linkVolunteering" href="/Volunteering">Volunteer</a>
-              <a id="linkAbout" href="/About">About</a>
-            </div>
           </div>
-        </header>
+          <p>
+            Table <em>of</em> Contents
+          </p>
+          ${navigation}
+        </nav>
         <div class="main">
-          <nav class="sideNavigation">
-            ${navigation}
-          </nav>
-          <article class="wikiContent">
-            <p class="breadcrumbs">${breadcrumbs}</p>
-            <h1 class="pageTitle">${heading}</h1>
-            <div>
-              ${body}
+          <header id="topNavigation">
+            <div id="links">
+              <div id="areaLinks">
+                <a id="linkSearch" href="/search">Search</a>
+                <a id="linkSubmissions" href="/Submissions">Submit</a>
+                <a id="linkVolunteering" href="/Volunteering">Volunteer</a>
+                <a id="linkAbout" href="/About">About</a>
+              </div>
             </div>
-          </article>
+          </header>
+          <p class="breadcrumbs">${breadcrumbs}</p>
+          <div class="articleContainer">
+            <div class="gutter"></div>
+            <article class="wikiContent">
+              <h1 class="pageTitle">${heading}</h1>
+              <div>
+                ${body}
+              </div>
+            </article>
+          </div>
+          <footer>${footer}</footer>
         </div>
-        <footer>${footer}</footer>
       </body>
     </html>`;
 };
