@@ -336,6 +336,8 @@ footer p {
 
 @media (min-width: 800px) {
   .sideNavigation {
-    display: block;
+    /* We force the side nav to hide during load to avoid flashing. */
+    /* Once loaded (on desktop), we can show it. */
+    display: block !important;
   }
 }
