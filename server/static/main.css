@@ -18,7 +18,7 @@ body,
 input,
 button {
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -72,7 +72,7 @@ img {
 /* Side navigation */
 
 .sideNavigation {
-  background: #1b243b;
+  background: linear-gradient(to right, #2c3449, #1b243b);
   display: none; /* Default for mobile; media query below enables on desktop. */
   flex: 3;
 }
@@ -89,9 +89,9 @@ img {
 
 #logo {
   display: block;
-  height: 36px;
-  margin: 0 auto;
-  width: 36px;
+  height: 72px;
+  margin: 0 auto 10px;
+  width: 72px;
 }
 
 .sideNavigation p {
@@ -107,9 +107,11 @@ img {
 
 /* Top-level navigation items */
 .sideNavigation > ul > li {
+  font-size: 16px;
   list-style-type: none;
   margin: 1.5em 0;
-  padding-left: 77px;
+  padding-left: 55px;
+  padding-right: 12px;
 }
 
 /* Navigation sublist */
@@ -148,7 +150,7 @@ img {
 #topNavigation {
   font-size: smaller;
   font-weight: bold;
-  padding: 56px 65px;
+  padding: 42px 62px;
   text-transform: uppercase;
 }
 
@@ -196,8 +198,7 @@ body[area="About"] #linkAbout {
 
 .breadcrumbs {
   color: #2b9ceb;
-  font-size: 14px;
-  padding: 28px 65px 12px 65px;
+  padding: 28px 62px 12px 62px;
 }
 
 
@@ -205,9 +206,12 @@ body[area="About"] #linkAbout {
 /* Main article content */
 article {
   /* font-family: "Georgia", "Times New Roman", serif; */
-   font-family: "PT Serif", "Times New Roman", serif;
-  flex: 8;
-  padding-right: 24px;
+  font-family: "PT Serif", "Times New Roman", serif;
+  flex: 7;
+}
+
+article p {
+  line-height: 1.8em;
 }
 
 

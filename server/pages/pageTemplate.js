@@ -64,6 +64,7 @@ module.exports = (request, data) => {
               </div>
               <footer>${footer}</footer>
             </article>
+            <div class="gutter"></div>
           </div>
         </div>
       </body>
