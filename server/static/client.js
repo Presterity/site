@@ -8,7 +8,7 @@ function highlightSideNavigation(pageTitle) {
   }
 
   // Find the link in the side navigation for the given page.
-  var element = sideNavigation.querySelector('li[navigation-item="' + pageTitle + '"');
+  var element = sideNavigation.querySelector('li[navigation-item="' + pageTitle + '"]');
 
   // Mark that link (if found) and all its ancestors as current.
   while (element && element !== sideNavigation) {
