@@ -43,9 +43,12 @@ module.exports = (request, data) => {
               <div>PRESTERITY</div>
             </a>
           </div>
-          <p>
-            Table <em>of</em> Contents
+          <p id="tableOfContentsCaption">
+            TABLE <em>of</em> CONTENTS
           </p>
+          <div id="captionSeparatorContainer">
+            <div id="captionSeparator"></div>
+          </div>
           ${navigation}
         </nav>
         <div class="main">
