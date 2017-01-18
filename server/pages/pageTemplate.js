@@ -7,7 +7,7 @@ const breadcrumbLinks = require('./breadcrumbLinks');
 module.exports = (request, data) => {
 
   // Pick defaults for any values not specified in data.
-  const ancestors = data.ancestors || [{ title :'Home' }];
+  const ancestors = data.ancestors || [];
   const area = data.area || '';
   const body = data.body || '';
   const footer = data.footer || '';
@@ -28,13 +28,14 @@ module.exports = (request, data) => {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>${title}</title>
+        <link rel="stylesheet" href="/static/main.css">
         <link rel="shortcut icon" href="/static/presterity.jpg" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="manifest" href="/static/manifest.json">
-        <link rel="stylesheet" href="/static/main.css">
+        <script src="/static/client.js" async></script>
         ${head}
       </head>
-      <body area="${area}">
+      <body area="${area}" page="${heading}">
         <nav class="sideNavigation">
           <div id="logoBlock">
             <a id="linkHome" href="/">

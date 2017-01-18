@@ -116,19 +116,19 @@ img {
 
 /* Navigation sublist */
 /* By default, hide sublists. */
-.sideNavigation > ul > li > ul {
+.sideNavigation > ul > li ul {
   margin-left: 1.2em;
   padding: 12px 0;
   display: none;
 }
 
 /* Navigation subitems */
-.sideNavigation > ul > li > ul > li {
+.sideNavigation > ul > li li {
   list-style-type: none;
 }
 
 .sideNavigation li {
-  line-height: 1.2em;
+  line-height: 1.5em;
   margin-bottom: 0.5em;
 }
 
@@ -143,6 +143,27 @@ img {
 .sideNavigation a:focus {
   text-decoration: initial;
 }
+
+/* Highlighting for the currently-selected items in the hierarchy. */
+.sideNavigation > ul > li.current {
+  background: #51a2e6;
+  list-style-type: disc;
+  padding-top: 1.5em;
+}
+
+.sideNavigation > ul > li.current > a {
+  color: #1c243c;
+}
+
+.sideNavigation > ul > li.current > ul,
+.sideNavigation > ul > li > ul > li.current > ul {
+  display: block;
+}
+
+.sideNavigation > ul > li li.current {
+  list-style-type: disc;
+}
+
 
 
 /* Top navigation */

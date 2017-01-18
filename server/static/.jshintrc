@@ -1,0 +1,11 @@
+{
+  "browser": true,
+  "curly": true,
+  "eqnull": true,
+  "globals": {
+    "console": false
+  },
+  "undef": true,
+  "unused": "vars",
+  "varstmt": false
+}
