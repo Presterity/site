@@ -3,6 +3,8 @@
  */
 
 const breadcrumbLinks = require('./breadcrumbLinks');
+const daysRemaining = require('./daysRemaining');
+
 
 module.exports = (request, data) => {
 
@@ -21,6 +23,7 @@ module.exports = (request, data) => {
       '';
 
   const breadcrumbs = breadcrumbLinks(ancestors);
+  const daysRemainingMessage = daysRemaining();
 
   return `<!DOCTYPE html>
     <html lang="en">
@@ -73,7 +76,12 @@ module.exports = (request, data) => {
               <div>
                 ${body}
               </div>
-              <footer>${footer}</footer>
+              <footer>
+                <p id="daysRemainingMessage">
+                  ${daysRemainingMessage}
+                </p>
+                ${footer}
+              </footer>
             </article>
             <div class="gutter"></div>
           </div>
