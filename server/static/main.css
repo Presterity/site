@@ -71,27 +71,21 @@ img {
 /* Side navigation */
 
 .sideNavigation {
-  background: linear-gradient(to right, #2c3449, #1b243b);
+  background: #253050;
   display: none; /* Default for mobile; media query below enables on desktop. */
   flex: 3;
 }
 
 #logoBlock {
-  margin-top: 78px;
+  margin-top: 46px;
   margin-bottom: 60px;
   text-align: center;
 }
 
-#linkHome {
-  color: #e4cf5b;
-  letter-spacing: 3px;
-}
-
 #logo {
   display: block;
-  height: 72px;
   margin: 0 auto 10px;
-  width: 72px;
+  width: 124px;
 }
 
 .sideNavigation p {

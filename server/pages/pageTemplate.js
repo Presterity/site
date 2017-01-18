@@ -39,8 +39,7 @@ module.exports = (request, data) => {
         <nav class="sideNavigation">
           <div id="logoBlock">
             <a id="linkHome" href="/">
-              <img id="logo" src="/static/presterity.jpg">
-              <div>PRESTERITY</div>
+              <img id="logo" src="/static/presterity.png" alt="Presterity">
             </a>
           </div>
           <p id="tableOfContentsCaption">
