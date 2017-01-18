@@ -325,8 +325,11 @@ td.confluenceTd > * {
 
 footer {
   font-size: smaller;
+  padding: 3em 12px 12px 0;
+}
+
+footer p {
   line-height: initial;
-  padding: 12px 12px 12px 0;
 }
 
 
