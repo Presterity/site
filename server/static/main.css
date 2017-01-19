@@ -304,15 +304,6 @@ td.confluenceTd > * {
 }
 
 
-/* Hide boring macro output */
-.content-by-label > li > div {
-  display: none; /* Hide most macro bulllet content */
-}
-.content-by-label > li > div.details {
-  display: inherit; /* Just show the key bits */
-}
-
-
 /* Footer */
 
 footer {
@@ -325,10 +316,26 @@ footer p {
 }
 
 
+/* Hide boring macro output */
+.content-by-label > li > div {
+  display: none; /* Hide most macro bulllet content */
+}
+.content-by-label > li > div.details {
+  display: inherit; /* Just show the key bits */
+}
+
+
 /* Desktop */
 
 @media (min-width: 800px) {
+
   .sideNavigation {
     display: block;
+  }
+
+  /* Home page table of contents only needed on mobile; hide on desktop. */
+  body[area="Home"] article #Home-Tableofcontents,
+  body[area="Home"] article ul.childpages-macro {
+    display: none;
   }
 }
