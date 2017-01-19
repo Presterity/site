@@ -72,11 +72,9 @@ module.exports = (request) => {
     // Add a footer that's specific to the reference area.
     const footer = `
       <p>
-        See something wrong or missing on this page?
-        Ping us at
-        <a href="https://twitter.com/presterity">@presterity</a>
-        or
-        <a href="/Volunteering">help us fix it</a>!
+        You can <a href="/Submissions">submit news</a> on this topic.
+        If something's wrong on this page,
+        <a href="/Volunteering">help us fix it</a>.
       </p>
       <p>
         This work is licensed under a

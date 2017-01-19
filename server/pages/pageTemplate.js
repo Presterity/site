@@ -105,10 +105,10 @@ module.exports = (request, data) => loadFiles
                 ${body}
               </div>
               <footer>
-                <p id="daysRemainingMessage">
-                  ${daysRemainingMessage}
-                </p>
                 ${footer}
+                <p id="daysRemainingMessage">
+                ${daysRemainingMessage}
+                </p>
               </footer>
             </article>
             <div class="gutter"></div>
