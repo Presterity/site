@@ -12,9 +12,9 @@ const wiki = require('../connectors/wiki');
  */
 module.exports = (request) => {
 
-  const title = request.params.title;
-  const topic = wiki.unescapePageTitle(title);
-  const query = `${wiki.restUrl}?spaceKey=DB&title=${title}&expand=space,ancestors,body.view`;
+  const requestTitle = request.params.title;
+  const topic = wiki.unescapePageTitle(requestTitle);
+  const query = `${wiki.restUrl}?spaceKey=DB&title=${requestTitle}&expand=space,ancestors,body.view`;
 
   console.log(`Page: ${query}`);
 
@@ -44,17 +44,15 @@ module.exports = (request) => {
     }
 
     // Extract the bits of the page we care about.
-
     let ancestors = wikiPageJson.ancestors;
-    // Wiki pages with ancestors should act like they're under Home, with the
+    const area = areaForPage(wikiPageJson.title, ancestors);
+
+    // Wiki pages with no ancestors should act like they're under Home, with the
     // exception of Home itself.
     if (ancestors == null || ancestors.length === 0 && wikiPageJson.title !== 'Home') {
       ancestors = [{ title: 'Home' }];
     }
 
-    const area = ancestors[0] ?
-      ancestors[0].title :
-      wikiPageJson.title;
     const title = wikiPageJson.title === 'Home' ?
       'Presterity' :
        `${wikiPageJson.title} - Presterity`;
@@ -96,3 +94,24 @@ module.exports = (request) => {
     });
   });
 };
+
+
+// Determine the site area a page belongs in based on its title and ancestors.
+function areaForPage(title, ancestors) {
+  if (title === 'Home') {
+    // Home page is its own area.
+    return 'Home';
+  } else if (ancestors.length === 0) {
+    // Top-level pages (Search, Volunteering, Submissions) are their own areas.
+    return title;
+  } else if (ancestors[0].title === 'Home') {
+    // Pages beneath Home area in the "Reference" area.
+    return 'Reference';
+  } else if (ancestors.length > 0) {
+    // Other pages fall under their top ancestor.
+    return ancestors[0].title;
+  } else {
+    // Unknown.
+    return '';
+  }
+}
