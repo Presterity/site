@@ -57,6 +57,7 @@ module.exports = (request, data) => loadFiles.then(() => {
         <link rel="shortcut icon" href="/static/presterity.jpg" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="manifest" href="/static/manifest.json">
+        <meta name="google-site-verification" content="Nq-8AZ7c03O_XwuU1bFSdjODzP9rxDZ0ewHVGiHksFQ" />
         <script src="/static/client.js" async></script>
         ${analytics}
         ${head}
