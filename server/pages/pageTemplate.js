@@ -3,6 +3,7 @@
  */
 
 const fs = require('fs');
+const navigationPane = require('./navigationPane');
 const path= require('path');
 const promisify = require('../promisify');
 const readFilePromise = promisify(fs.readFile);
@@ -17,7 +18,6 @@ const loadFiles = fileContents('analytics.html')
 .then(result => {
   analytics = result;
 });
-// const loadFiles = Promise.resolve();
 
 
 /*
@@ -28,23 +28,27 @@ const loadFiles = fileContents('analytics.html')
  * The `loadFiles` promise will only need to do its work the first time it's
  * invoked, and thereafter return immediately.
  */
-module.exports = (request, data) => loadFiles.then(() => {
+module.exports = (request, data) => loadFiles
+  .then(() => navigationPane())
+  .then(navigation => {
 
   // Pick defaults for any values not specified in data.
-  const ancestors = data.ancestors || [];
   const area = data.area || '';
   const body = data.body || '';
   const footer = data.footer || '';
   const head = data.head || '';
   const heading = data.heading || data.title || '';
-  const navigation = data.navigation || '';
   const title = data.title ?
     data.title :
     data.heading ?
       `${data.heading} - Presterity` :
       '';
 
+  // Pages without ancestors should at least show Home as a breadcrumb so mobile
+  // users have a way to get back to Home.
+  const ancestors = data.ancestors || [{ title: 'Home' }];
   const breadcrumbs = breadcrumbLinks(ancestors);
+
   const daysRemainingMessage = daysRemaining();
 
   return `<!DOCTYPE html>
@@ -81,7 +85,7 @@ module.exports = (request, data) => loadFiles.then(() => {
           <header id="topNavigation">
             <div class="gutter"></div>
             <div id="topLinks">
-              <a id="linkAbout" href="/About">ABOUT THIS PROJECT</a>
+              <a id="linkAbout" href="/About">ABOUT</a>
               <a id="linkVolunteering" href="/Volunteering">VOLUNTEER</a>
               <a id="linkSearch" href="/search">SEARCH</a>
               <a id="linkSubmissions" href="/Submissions">SUBMIT NEWS</a>

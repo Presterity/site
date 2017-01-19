@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const navigationPane = require('./navigationPane');
 const notFoundPage = require('./notFoundPage');
 const pageTemplate = require('./pageTemplate');
 const topicLinks = require('./topicLinks');
@@ -27,20 +26,12 @@ module.exports = (request) => {
     topicLinks(topic) :
     Promise.resolve('');
 
-  // On the home page or reference pages, show a navigation pane.
-  const showNavigationPane = request.params.title === 'Home' ||
-      request.params.area === 'reference';
-  const navigationPanePromise = showNavigationPane ?
-    navigationPane() :
-    Promise.resolve('');
-
   // Once we've got the wiki page and topic links, put the page together.
-  return Promise.all([pagePromise, topicLinksPromise, navigationPanePromise])
+  return Promise.all([pagePromise, topicLinksPromise])
   .then(values => {
 
     const wikiResults = values[0]; // from pagePromise
     const topicLinksHtml = values[1]; // from topicLinksPromise
-    const navigation = values[2]; // from navigationPanePromise
 
     const wikiPageJson = wikiResults.results instanceof Array ?
       wikiResults.results[0] :
@@ -53,7 +44,13 @@ module.exports = (request) => {
 
     // Extract the bits of the page we care about.
 
-    const ancestors = wikiPageJson.ancestors;
+    let ancestors = wikiPageJson.ancestors;
+    // Wiki pages with ancestors should act like they're under Home, with the
+    // exception of Home itself.
+    if (ancestors == null || ancestors.length === 0 && wikiPageJson.title !== 'Home') {
+      ancestors = [{ title: 'Home' }];
+    }
+
     const area = ancestors[0] ?
       ancestors[0].title :
       wikiPageJson.title;
@@ -94,7 +91,6 @@ module.exports = (request) => {
       body,
       footer,
       heading,
-      navigation,
       title
     });
   });
