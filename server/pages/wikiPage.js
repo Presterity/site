@@ -22,7 +22,8 @@ module.exports = (request) => {
   const pagePromise = fetch(query).then(response => response.json());
 
   // On pages in the /reference area, ask for bookmarks in the form of links.
-  const topicLinksPromise = request.params.area === 'reference' ?
+  const isReferencePage = request.params.area === 'reference';
+  const topicLinksPromise = isReferencePage ?
     topicLinks(topic) :
     Promise.resolve('');
 
@@ -70,17 +71,19 @@ module.exports = (request) => {
     const body = wiki.rewriteHtml(mainPaneHtml);
 
     // Add a footer that's specific to the reference area.
-    const footer = `
-      <p>
-        You can <a href="/Submissions">submit news</a> on this topic.
-        If something's wrong on this page,
-        <a href="/Volunteering">help us fix it</a>.
-      </p>
-      <p>
-        This work is licensed under a
-        <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
-      </p>
-    `;
+    const footer = isReferencePage ?
+      `
+        <p>
+          You can <a href="/Submissions">submit news</a> on this topic.
+          If something's wrong on this page,
+          <a href="/Volunteering">help us fix it</a>.
+        </p>
+        <p>
+          This work is licensed under a
+          <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+        </p>
+      ` :
+      '';
 
     // Pour all that into our standard page template.
     return pageTemplate(request, {

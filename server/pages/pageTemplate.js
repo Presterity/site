@@ -112,7 +112,7 @@ module.exports = (request, data) => loadFiles
                 <p>${tweetHtml}</p>
                 ${footer}
                 <p id="daysRemainingMessage">
-                ${daysRemainingMessage}
+                  ${daysRemainingMessage}
                 </p>
               </footer>
             </article>
