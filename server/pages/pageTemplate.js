@@ -7,6 +7,7 @@ const navigationPane = require('./navigationPane');
 const path= require('path');
 const promisify = require('../promisify');
 const readFilePromise = promisify(fs.readFile);
+const tweetButton = require('./tweetButton');
 
 const breadcrumbLinks = require('./breadcrumbLinks');
 const daysRemaining = require('./daysRemaining');
@@ -50,6 +51,9 @@ module.exports = (request, data) => loadFiles
   const breadcrumbs = breadcrumbLinks(ancestors);
 
   const daysRemainingMessage = daysRemaining();
+
+  const url = `${request.protocol}://${request.headers.host}${request.url}`;
+  const tweetHtml = tweetButton(`${heading}`, url);
 
   return `<!DOCTYPE html>
     <html lang="en">
@@ -105,6 +109,7 @@ module.exports = (request, data) => loadFiles
                 ${body}
               </div>
               <footer>
+                <p>${tweetHtml}</p>
                 ${footer}
                 <p id="daysRemainingMessage">
                 ${daysRemainingMessage}

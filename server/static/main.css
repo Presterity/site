@@ -316,6 +316,34 @@ footer p {
 }
 
 
+/* Tweet button */
+
+.tweetButton {
+  -webkit-align-items: center;
+  align-items: center;
+  background-color: #1b95e0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #fff !important;
+  cursor: pointer;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  padding: 5px 10px;
+}
+
+.tweetButton:hover,
+.tweetButton:focus {
+  text-decoration: none;
+}
+
+.tweetButton svg {
+  height: 16px;
+  margin-right: 5px;
+}
+
+
 /* Hide boring macro output */
 .content-by-label > li > div {
   display: none; /* Hide most macro bulllet content */
