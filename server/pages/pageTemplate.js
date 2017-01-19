@@ -2,11 +2,33 @@
  * Main page template for all web site pages.
  */
 
+const fs = require('fs');
+const path= require('path');
+const promisify = require('../promisify');
+const readFilePromise = promisify(fs.readFile);
+
 const breadcrumbLinks = require('./breadcrumbLinks');
 const daysRemaining = require('./daysRemaining');
 
 
-module.exports = (request, data) => {
+// Load includes which are broken out into separate files for easier editing.
+let analytics;
+const loadFiles = fileContents('analytics.html')
+.then(result => {
+  analytics = result;
+});
+// const loadFiles = Promise.resolve();
+
+
+/*
+ * Return a promise for HTML that renders the given data using the site's
+ * default page template.
+ *
+ * This waits for initialization to be complete before return its work.
+ * The `loadFiles` promise will only need to do its work the first time it's
+ * invoked, and thereafter return immediately.
+ */
+module.exports = (request, data) => loadFiles.then(() => {
 
   // Pick defaults for any values not specified in data.
   const ancestors = data.ancestors || [];
@@ -36,6 +58,7 @@ module.exports = (request, data) => {
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="manifest" href="/static/manifest.json">
         <script src="/static/client.js" async></script>
+        ${analytics}
         ${head}
       </head>
       <body area="${area}" page="${heading}">
@@ -88,4 +111,12 @@ module.exports = (request, data) => {
         </div>
       </body>
     </html>`;
-};
+});
+
+
+// Return a promise for contents of the file with the indicated relative path.
+function fileContents(relativePath) {
+  const absolutePath = path.join(__dirname, relativePath);
+  return readFilePromise(absolutePath)
+  .then(buffer => buffer.toString());
+}
