@@ -62,7 +62,7 @@ module.exports = (request, data) => loadFiles
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>${title}</title>
         <link rel="stylesheet" href="/static/main.css">
-        <link rel="shortcut icon" href="/static/presterity.jpg" type="image/x-icon" />
+        <link rel="shortcut icon" href="/static/appIcon.png" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="manifest" href="/static/manifest.json">
         <meta name="google-site-verification" content="4TmUwdRDIEbTE65Bw8HwEyVZqJthy2MvT0S327h_Gdg" />
@@ -74,7 +74,7 @@ module.exports = (request, data) => loadFiles
         <nav class="sideNavigation">
           <div id="logoBlock">
             <a id="linkHome" href="/">
-              <img id="logo" src="/static/presterity.png" alt="Presterity">
+              <img id="logo" src="/static/presterity.png" alt="Presterity logo: a torch and a book">
             </a>
           </div>
           <p id="tableOfContentsCaption">
@@ -104,6 +104,7 @@ module.exports = (request, data) => loadFiles
           <div class="articleContainer">
             <div class="gutter"></div>
             <article class="wikiContent">
+              <img id="mobileHomeLogo" src="/static/appIcon.png" alt="Presterity logo: a torch and a book">
               <h1 class="pageTitle">${heading}</h1>
               <div>
                 ${body}

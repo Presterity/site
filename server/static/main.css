@@ -85,7 +85,7 @@ img {
 #logo {
   display: block;
   margin: 0 auto 10px;
-  width: 124px;
+  width: 148px;
 }
 
 .sideNavigation p {
@@ -225,6 +225,16 @@ body[area="About"] #linkAbout {
   flex: 9;
 }
 
+/* Logo for mobile Home page only */
+#mobileHomeLogo {
+  display: none;
+  width: 100%;
+  max-width: 350px;
+}
+body[area="Home"] #mobileHomeLogo {
+  display: block;
+}
+
 .pageTitle {
   color: black;
   font-size: 2.5em;
@@ -359,6 +369,11 @@ footer p {
 
   .sideNavigation {
     display: block;
+  }
+
+  /* Home page logo not needed on desktop. */
+  body[area="Home"] #mobileHomeLogo {
+    display: none;
   }
 
   /* Home page table of contents only needed on mobile; hide on desktop. */
