@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const latestLinks = require('./latestLinks');
 const notFoundPage = require('./notFoundPage');
 const pageTemplate = require('./pageTemplate');
 const topicLinks = require('./topicLinks');
@@ -22,17 +23,21 @@ module.exports = (request) => {
   const pagePromise = fetch(query).then(response => response.json());
 
   // On pages in the /reference area, ask for bookmarks in the form of links.
+  // Home page gets a special set of links: the most recent links added to site.
+  const isHomePage = request.params.title === 'Home';
   const isReferencePage = request.params.area === 'reference';
-  const topicLinksPromise = isReferencePage ?
-    topicLinks(topic) :
-    Promise.resolve('');
+  const linksPromise = isHomePage ?
+    latestLinks() :
+    isReferencePage ?
+      topicLinks(topic) :
+      Promise.resolve('');  // Some other page -- no need to get links.
 
   // Once we've got the wiki page and topic links, put the page together.
-  return Promise.all([pagePromise, topicLinksPromise])
+  return Promise.all([pagePromise, linksPromise])
   .then(values => {
 
     const wikiResults = values[0]; // from pagePromise
-    const topicLinksHtml = values[1]; // from topicLinksPromise
+    const linksHtml = values[1]; // from linksPromise
 
     const wikiPageJson = wikiResults.results instanceof Array ?
       wikiResults.results[0] :
@@ -62,7 +67,7 @@ module.exports = (request) => {
 
     // The main page content with be the wiki page + formatted topic links.
     const wikiHtml = wikiPageJson.body.view.value;
-    const mainPaneHtml = wikiHtml.replace('<em>(Topic links will automatically appear here.)</em>', topicLinksHtml);
+    const mainPaneHtml = wikiHtml.replace('<em>(Topic links will automatically appear here.)</em>', linksHtml);
 
     // The body will include link which are relative to the wiki.
     // We fix those up so they refer to URLs on our site instead.

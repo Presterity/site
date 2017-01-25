@@ -97,6 +97,16 @@ function getResultsForPage(topic, pageNumber) {
   .then(response => response.json());
 }
 
+// Return the latest bookmarks, up to a maximum of count (but no more than 40).
+// The default count is 10.
+function mostRecentBookmarks(count = 10) {
+  const url = `${RAINDROP_REST_URL}?perpage=${count}`;
+  console.log(`Latest bookmarks: ${url}`);
+  return fetch(url)
+  .then(response => response.json())
+  .then(json => json.items);
+}
+
 // Return a promise for pages 1..pageCount of bookmarks for the given topic.
 // This does *not* get the bookmarks on page 0. We handle those separately.
 // Accordingly, if pageCount is 0 or 1, this returns a resolved promise for
@@ -110,5 +120,6 @@ function getResultsForPages(topic, pageCount) {
 }
 
 module.exports = {
-  bookmarksForTopic
+  bookmarksForTopic,
+  mostRecentBookmarks
 };
