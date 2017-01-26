@@ -1,77 +1,54 @@
-const fetch = require('node-fetch');
-const latestLinks = require('./latestLinks');
 const notFoundPage = require('./notFoundPage');
 const pageTemplate = require('./pageTemplate');
 const topicLinks = require('./topicLinks');
 const wiki = require('../connectors/wiki');
 
 /*
- * Return a formatted version of the wiki page indicated by the given HTTP
- * request.
+ * Return a formatted version of the wiki page indicated by the title in the
+ * given HTTP request.
  *
  * If the wiki page isn't found, this returns a "Not Found" page.
  */
 module.exports = (request) => {
 
-  const requestTitle = request.params.title;
-  const topic = wiki.unescapePageTitle(requestTitle);
-  const query = `${wiki.restUrl}?spaceKey=DB&title=${requestTitle}&expand=space,ancestors,body.view`;
-
-  console.log(`Page: ${query}`);
+  const wikiPageTitle = wiki.unescapePageTitle(request.params.title);
 
   // Get the content of the corresponding wiki page.
-  const pagePromise = fetch(query).then(response => response.json());
+  const pagePromise = wiki.wikiPageWithTitle(wikiPageTitle);
 
   // On pages in the /reference area, ask for bookmarks in the form of links.
-  // Home page gets a special set of links: the most recent links added to site.
-  const isHomePage = request.params.title === 'Home';
   const isReferencePage = request.params.area === 'reference';
-  const linksPromise = isHomePage ?
-    latestLinks() :
-    isReferencePage ?
-      topicLinks(topic) :
-      Promise.resolve('');  // Some other page -- no need to get links.
+  const linksPromise = isReferencePage ?
+    topicLinks(wikiPageTitle) :
+    Promise.resolve('');  // Some other page -- no need to get links.
 
   // Once we've got the wiki page and topic links, put the page together.
   return Promise.all([pagePromise, linksPromise])
-  .then(values => {
+  .then(results => {
 
-    const wikiResults = values[0]; // from pagePromise
-    const linksHtml = values[1]; // from linksPromise
+    const pageJson = results[0]; // from pagePromise
+    const linksHtml = results[1]; // from linksPromise
 
-    const wikiPageJson = wikiResults.results instanceof Array ?
-      wikiResults.results[0] :
-      wikiResults;
-    if (!wikiPageJson) {
+    if (!pageJson) {
       // We couldn't find a wiki page with that name.
       // Serve up a "Not found" page instead.
-      return notFoundPage(request, topic);
+      return notFoundPage(request, wikiPageTitle);
     }
 
     // Extract the bits of the page we care about.
-    let ancestors = wikiPageJson.ancestors;
-    const area = areaForPage(wikiPageJson.title, ancestors);
+    const area = areaForPage(pageJson.title, pageJson.ancestors);
 
     // Wiki pages with no ancestors should act like they're under Home, with the
     // exception of Home itself.
-    if (ancestors == null || ancestors.length === 0 && wikiPageJson.title !== 'Home') {
-      ancestors = [{ title: 'Home' }];
-    }
+    const ancestors = (pageJson.ancestors == null || pageJson.ancestors.length === 0) ?
+      [{ title: wiki.HOME_PAGE_TITLE }] :
+      pageJson.ancestors;
 
-    const title = wikiPageJson.title === 'Home' ?
-      'Presterity' :
-       `${wikiPageJson.title} - Presterity`;
-    const heading = wikiPageJson.title === 'Home' ?
-      'Presterity' :
-      wikiPageJson.title;
+    const title = `${pageJson.title} - Presterity`;
+    const heading = pageJson.title;
 
     // The main page content with be the wiki page + formatted topic links.
-    const wikiHtml = wikiPageJson.body.view.value;
-    const mainPaneHtml = wikiHtml.replace('<em>(Topic links will automatically appear here.)</em>', linksHtml);
-
-    // The body will include link which are relative to the wiki.
-    // We fix those up so they refer to URLs on our site instead.
-    const body = wiki.rewriteHtml(mainPaneHtml);
+    const body = wiki.replacePlaceholderWithLinks(pageJson.body, linksHtml);
 
     // Add a footer that's specific to the reference area.
     const footer = isReferencePage ?
@@ -103,13 +80,10 @@ module.exports = (request) => {
 
 // Determine the site area a page belongs in based on its title and ancestors.
 function areaForPage(title, ancestors) {
-  if (title === 'Home') {
-    // Home page is its own area.
-    return 'Home';
-  } else if (ancestors.length === 0) {
+  if (ancestors.length === 0) {
     // Top-level pages (Search, Volunteering, Submissions) are their own areas.
     return title;
-  } else if (ancestors[0].title === 'Home') {
+  } else if (ancestors[0].title === wiki.HOME_PAGE_TITLE) {
     // Pages beneath Home area in the "Reference" area.
     return 'Reference';
   } else if (ancestors.length > 0) {

@@ -44,7 +44,7 @@ module.exports = () => {
 // Returns a promise to get the navigation HTML from the wiki.
 function getNavigationFromWiki() {
   const title = 'Navigation';
-  const query = `${wiki.restUrl}?spaceKey=DB&title=${title}&expand=body.view`;
+  const query = `${wiki.REST_URL}?spaceKey=DB&title=${title}&expand=body.view`;
   console.log(`Navigation: ${query}`);
   return fetch(query)
   .then(response => response.json())

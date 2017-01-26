@@ -15,6 +15,7 @@ const wikiLabelPage = require('./pages/wikiLabelPage');
 const searchPage = require('./pages/searchPage');
 const wiki = require('./connectors/wiki');
 const wikiPage = require('./pages/wikiPage');
+const homePage = require('./pages/homePage');
 const errorPage = require('./pages/errorPage');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
@@ -62,7 +63,7 @@ app.get('/search', (request, response) => {
 
 // Serve an image or other page attachment from the wiki.
 app.get('/wiki/download/*', (request, response) => {
-  const url = `${wiki.baseUrl}${request.url}`;
+  const url = `${wiki.BASE_URL}${request.url}`;
   console.log(`Download: ${url}`);
   fetch(url)
   .then(result => result.buffer())
@@ -84,8 +85,7 @@ app.get(['/:title', '/:area/:title'], (request, response) => {
 
 // Serve up home page
 app.get('/', (request, response) => {
-  request.params.title = 'Home';
-  respondWithPage(request, wikiPage, response);
+  respondWithPage(request, homePage, response);
 });
 
 
@@ -109,7 +109,7 @@ function inferContentType(content) {
 // Redirect a request for a page by ID to a request for page by title.
 function redirectIdToTitle(request, response) {
   const pageId = request.params.pageId;
-  const query = `${wiki.restUrl}/${pageId}`;
+  const query = `${wiki.REST_URL}/${pageId}`;
   return fetch(query)
   .then(response => response.json())
   .then(json => {

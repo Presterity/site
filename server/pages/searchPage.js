@@ -23,7 +23,7 @@ module.exports = (request) => {
   if (isNewSearch) {
     searchPromise = Promise.resolve({});
   } else {
-    const query = `${wiki.searchUrl}text~${searchText}`;
+    const query = `${wiki.SEARCH_URL}text~${searchText}`;
     console.log(`Search for: ${query}`);
     searchPromise = fetch(query).then(response => response.json());
   }
