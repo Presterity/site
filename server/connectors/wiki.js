@@ -150,7 +150,7 @@ function wikiPageWithTitle(title) {
       json.results[0] :
       json;
 
-    if (pageJson === null) {
+    if (!pageJson) {
       return null;
     }
 
