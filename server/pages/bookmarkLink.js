@@ -1,3 +1,6 @@
+const wiki = require('../connectors/wiki');
+
+
 /*
  * Return a bookmark from the server as HTML for presentation to the user.
  * This will be a row intended for display in a table.
@@ -25,7 +28,10 @@ module.exports = (bookmark, topic) => {
   const excludeCurrentTag = topic != null;
   const tags = bookmark.tags
       .filter(tag => tag !== topic)
-      .map(tag => `<a href="/reference/${tag}">${tag}</a>`);
+      .map(tag => {
+        const url = `/reference/${wiki.escapePageTitle(tag)}`;
+        return `<a href="${url}">${tag}</a>`;
+      });
   let tagsHtml = tags.join(', ');
   if (tagsHtml.trim().length > 0) {
     const seeLabel = excludeCurrentTag ? 'See also' : 'See';
