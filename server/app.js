@@ -11,12 +11,14 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const fetch = require('node-fetch');
-const wikiLabelPage = require('./pages/wikiLabelPage');
-const searchPage = require('./pages/searchPage');
-const wiki = require('./connectors/wiki');
-const wikiPage = require('./pages/wikiPage');
-const homePage = require('./pages/homePage');
 const errorPage = require('./pages/errorPage');
+const homePage = require('./pages/homePage');
+const robots = require('./pages/robots');
+const searchPage = require('./pages/searchPage');
+const sitemap = require('./pages/sitemap');
+const wiki = require('./connectors/wiki');
+const wikiLabelPage = require('./pages/wikiLabelPage');
+const wikiPage = require('./pages/wikiPage');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
 const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
@@ -56,9 +58,19 @@ app.get('/reference/label/:label', (request, response) => {
   respondWithPage(request, wikiLabelPage, response);
 });
 
+// Serve robots.txt
+app.get('/robots.txt', (request, response) => {
+  respondWithPage(request, robots, response);
+});
+
 // Serve a search page.
 app.get('/search', (request, response) => {
   respondWithPage(request, searchPage, response);
+});
+
+// Serve sitemap.xml
+app.get('/sitemap.xml', (request, response) => {
+  respondWithPage(request, sitemap, response);
 });
 
 // Serve an image or other page attachment from the wiki.
