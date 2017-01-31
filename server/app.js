@@ -10,18 +10,34 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8000;
 
-const fetch = require('node-fetch');
+const wiki = require('./connectors/wiki');
+
 const errorPage = require('./pages/errorPage');
 const homePage = require('./pages/homePage');
 const robots = require('./pages/robots');
 const searchPage = require('./pages/searchPage');
 const sitemap = require('./pages/sitemap');
-const wiki = require('./connectors/wiki');
 const wikiLabelPage = require('./pages/wikiLabelPage');
 const wikiPage = require('./pages/wikiPage');
+const wikiResource = require('./pages/wikiResource');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
 const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
+
+//
+// General route handlers, which map a route to a function that returns the
+// body of the response.
+//
+const routes = {
+  '/error': errorPage,
+  '/reference/label/:label': wikiLabelPage,
+  '/robots.txt': robots,
+  '/search': searchPage,
+  '/sitemap.xml': sitemap,
+  '/:title': wikiPage,
+  '/:area/:title': wikiPage,
+  '/': homePage
+};
 
 
 // Tell Express to serve up static content from the ./static folder.
@@ -31,54 +47,12 @@ app.use('/static', express.static(staticPath, {
 }));
 
 //
-// Route handlers.
-// These should generally go from most- to least-specific routes.
+// Specialized route handlers.
 //
-
-// Serve an error page.
-app.get('/error', (request, response) => {
-  respondWithPage(request, errorPage, response);
-});
-
-// Top-level of reference redirects to site home page.
-app.get('/reference', (request, response) => {
-  response.redirect('/');
-});
-
-// Redirect pages by ID to their title equivalent.
-// There are cases where a wiki page link will refer to a page by ID.
-// This seems to happen if the wiki page title includes punctuation.
-app.get('/reference/id/:pageId', (request, response) => {
-  redirectIdToTitle(request, response);
-});
-
-// Serve a label page.
-// Labels are tags on wiki pages. Certain wiki links will point to these.
-app.get('/reference/label/:label', (request, response) => {
-  respondWithPage(request, wikiLabelPage, response);
-});
-
-// Serve robots.txt
-app.get('/robots.txt', (request, response) => {
-  respondWithPage(request, robots, response);
-});
-
-// Serve a search page.
-app.get('/search', (request, response) => {
-  respondWithPage(request, searchPage, response);
-});
-
-// Serve sitemap.xml
-app.get('/sitemap.xml', (request, response) => {
-  respondWithPage(request, sitemap, response);
-});
 
 // Serve an image or other page attachment from the wiki.
 app.get('/wiki/download/*', (request, response) => {
-  const url = `${wiki.BASE_URL}${request.url}`;
-  console.log(`Download: ${url}`);
-  fetch(url)
-  .then(result => result.buffer())
+  wikiResource(request)
   .then(buffer => {
     response.set({
       'Cache-Control': CACHE_CONTROL_VALUE
@@ -90,15 +64,29 @@ app.get('/wiki/download/*', (request, response) => {
   });
 });
 
-// Serve a top-level page, or page within a top-level area.
-app.get(['/:title', '/:area/:title'], (request, response) => {
-  respondWithPage(request, wikiPage, response);
+// Redirect pages by ID to their title equivalent.
+// There are cases where a wiki page link will refer to a page by ID.
+// This seems to happen if the wiki page title includes punctuation.
+app.get('/reference/id/:pageId', (request, response) => {
+  redirectIdToTitle(request, response);
 });
 
-// Serve up home page
-app.get('/', (request, response) => {
-  respondWithPage(request, homePage, response);
+// Top-level of reference redirects to site home page.
+app.get('/reference/', (request, response) => {
+  response.redirect('/');
 });
+
+//
+// Wire up general route handlers.
+//
+for (let route in routes) {
+  const renderFunction = routes[route];
+  console.log(`Wiring up ${route}`);
+  app.get(route, (request, response) => {
+    renderResponse(request, renderFunction, response);
+  });
+}
+
 
 
 //
@@ -121,11 +109,8 @@ function inferContentType(content) {
 // Redirect a request for a page by ID to a request for page by title.
 function redirectIdToTitle(request, response) {
   const pageId = request.params.pageId;
-  const query = `${wiki.REST_URL}/${pageId}`;
-  return fetch(query)
-  .then(response => response.json())
-  .then(json => {
-    const title = wiki.escapePageTitle(json.title);
+  wiki.getTitleForPageWithId(pageId)
+  .then(title => {
     console.log(`Redirecting page by ID ${pageId} to title "${title}"`);
     const url = `/reference/${title}`;
     response.redirect(url);
@@ -136,7 +121,7 @@ function redirectIdToTitle(request, response) {
 }
 
 // Handle a web request by returning an instance of the indicated page.
-function respondWithPage(request, page, response) {
+function renderResponse(request, page, response) {
   // Render the request as page content, or a promise for content.
   const result = page(request);
   // If the result's not already a promise, cast it to a promise.
@@ -152,7 +137,7 @@ function respondWithPage(request, page, response) {
   .catch(exception => {
     log(exception);
     if (page !== errorPage) {
-      respondWithPage(request, errorPage, response);
+      renderResponse(request, errorPage, response);
     }
   });
 }

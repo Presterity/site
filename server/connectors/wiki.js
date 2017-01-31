@@ -11,7 +11,6 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
-
 const BASE_URL = 'https://presterity.atlassian.net';
 const REST_URL = `${BASE_URL}/wiki/rest/api/content`;
 const SEARCH_URL = `${REST_URL}/search?cql=space=DB and `;
@@ -46,6 +45,19 @@ const mapPageTitleToSiteUrl = {
  */
 function escapePageTitle(title) {
   return title.replace(/ /g, '+');
+}
+
+/*
+ * Return a promise for the title for the page with the given ID.
+ */
+function getTitleForPageWithId(pageId) {
+  const query = `${REST_URL}/${pageId}`;
+  return fetch(query)
+  .then(response => response.json())
+  .then(json => {
+    const title = escapePageTitle(json.title);
+    return title;
+  });
 }
 
 /*
@@ -170,6 +182,7 @@ function wikiPageWithTitle(title) {
 module.exports = {
   BASE_URL,
   escapePageTitle,
+  getTitleForPageWithId,
   HOME_PAGE_TITLE,
   labelToSiteUrl,
   pageTitleToSiteUrl,

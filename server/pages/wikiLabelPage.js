@@ -9,7 +9,7 @@ const wiki = require('../connectors/wiki');
  */
 module.exports = (request) => {
   const label = request.params.label;
-  const query = `${wiki.searchUrl}label=${label}`;
+  const query = `${wiki.SEARCH_URL}label=${label}`;
   console.log(`Label page: ${query}`);
   return fetch(query)
   .then(response => response.json())
