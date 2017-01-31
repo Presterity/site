@@ -2,7 +2,7 @@
  * Return a simple robots.txt that allows full access to everything.
  */
 module.exports = (request) => `
-  Sitemap: ${request.protocol}://${request.headers.host}/sitemap.xml
+  Sitemap: https://presterity.org/sitemap.xml
   User-agent: *
   Disallow:
 `;
