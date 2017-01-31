@@ -23,7 +23,8 @@ module.exports = (request) => {
   if (isNewSearch) {
     searchPromise = Promise.resolve({});
   } else {
-    const query = `${wiki.SEARCH_URL}text~${searchText}`;
+    const escapedText = encodeURIComponent(searchText);
+    const query = `${wiki.SEARCH_URL}text~"${escapedText}"`;
     console.log(`Search for: ${query}`);
     searchPromise = fetch(query).then(response => response.json());
   }
