@@ -62,11 +62,13 @@ module.exports = (request, data) => loadFiles
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>${title}</title>
         <link rel="stylesheet" href="/static/main.css">
+        <script src="/static/client.js" async></script>
         <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="manifest" href="/static/manifest.json">
         <meta name="google-site-verification" content="4TmUwdRDIEbTE65Bw8HwEyVZqJthy2MvT0S327h_Gdg" />
-        <script src="/static/client.js" async></script>
+        <meta property="og:url" content="${url}" />
+        <meta property="og:image" content="/static/facebookShare.png" />
         ${analytics}
         ${head}
       </head>
