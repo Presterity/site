@@ -52,7 +52,7 @@ module.exports = (request, data) => loadFiles
 
   const daysRemainingMessage = daysRemaining();
 
-  const baseUrl = `${request.protocol}://${request.headers.host}`;
+  const baseUrl = `https://${request.headers.host}`;
   const url = `${baseUrl}${request.url}`;
   const tweetHtml = tweetButton(`${heading}`, url);
 
