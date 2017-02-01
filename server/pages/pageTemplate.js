@@ -68,6 +68,7 @@ module.exports = (request, data) => loadFiles
         <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
         <link rel="manifest" href="/static/manifest.json">
         <meta name="google-site-verification" content="4TmUwdRDIEbTE65Bw8HwEyVZqJthy2MvT0S327h_Gdg" />
+        <meta property="og:title" content="${title}" />
         <meta property="og:url" content="${url}" />
         <meta property="og:image" content="${baseUrl}/static/facebookShare.png" />
         ${analytics}
