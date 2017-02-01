@@ -81,7 +81,6 @@ app.get('/reference/', (request, response) => {
 //
 for (let route in routes) {
   const renderFunction = routes[route];
-  console.log(`Wiring up ${route}`);
   app.get(route, (request, response) => {
     renderResponse(request, renderFunction, response);
   });
