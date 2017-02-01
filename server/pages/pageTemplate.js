@@ -52,7 +52,8 @@ module.exports = (request, data) => loadFiles
 
   const daysRemainingMessage = daysRemaining();
 
-  const url = `${request.protocol}://${request.headers.host}${request.url}`;
+  const baseUrl = `${request.protocol}://${request.headers.host}`;
+  const url = `${baseUrl}${request.url}`;
   const tweetHtml = tweetButton(`${heading}`, url);
 
   return `<!DOCTYPE html>
@@ -68,7 +69,7 @@ module.exports = (request, data) => loadFiles
         <link rel="manifest" href="/static/manifest.json">
         <meta name="google-site-verification" content="4TmUwdRDIEbTE65Bw8HwEyVZqJthy2MvT0S327h_Gdg" />
         <meta property="og:url" content="${url}" />
-        <meta property="og:image" content="/static/facebookShare.png" />
+        <meta property="og:image" content="${baseUrl}/static/facebookShare.png" />
         ${analytics}
         ${head}
       </head>
