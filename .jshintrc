@@ -3,7 +3,8 @@
   "esnext": true,
   "eqnull": true,
   "globals": {
-    "console": false
+    "console": false,
+    "React": false
   },
   "node": true,
   "undef": true,

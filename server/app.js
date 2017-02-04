@@ -12,6 +12,10 @@ const port = process.env.PORT || 8000;
 
 const wiki = require('./connectors/wiki');
 
+const render = require('preact-render-to-string');
+const h = require('preact').h;
+const components = require('../dist/server');
+
 const errorPage = require('./pages/errorPage');
 const homePage = require('./pages/homePage');
 const robots = require('./pages/robots');
@@ -49,6 +53,20 @@ app.use('/static', express.static(staticPath, {
 //
 // Specialized route handlers.
 //
+
+app.get('/hello', (request, response) => {
+  const page = components.Hello;
+  const promise = page.asyncProperties || Promise.resolve({ message: "Hello, world." });
+  promise.then(props => {
+    // const html = render(h(components.AppShell, null, h(page, props)));
+    const html = render(h(components.AppShell, { title: "Test" }, h(page, props)));
+    response.set({
+      'Content-Type': 'text/html'
+    });
+    response.send(html);
+  });
+
+});
 
 // Serve an image or other page attachment from the wiki.
 app.get('/wiki/download/*', (request, response) => {
