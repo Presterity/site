@@ -10,7 +10,10 @@ export default class Hello extends Component {
 
   render(props, state) {
     return (
-      <PageTemplate title={props.title} navigation={props.navigation}>
+      <PageTemplate
+          title={props.title}
+          navigation={props.navigation}
+          ancestors={props.ancestors}>
         <p>{props.message}</p>
       </PageTemplate>
     );

@@ -1,4 +1,5 @@
 import { Component, h } from 'preact'; // jshint ignore:line
+import BreadcrumbBar from './BreadcrumbBar';
 import SideNavigation from './SideNavigation';
 import TopNavigation from './TopNavigation';
 
@@ -20,7 +21,7 @@ export default class StandardPage extends Component {
           <TopNavigation/>
           <div class="breadcrumbBar">
             <div class="gutter"></div>
-            <div class="breadcrumbs">breadcrumbs...</div>
+            <BreadcrumbBar ancestors={props.ancestors}/>
             <div class="gutter"></div>
           </div>
           <div class="articleContainer">

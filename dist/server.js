@@ -167,7 +167,10 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
   render(props, state) {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
-      { title: props.title, navigation: props.navigation },
+      {
+        title: props.title,
+        navigation: props.navigation,
+        ancestors: props.ancestors },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'p',
         null,
@@ -187,9 +190,11 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SideNavigation__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TopNavigation__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BreadcrumbBar__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SideNavigation__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TopNavigation__ = __webpack_require__(7);
  // jshint ignore:line
+
 
 
 
@@ -199,27 +204,23 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   static get asyncProperties() {
-    return __WEBPACK_IMPORTED_MODULE_1__SideNavigation__["a" /* default */].asyncProperties;
+    return __WEBPACK_IMPORTED_MODULE_2__SideNavigation__["a" /* default */].asyncProperties;
   }
 
   render(props, state) {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
       { 'class': 'pageWrapper' },
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_1__SideNavigation__["a" /* default */], { navigation: props.navigation }),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__SideNavigation__["a" /* default */], { navigation: props.navigation }),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'div',
         { 'class': 'main' },
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__TopNavigation__["a" /* default */], null),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_3__TopNavigation__["a" /* default */], null),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
           'div',
           { 'class': 'breadcrumbBar' },
           __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { 'class': 'gutter' }),
-          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-            'div',
-            { 'class': 'breadcrumbs' },
-            'breadcrumbs...'
-          ),
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_1__BreadcrumbBar__["a" /* default */], { ancestors: props.ancestors }),
           __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { 'class': 'gutter' })
         ),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
@@ -651,6 +652,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+ // jshint ignore:line
+const wiki = __webpack_require__(8);
+
+/**
+ * Side navigation pane
+ */
+class BreadcrumbBar extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
+
+  render(props, state) {
+
+    // TODO: Add ' / ' ::before the breadcrumbs.
+    const ancestors = props.ancestors || [];
+    const breadcrumbs = ancestors.map(ancestor => {
+      const title = ancestor.title;
+      const siteUrl = wiki.pageTitleToSiteUrl(title);
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'a',
+        { href: siteUrl },
+        title
+      );
+    });
+
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'div',
+      { 'class': 'breadcrumbs' },
+      breadcrumbs
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = BreadcrumbBar;
 
 
 /***/ })

@@ -56,7 +56,11 @@ app.use('/static', express.static(staticPath, {
 
 app.get('/hello', (request, response) => {
   const page = components.Hello;
-  const defaultProps = { message: "Hello, world.", title: "Hello" };
+  const defaultProps = {
+    ancestors: [{ title: 'Home' }],
+    message: "Hello, world.",
+    title: "Hello"
+  };
   const promise = page.asyncProperties || Promise.resolve();
   promise.then(asyncProps => {
     // const html = render(h(components.AppShell, null, h(page, props)));
