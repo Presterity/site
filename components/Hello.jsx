@@ -1,10 +1,8 @@
-/** @jsx h */
-
 import { h } from 'preact'; // jshint ignore:line
+import PageTemplate from './PageTemplate';
 
 export default (props) => (
-  <div>
-    <h1>Test</h1>
+  <PageTemplate title={props.title}>
     <p>{props.message}</p>
-  </div>
+  </PageTemplate>
 );

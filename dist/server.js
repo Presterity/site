@@ -567,32 +567,35 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/** @jsx h */
-
  // jshint ignore:line
 
 class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   render(props, state) {
+
+    const titleBar = props.titleBar || props.title ? `${props.title} - Presterity` : '';
+
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      "html",
-      null,
+      'html',
+      { lang: 'en' },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-        "head",
+        'head',
         null,
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { charset: 'utf-8' }),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { name: 'viewport', content: 'width=device-width,initial-scale=1.0' }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-          "title",
+          'title',
           null,
-          this.props.title
+          titleBar
         ),
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("link", { rel: "stylesheet", href: "/static/main.css" })
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('link', { rel: 'stylesheet', href: '/static/main.css' })
       ),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-        "body",
+        'body',
         null,
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-          "div",
-          { id: "root" },
+          'div',
+          { id: 'root' },
           props.children
         )
       )
@@ -610,18 +613,13 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/** @jsx h */
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(5);
  // jshint ignore:line
 
+
 /* harmony default export */ __webpack_exports__["a"] = props => __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-  'div',
-  null,
-  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-    'h1',
-    null,
-    'Test'
-  ),
+  __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+  { title: props.title },
   __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
     'p',
     null,
@@ -642,6 +640,143 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+
+/***/ }),
+/* 4 */,
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+ // jshint ignore:line
+
+/**
+ * Template for a standard page on the site.
+ */
+class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
+
+  render(props, state) {
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      "div",
+      { "class": "pageWrapper" },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        "nav",
+        { "class": "sideNavigation" },
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          "div",
+          { id: "logoBlock" },
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+            "a",
+            { id: "linkHome", href: "/" },
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("img", { id: "logo", src: "/static/presterity.png", alt: "Presterity logo: a torch and a book" })
+          )
+        ),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          "p",
+          { id: "tableOfContentsCaption" },
+          "TABLE ",
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+            "em",
+            null,
+            "of"
+          ),
+          " CONTENTS"
+        ),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          "div",
+          { id: "captionSeparatorContainer" },
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("div", { id: "captionSeparator" })
+        ),
+        "navigation..."
+      ),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        "div",
+        { "class": "main" },
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          "header",
+          { id: "topNavigation" },
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("div", { "class": "gutter" }),
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+            "div",
+            { id: "topLinks" },
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+              "a",
+              { id: "linkAbout", href: "/About" },
+              "ABOUT"
+            ),
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+              "a",
+              { id: "linkVolunteering", href: "/Volunteering" },
+              "VOLUNTEER"
+            ),
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+              "a",
+              { id: "linkSearch", href: "/search" },
+              "SEARCH"
+            ),
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+              "a",
+              { id: "linkSubmissions", href: "/Submissions" },
+              "SUBMIT NEWS"
+            )
+          ),
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("div", { "class": "gutter" })
+        ),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          "div",
+          { "class": "breadcrumbBar" },
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("div", { "class": "gutter" }),
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+            "div",
+            { "class": "breadcrumbs" },
+            "breadcrumbs..."
+          ),
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("div", { "class": "gutter" })
+        ),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          "div",
+          { "class": "articleContainer" },
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("div", { "class": "gutter" }),
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+            "article",
+            { "class": "wikiContent" },
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("img", { id: "mobileHomeLogo", src: "/static/appIcon.png", alt: "Presterity logo: a torch and a book" }),
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+              "h1",
+              { "class": "pageTitle" },
+              props.title
+            ),
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+              "div",
+              null,
+              props.children
+            ),
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+              "footer",
+              null,
+              __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+                "p",
+                null,
+                "tweetHtml..."
+              ),
+              "footer...",
+              __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+                "p",
+                { id: "daysRemainingMessage" },
+                "daysRemainingMessage..."
+              )
+            )
+          ),
+          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])("div", { "class": "gutter" })
+        )
+      )
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = StandardPage;
 
 
 /***/ })

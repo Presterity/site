@@ -68,6 +68,18 @@ img {
 }
 
 
+/* Application root */
+#root {
+  display: flex;
+  flex: 1;
+}
+
+.pageWrapper {
+  display: flex;
+  flex: 1;
+}
+
+
 /* Side navigation */
 
 .sideNavigation {
