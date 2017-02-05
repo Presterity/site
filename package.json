@@ -15,7 +15,8 @@
     "express": "^4.14.0",
     "node-fetch": "^1.6.3",
     "preact": "^6.0.0",
-    "preact-render-to-string": "^3.5.0"
+    "preact-render-to-string": "^3.5.0",
+    "route-parser": "^0.0.5"
   },
   "engines": {
     "node": "7.0.0",

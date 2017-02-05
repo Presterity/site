@@ -11,5 +11,6 @@ export default {
   '/error': ErrorPage,
   '/hello': Hello,
   '/notfound': NotFoundPage, // TODO: Remove
-  '/About': WikiPage
+  '/:title': WikiPage,
+  '/:area/:title': WikiPage
 };

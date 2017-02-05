@@ -12,18 +12,13 @@ const port = process.env.PORT || 8000;
 
 const wiki = require('./connectors/wiki');
 
-const render = require('preact-render-to-string');
-const h = require('preact').h;
-const components = require('../dist/server');
-const newRoutes = components.routes;
-
-// const errorPage = require('./pages/errorPage');
-const homePage = require('./pages/homePage');
+// const homePage = require('./pages/homePage');
 const robots = require('./pages/robots');
-const searchPage = require('./pages/searchPage');
+const renderReactRoute = require('./renderReactRoute');
+// const searchPage = require('./pages/searchPage');
 const sitemap = require('./pages/sitemap');
-const wikiLabelPage = require('./pages/wikiLabelPage');
-const wikiPage = require('./pages/wikiPage');
+// const wikiLabelPage = require('./pages/wikiLabelPage');
+// const wikiPage = require('./pages/wikiPage');
 const wikiResource = require('./pages/wikiResource');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
@@ -34,14 +29,13 @@ const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
 // body of the response.
 //
 const routes = {
-  // '/error': errorPage,
-  '/reference/label/:label': wikiLabelPage,
+  // '/reference/label/:label': wikiLabelPage,
   '/robots.txt': robots,
-  '/search': searchPage,
+  // '/search': searchPage,
   '/sitemap.xml': sitemap,
-  '/:title': wikiPage,
-  '/:area/:title': wikiPage,
-  '/': homePage
+  // '/:title': wikiPage,
+  // '/:area/:title': wikiPage,
+  // '/': homePage
 };
 
 
@@ -56,38 +50,19 @@ app.use('/static', express.static(staticPath, {
 //
 
 app.get('*', (request, response, next) => {
-  const page = newRoutes[request.url];
-  if (!page) {
-    next();
-    return;
-  }
-  // HACK until we have route parsing.
-  if (request.url === '/About') {
-    request.params.title = 'About';
-  }
-  const baseUrl = `https://${request.hostname}`;
-  const shellProps = {
-    baseUrl: baseUrl,
-    url: `${baseUrl}${request.url}`,
-    request: request
-  };
-  const instance = new page(shellProps);
-  const promise = instance.asyncProperties || Promise.resolve();
-  promise.then(asyncProps => {
-    const props = Object.assign({}, shellProps, asyncProps);
-    const pageContent = instance.render(props);
-
-    shellProps.title = instance.title; // Grab title from page.
-    const rendered = render(h(components.AppShell, shellProps, pageContent));
-
-    const html = `<!DOCTYPE html>${rendered}`;
-    response.set({
-      'Cache-Control': CACHE_CONTROL_VALUE,
-      'Content-Type': 'text/html'
-    });
-    response.send(html);
+  renderReactRoute(request)
+  .then(html => {
+    if (html) {
+      response.set({
+        'Cache-Control': CACHE_CONTROL_VALUE,
+        'Content-Type': 'text/html'
+      });
+      response.send(html);
+    } else {
+      // Wasn't handled, keep going.
+      next();
+    }
   });
-
 });
 
 // Serve an image or other page attachment from the wiki.
