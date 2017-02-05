@@ -64,7 +64,6 @@ app.get('*', (request, response, next) => {
   const baseUrl = `https://${request.hostname}`;
   const url = `${baseUrl}${request.url}`;
   const defaultProps = {
-    ancestors: [{ title: 'Home' }],
     baseUrl: baseUrl,
     url: url
   };
@@ -72,8 +71,7 @@ app.get('*', (request, response, next) => {
   promise.then(asyncProps => {
     const props = Object.assign({}, defaultProps, asyncProps);
     const instance = new page(props);
-    console.log(instance.title);
-    const title = instance.title;
+    const title = instance.title; // Grab title from page.
     const shellProps = { baseUrl, title, url };
     const pageContent = instance.render(props);
     const rendered = render(h(components.AppShell, shellProps, pageContent));

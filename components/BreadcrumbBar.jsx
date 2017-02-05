@@ -10,7 +10,10 @@ export default class BreadcrumbBar extends Component {
   render(props) {
 
     // TODO: Add ' / ' ::before the breadcrumbs.
-    const ancestors = props.ancestors || [];
+
+    // Pages without known ancestors get "Home" as their default ancestor.
+    const ancestors = props.ancestors || [{ title: 'Home' }];
+
     const breadcrumbs = ancestors.map(ancestor => {
       const title = ancestor.title;
       const siteUrl = wiki.pageTitleToSiteUrl(title);

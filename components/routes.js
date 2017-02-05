@@ -1,5 +1,6 @@
 import ErrorPage from './ErrorPage';
 import Hello from './Hello';
+import NotFoundPage from './NotFoundPage';
 
 
 /**
@@ -7,5 +8,6 @@ import Hello from './Hello';
  */
 export default {
   '/error': ErrorPage,
-  '/hello': Hello
+  '/hello': Hello,
+  '/notfound': NotFoundPage // TODO: Remove
 };

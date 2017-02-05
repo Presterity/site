@@ -216,6 +216,7 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
   }
 
   render(props) {
+
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
       { 'class': 'pageWrapper' },
@@ -673,7 +674,10 @@ class BreadcrumbBar extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
   render(props) {
 
     // TODO: Add ' / ' ::before the breadcrumbs.
-    const ancestors = props.ancestors || [];
+
+    // Pages without known ancestors get "Home" as their default ancestor.
+    const ancestors = props.ancestors || [{ title: 'Home' }];
+
     const breadcrumbs = ancestors.map(ancestor => {
       const title = ancestor.title;
       const siteUrl = wiki.pageTitleToSiteUrl(title);
@@ -867,6 +871,8 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Hello__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__ = __webpack_require__(18);
+
 
 
 
@@ -875,7 +881,8 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
  */
 /* harmony default export */ __webpack_exports__["a"] = {
   '/error': __WEBPACK_IMPORTED_MODULE_0__ErrorPage__["a" /* default */],
-  '/hello': __WEBPACK_IMPORTED_MODULE_1__Hello__["a" /* default */]
+  '/hello': __WEBPACK_IMPORTED_MODULE_1__Hello__["a" /* default */],
+  '/notfound': __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__["a" /* default */] // TODO: Remove
 };
 
 /***/ }),
@@ -918,6 +925,63 @@ class ErrorPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* defau
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = ErrorPage;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(5);
+ // jshint ignore:line
+
+
+/**
+ * "Not Found" page.
+ */
+class NotFoundPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
+
+  render(props) {
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+      {
+        ancestors: props.ancestors,
+        footer: props.footer,
+        navigation: props.navigation,
+        title: this.title,
+        url: props.url
+      },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'p',
+        null,
+        'We don\u2019t have a page for \u201C',
+        this.title,
+        '\u201D yet!'
+      ),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'p',
+        null,
+        'Would you consider ',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { href: '/Volunteering' },
+          'volunteering'
+        ),
+        ' and helping us make one?'
+      )
+    );
+  }
+
+  get title() {
+    // TODO: Pass in title when constructing page.
+    // return this.props.title;
+    return "Not Found";
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = NotFoundPage;
 
 
 /***/ })
