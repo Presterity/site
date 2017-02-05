@@ -62,21 +62,22 @@ app.get('*', (request, response, next) => {
     return;
   }
   const baseUrl = `https://${request.hostname}`;
-  const url = `${baseUrl}${request.url}`;
-  const defaultProps = {
+  const shellProps = {
     baseUrl: baseUrl,
-    url: url
+    url: `${baseUrl}${request.url}`
   };
   const promise = page.asyncProperties || Promise.resolve();
   promise.then(asyncProps => {
-    const props = Object.assign({}, defaultProps, asyncProps);
+    const props = Object.assign({}, shellProps, asyncProps);
     const instance = new page(props);
-    const title = instance.title; // Grab title from page.
-    const shellProps = { baseUrl, title, url };
     const pageContent = instance.render(props);
+
+    shellProps.title = instance.title; // Grab title from page.
     const rendered = render(h(components.AppShell, shellProps, pageContent));
+
     const html = `<!DOCTYPE html>${rendered}`;
     response.set({
+      'Cache-Control': CACHE_CONTROL_VALUE,
       'Content-Type': 'text/html'
     });
     response.send(html);

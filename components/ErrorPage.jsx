@@ -10,8 +10,6 @@ export default class ErrorPage extends PageTemplate {
   render(props) {
     return (
       <PageTemplate
-          ancestors={props.ancestors}
-          footer={props.footer}
           navigation={props.navigation}
           title={this.title}
           url={props.url}

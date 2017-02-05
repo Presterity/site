@@ -15,7 +15,6 @@ export default class StandardPage extends Component {
   }
 
   render(props) {
-    
     return (
       <div class="pageWrapper">
         <SideNavigation navigation={props.navigation}/>

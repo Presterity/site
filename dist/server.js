@@ -167,8 +167,6 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default *
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
       {
-        ancestors: props.ancestors,
-        footer: props.footer,
         navigation: props.navigation,
         title: this.title,
         url: props.url
@@ -216,7 +214,6 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
   }
 
   render(props) {
-
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
       { 'class': 'pageWrapper' },
@@ -905,8 +902,6 @@ class ErrorPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* defau
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
       {
-        ancestors: props.ancestors,
-        footer: props.footer,
         navigation: props.navigation,
         title: this.title,
         url: props.url
