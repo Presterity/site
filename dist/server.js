@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("preact"), require("cheerio"), require("node-fetch"));
+		module.exports = factory(require("preact"), require("cheerio"), require("node-fetch"), require("preact-render-to-string"));
 	else if(typeof define === 'function' && define.amd)
-		define(["preact", "cheerio", "node-fetch"], factory);
+		define(["preact", "cheerio", "node-fetch", "preact-render-to-string"], factory);
 	else {
-		var a = typeof exports === 'object' ? factory(require("preact"), require("cheerio"), require("node-fetch")) : factory(root["preact"], root["cheerio"], root["node-fetch"]);
+		var a = typeof exports === 'object' ? factory(require("preact"), require("cheerio"), require("node-fetch"), require("preact-render-to-string")) : factory(root["preact"], root["cheerio"], root["node-fetch"], root["preact-render-to-string"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_21__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -882,7 +882,8 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
   '/error': __WEBPACK_IMPORTED_MODULE_0__ErrorPage__["a" /* default */],
   '/hello': __WEBPACK_IMPORTED_MODULE_1__Hello__["a" /* default */],
   '/notfound': __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__["a" /* default */], // TODO: Remove
-  '/About': __WEBPACK_IMPORTED_MODULE_3__WikiPage__["a" /* default */]
+  '/:title': __WEBPACK_IMPORTED_MODULE_3__WikiPage__["a" /* default */],
+  '/:area/:title': __WEBPACK_IMPORTED_MODULE_3__WikiPage__["a" /* default */]
 };
 
 /***/ }),
@@ -989,29 +990,57 @@ class NotFoundPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* de
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__BookmarkList__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PageTemplate__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__);
  // jshint ignore:line
 
-const wiki = __webpack_require__(8);
+
+
+
+
 
 /**
  * A page that renders content from the Atlassian wiki.
  */
-class WikiPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
+class WikiPage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */] {
 
   get asyncProperties() {
-    const pagePromise = wiki.wikiPageWithTitle(this.title).then(wikiPage => {
+
+    const title = this.title;
+
+    // Load the wiki page with the given title.
+    const pagePromise = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.wikiPageWithTitle(title).then(wikiPage => {
       return {
         ancestors: wikiPage.ancestors,
         body: wikiPage.body
       };
     });
-    return Promise.all([super.asyncProperties, pagePromise]).then(results => {
+
+    // Load the bookmarks tagged with the same title.
+    const bookmarksPromise = __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks___default.a.bookmarksForTopic(title).then(bookmarks => {
+      return { bookmarks };
+    });
+
+    // Merge the above with the base class' async properties.
+    return Promise.all([super.asyncProperties, pagePromise, bookmarksPromise]).then(results => {
       return Object.assign.apply({}, results);
     });
   }
 
   render(props) {
+
+    // Merge the bookmark list into the wiki page body to construct the final
+    // page body.
+    const bookmarkList = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__BookmarkList__["a" /* default */], { bookmarks: props.bookmarks, excludeTag: this.title });
+    const bookmarkListHtml = __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string___default()(bookmarkList);
+    const body = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.replacePlaceholderWithLinks(props.body, bookmarkListHtml);
+
     const footer = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
       null,
@@ -1046,26 +1075,313 @@ class WikiPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* defaul
     );
 
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+      __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */],
       {
+        ancestors: props.ancestors,
         navigation: props.navigation,
         title: this.title,
         url: props.url,
         footer: footer
       },
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { dangerouslySetInnerHTML: { __html: props.body } })
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { dangerouslySetInnerHTML: { __html: body } })
     );
   }
 
   get title() {
     const requestTitle = this.props.request.params.title;
-    const title = wiki.unescapePageTitle(requestTitle);
+    const title = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.unescapePageTitle(requestTitle);
     return title;
   }
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = WikiPage;
 
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Bookmark__ = __webpack_require__(23);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+ // jshint ignore:line
+
+
+/**
+ * A list (actually, a table) of bookmarks whose tags include a given title.
+ */
+class BookmarkList extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
+
+  render(props) {
+    const bookmarks = props.bookmarks.map(bookmarkProps => __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_1__Bookmark__["a" /* default */], _extends({}, bookmarkProps, { excludeTag: props.excludeTag })));
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'table',
+      { 'class': 'topicLinks' },
+      bookmarks
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = BookmarkList;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("preact-render-to-string");
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * The site's connection to, and representation of, the Raindrop bookmark API.
+ *
+ * The general principle is that this module isolates anything specific to
+ * Raindrop. If we were to change to a different bookmarks back-end, this module
+ * would get replaced, but much of the rest of the server could stay the same.
+ *
+ * Raindrop bookmark results are paginated: http://raindrop.io/dev/docs#bookmarks.
+ * The first page of results includes a `count` property indicating how many
+ * total results there are. Once we have that, we know how many more pages of
+ * results to ask for.
+ *
+ * To keep the client as simple as possible, we get *all* bookmarks for a given
+ * topic at once. This works at a small scale, but will become slow as we gather
+ * 100s of bookmarks per topic. On the plus side:
+ *
+ * * Since we have server-side caching, once someone visits a page, subsequent
+ *   visitors within the cache interval will immediately get a complete page of
+ *   results.
+ *
+ * * This also means that only our server is hitting Raindrop, reducing the
+ *   degree to which we may annoy them.
+ *
+ * At some point, we'd like to have our own DB of bookmarks, and at that point
+ * should add infinite-scrolling to the client so the client can request only
+ * those results it actually needs to fill the page.
+ */
+
+const fetch = __webpack_require__(2);
+
+const PRESTERITY_BOOKMARK_COLLECTION_ID = 2021037;
+const RAINDROP_REST_URL = `https://raindrop.io/api/raindrops/${PRESTERITY_BOOKMARK_COLLECTION_ID}`;
+const MAX_BOOKMARKS_PER_PAGE = 40; // Limit imposed by Raindrop.
+
+
+/*
+ * Return a promise for the complete set of bookmarks on the given topic.
+ * The topic is identified with a string: "Trump Cabinet".
+ *
+ * The bookmarks are returned sorted by bookmark title. Since we start bookmark
+ * titles with a date in YYYY.MM.DD format, the bookmarks will also be sorted
+ * by date.
+ */
+function bookmarksForTopic(topic) {
+
+  let bookmarks;
+
+  // Fetch the initial results: page 0.
+  return getResultsForPage(topic, 0).then(resultPage0 => {
+
+    // Save the page 0 bookmarks.
+    bookmarks = resultPage0.items;
+
+    // The results include a `count` property that gives the total number of
+    // bookmarks. Use this to calculate how many more pages we need fetch.
+    const bookmarkCount = resultPage0.count;
+    const pageCount = Math.ceil(bookmarkCount / MAX_BOOKMARKS_PER_PAGE);
+
+    // Now get pages 1..pageCount.
+    return getResultsForPages(topic, pageCount);
+  }).then(additionalResultPages => {
+
+    // Combine bookmarks from additional pages (if any) with set from page 0.
+    additionalResultPages.forEach(resultPage => {
+      bookmarks = bookmarks.concat(resultPage.items);
+    });
+
+    // Raindrop's sorting facilities are limited, so we sort ourselves.
+    const sorted = bookmarks.sort(compareBookmarks);
+
+    return sorted;
+  });
+}
+
+// Sort two bookmarks by title.
+// Since the title should start with a date like 2017.01.13, sorting by title
+// should produce a chronological sort.
+function compareBookmarks(bookmark1, bookmark2) {
+  if (bookmark1.title < bookmark2.title) {
+    return -1;
+  }
+  if (bookmark1.title > bookmark2.title) {
+    return 1;
+  }
+  return 0;
+}
+
+// Return a promise for the indicated page of results for the given topic.
+function getResultsForPage(topic, pageNumber) {
+  const escapedTopic = encodeURIComponent(topic);
+  const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${escapedTopic}"}]&perpage=${MAX_BOOKMARKS_PER_PAGE}&page=${pageNumber}`;
+  console.log(`Bookmarks: ${url}`);
+  return fetch(url).then(response => response.json());
+}
+
+// Return the latest bookmarks, up to a maximum of count (but no more than 40).
+// The default count is 10.
+function mostRecentBookmarks(count = 10) {
+  const url = `${RAINDROP_REST_URL}?perpage=${count}`;
+  console.log(`Latest bookmarks: ${url}`);
+  return fetch(url).then(response => response.json()).then(json => json.items);
+}
+
+// Return a promise for pages 1..pageCount of bookmarks for the given topic.
+// This does *not* get the bookmarks on page 0. We handle those separately.
+// Accordingly, if pageCount is 0 or 1, this returns a resolved promise for
+// an empty array.
+function getResultsForPages(topic, pageCount) {
+  let promises = [];
+  for (let page = 1; page < pageCount; page++) {
+    promises = promises.concat(getResultsForPage(topic, page));
+  }
+  return Promise.all(promises);
+}
+
+module.exports = {
+  bookmarksForTopic,
+  mostRecentBookmarks
+};
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_wiki__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__server_connectors_wiki__);
+ // jshint ignore:line
+
+
+/**
+ * Return a bookmark from the server as HTML for presentation to the user.
+ * This will be a row intended for display in a table.
+ *
+ * The result will include "See also" links to topics tagged on the bookmark. If
+ * an "excludeTag" property has been supplied, a "See also" link will *not* be
+ * included for the indicated topic (since the user will already be looking at
+ * that page).
+ */
+class Bookmark extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
+
+  render(props) {
+
+    let domain = props.domain;
+    if (domain.startsWith('www.')) {
+      domain = domain.slice(4); // Remove "www."
+    }
+
+    // Our bookmark format has writers put the date of an event in the bookmark
+    // title. Parse that out.
+    const { date, text } = parseLinkTitle(props.title);
+
+    // Construct list of bookmark tags. If a current title has been supplied,
+    // *don't* include that tag. Otherwise, include all tags.
+    const tags = props.tags.filter(tag => tag !== props.excludeTag).map((tag, index) => {
+      const url = `/reference/${__WEBPACK_IMPORTED_MODULE_1__server_connectors_wiki___default.a.escapePageTitle(tag)}`;
+      const comma = index > 0 ? ', ' : '';
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'span',
+        null,
+        comma,
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { href: url },
+          tag
+        )
+      );
+    });
+
+    let seeAlsoSection = null;
+    if (tags.length > 0) {
+      const seeLabel = props.excludeTag ? 'See also' : 'See';
+      seeAlsoSection = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'span',
+        null,
+        '(',
+        seeLabel,
+        ' ',
+        tags,
+        ')'
+      );
+    }
+
+    // The bookmark may have an optional description ("excerpt").
+    const excerpt = props.excerpt ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'div',
+      null,
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'div',
+        { 'class': 'excerpt' },
+        props.excerpt
+      )
+    ) : null;
+
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'tr',
+      null,
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'td',
+        null,
+        date
+      ),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'td',
+        null,
+        text,
+        '\xA0',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { href: props.link },
+          domain
+        ),
+        '\xA0',
+        seeAlsoSection,
+        excerpt
+      )
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Bookmark;
+
+
+function parseLinkTitle(title) {
+  // Find link parts:
+  // * optional whitespace to start
+  // * date in 2017.01.17 format, can also use hyphens
+  // * whitespace
+  // * remaining text
+  const linkPartsRegex = /^\s*([\d\.-]+)\s+(.*)/;
+  const match = linkPartsRegex.exec(title);
+  let date;
+  let text;
+  if (match) {
+    date = match[1];
+    text = match[2];
+  } else {
+    date = '';
+    text = title;
+  }
+  return { date, text };
+}
 
 /***/ })
 /******/ ]);

@@ -1,6 +1,9 @@
 import { h } from 'preact'; // jshint ignore:line
+import bookmarks from '../server/connectors/bookmarks';
+import BookmarkList from './BookmarkList';
 import PageTemplate from './PageTemplate';
-const wiki = require('../server/connectors/wiki');
+import render from 'preact-render-to-string';
+import wiki from '../server/connectors/wiki';
 
 
 /**
@@ -9,20 +12,41 @@ const wiki = require('../server/connectors/wiki');
 export default class WikiPage extends PageTemplate {
 
   get asyncProperties() {
-    const pagePromise = wiki.wikiPageWithTitle(this.title)
+
+    const title = this.title;
+
+    // Load the wiki page with the given title.
+    const pagePromise = wiki.wikiPageWithTitle(title)
     .then(wikiPage => {
       return {
         ancestors: wikiPage.ancestors,
         body: wikiPage.body
       };
     });
-    return Promise.all([super.asyncProperties, pagePromise])
+
+    // Load the bookmarks tagged with the same title.
+    const bookmarksPromise = bookmarks.bookmarksForTopic(title)
+    .then(bookmarks => {
+      return { bookmarks };
+    });
+
+    // Merge the above with the base class' async properties.
+    return Promise.all([super.asyncProperties, pagePromise, bookmarksPromise])
     .then(results => {
       return Object.assign.apply({}, results);
     });
   }
 
   render(props) {
+
+    // Merge the bookmark list into the wiki page body to construct the final
+    // page body.
+    const bookmarkList = (
+      <BookmarkList bookmarks={props.bookmarks} excludeTag={this.title}/>
+    );
+    const bookmarkListHtml = render(bookmarkList);
+    const body = wiki.replacePlaceholderWithLinks(props.body, bookmarkListHtml);
+
     const footer = (
       <div>
         <p>
@@ -39,12 +63,13 @@ export default class WikiPage extends PageTemplate {
 
     return (
       <PageTemplate
+          ancestors={props.ancestors}
           navigation={props.navigation}
           title={this.title}
           url={props.url}
           footer={footer}
         >
-        <div dangerouslySetInnerHTML={{ __html: props.body }} />
+        <div dangerouslySetInnerHTML={{ __html: body }} />
       </PageTemplate>
     );
   }
