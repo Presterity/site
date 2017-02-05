@@ -1,4 +1,8 @@
 import AppShell from './AppShell';
-import Hello from './Hello';
+import routes from './routes';
 
-export { AppShell, Hello };
+
+/**
+ * Single export for all components.
+ */
+export { AppShell, routes };

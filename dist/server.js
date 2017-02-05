@@ -644,12 +644,15 @@ function getNavigationFromWiki() {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__AppShell__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Hello__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes__ = __webpack_require__(16);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "AppShell", function() { return __WEBPACK_IMPORTED_MODULE_0__AppShell__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Hello", function() { return __WEBPACK_IMPORTED_MODULE_1__Hello__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "routes", function() { return __WEBPACK_IMPORTED_MODULE_1__routes__["a"]; });
 
 
 
+/**
+ * Single export for all components.
+ */
 
 
 /***/ }),
@@ -855,6 +858,21 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
       )
     )
   );
+};
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Hello__ = __webpack_require__(4);
+
+
+/**
+ * Map routes to components.
+ */
+/* harmony default export */ __webpack_exports__["a"] = {
+  '/hello': __WEBPACK_IMPORTED_MODULE_0__Hello__["a" /* default */]
 };
 
 /***/ })

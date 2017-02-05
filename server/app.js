@@ -15,6 +15,7 @@ const wiki = require('./connectors/wiki');
 const render = require('preact-render-to-string');
 const h = require('preact').h;
 const components = require('../dist/server');
+const newRoutes = components.routes;
 
 const errorPage = require('./pages/errorPage');
 const homePage = require('./pages/homePage');
@@ -54,10 +55,14 @@ app.use('/static', express.static(staticPath, {
 // Specialized route handlers.
 //
 
-app.get('/hello', (request, response) => {
+app.get('*', (request, response, next) => {
+  const page = newRoutes[request.url];
+  if (!page) {
+    next();
+    return;
+  }
   const baseUrl = `https://${request.hostname}`;
   const url = `${baseUrl}${request.url}`;
-  const page = components.Hello;
   const defaultProps = {
     ancestors: [{ title: 'Home' }],
     baseUrl: baseUrl,
