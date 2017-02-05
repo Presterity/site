@@ -16,7 +16,7 @@ export default class SideNavigation extends Component {
     });
   }
 
-  render(props, state) {
+  render(props) {
     return (
       <nav class="sideNavigation">
         <div id="logoBlock">

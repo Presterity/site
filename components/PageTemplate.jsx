@@ -14,7 +14,7 @@ export default class StandardPage extends Component {
     return SideNavigation.asyncProperties;
   }
 
-  render(props, state) {
+  render(props) {
     return (
       <div class="pageWrapper">
         <SideNavigation navigation={props.navigation}/>

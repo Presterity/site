@@ -11,7 +11,7 @@ export default class Hello extends Component {
     return PageTemplate.asyncProperties;
   }
 
-  render(props, state) {
+  render(props) {
     return (
       <PageTemplate
           ancestors={props.ancestors}

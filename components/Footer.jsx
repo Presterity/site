@@ -1,15 +1,16 @@
 import { Component, h } from 'preact'; // jshint ignore:line
 import DaysRemaining from './DaysRemaining';
+import TweetButton from './TweetButton';
 
 /**
  * Standard template footer
  */
 export default class Footer extends Component {
 
-  render(props, state) {
+  render(props) {
     return (
       <footer>
-        <p>tweetHtml...</p>
+        <TweetButton/>
         {props.children}
         <DaysRemaining/>
       </footer>

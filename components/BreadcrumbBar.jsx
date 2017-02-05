@@ -7,7 +7,7 @@ const wiki = require('../server/connectors/wiki');
  */
 export default class BreadcrumbBar extends Component {
 
-  render(props, state) {
+  render(props) {
 
     // TODO: Add ' / ' ::before the breadcrumbs.
     const ancestors = props.ancestors || [];

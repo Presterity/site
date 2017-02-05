@@ -2,7 +2,7 @@ import { Component, h } from 'preact'; // jshint ignore:line
 
 export default class AppShell extends Component {
 
-  render(props, state) {
+  render(props) {
 
     const titleBar = props.titleBar ||
         props.title ?
