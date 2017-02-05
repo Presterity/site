@@ -20,9 +20,9 @@ export default class AppShell extends Component {
           <link rel="apple-touch-icon" sizes="144x144" href="/static/appIcon.png" />
           <link rel="manifest" href="/static/manifest.json" />
           <meta name="google-site-verification" content="4TmUwdRDIEbTE65Bw8HwEyVZqJthy2MvT0S327h_Gdg" />
-          <meta property="og:title" content="${title}" />
-          <meta property="og:url" content="${url}" />
-          <meta property="og:image" content="${baseUrl}/static/facebookShare.png" />
+          <meta property="og:title" content={props.title} />
+          <meta property="og:url" content={props.url} />
+          <meta property="og:image" content={`${props.baseUrl}/static/facebookShare.png`} />
         </head>
         <body>
           <div id="root">

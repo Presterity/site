@@ -55,18 +55,26 @@ app.use('/static', express.static(staticPath, {
 //
 
 app.get('/hello', (request, response) => {
+  const baseUrl = `https://${request.hostname}`;
+  const url = `${baseUrl}${request.url}`;
   const page = components.Hello;
   const defaultProps = {
     ancestors: [{ title: 'Home' }],
-    footer: "Footer goes here",
+    baseUrl: baseUrl,
     message: "Hello, world.",
-    title: "Hello"
+    title: "Hello",
+    url: url
   };
   const promise = page.asyncProperties || Promise.resolve();
   promise.then(asyncProps => {
     // const html = render(h(components.AppShell, null, h(page, props)));
     const props = Object.assign({}, defaultProps, asyncProps);
-    const rendered = render(h(components.AppShell, { title: props.title }, h(page, props)));
+    const shellProps = {
+      baseUrl: baseUrl,
+      title: props.title,
+      url: url
+    };
+    const rendered = render(h(components.AppShell, shellProps, h(page, props)));
     const html = `<!DOCTYPE html>${rendered}`;
     response.set({
       'Content-Type': 'text/html'

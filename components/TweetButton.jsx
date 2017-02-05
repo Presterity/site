@@ -10,7 +10,7 @@ export default class TweetButton extends Component {
     const href = `https://twitter.com/intent/tweet?via=presterity&text=${encodedText}&url=${encodedUrl}`;
     return (
       <a class="tweetButton" href={href}>
-        <TwitterIcon/>
+        <TwitterIcon fill="#fff"/>
         <span>Share</span>
       </a>
     );

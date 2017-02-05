@@ -127,9 +127,9 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('link', { rel: 'apple-touch-icon', sizes: '144x144', href: '/static/appIcon.png' }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('link', { rel: 'manifest', href: '/static/manifest.json' }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { name: 'google-site-verification', content: '4TmUwdRDIEbTE65Bw8HwEyVZqJthy2MvT0S327h_Gdg' }),
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:title', content: '${title}' }),
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:url', content: '${url}' }),
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:image', content: '${baseUrl}/static/facebookShare.png' })
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:title', content: props.title }),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:url', content: props.url }),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:image', content: `${props.baseUrl}/static/facebookShare.png` })
       ),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'body',
@@ -174,7 +174,8 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
         ancestors: props.ancestors,
         footer: props.footer,
         navigation: props.navigation,
-        title: props.title
+        title: props.title,
+        url: props.url
       },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'p',
@@ -250,7 +251,7 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
             ),
             __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
               __WEBPACK_IMPORTED_MODULE_2__Footer__["a" /* default */],
-              null,
+              { title: props.title, url: props.url },
               props.footer
             )
           ),
@@ -713,7 +714,11 @@ class Footer extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'footer',
       null,
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__TweetButton__["a" /* default */], null),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'p',
+        null,
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__TweetButton__["a" /* default */], { text: props.title, url: props.url })
+      ),
       props.children,
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_1__DaysRemaining__["a" /* default */], null)
     );
@@ -809,7 +814,7 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'a',
       { 'class': 'tweetButton', href: href },
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_1__TwitterIcon__["a" /* default */], null),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_1__TwitterIcon__["a" /* default */], { fill: '#fff' }),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'span',
         null,
@@ -837,20 +842,16 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
  */
 /* harmony default export */ __webpack_exports__["a"] = props => {
   const fill = props.fill || 'black';
-  const fillAttribute = `fill: ${fill};`;
-  return (
-    // <svg xml:space="preserve" height="19" viewBox="0 0 182.66667 150.66667" style={fillAttribute}>
+  return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+    'svg',
+    { viewBox: '0 0 182.66667 150.66667', style: `fill: ${fill};` },
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      'svg',
-      { space: 'preserve', height: '19', viewBox: '0 0 182.66667 150.66667', style: fillAttribute },
+      'g',
+      { xmlns: 'http://www.w3.org/2000/svg', id: 'g10', transform: 'matrix(1.3333 0 0 -1.3333 0 150.67)' },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'g',
-        { xmlns: 'http://www.w3.org/2000/svg', id: 'g10', transform: 'matrix(1.3333 0 0 -1.3333 0 150.67)' },
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-          'g',
-          { transform: 'scale(.1)' },
-          __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('path', { d: 'm1366.9 989.39c-50.27-22.309-104.33-37.387-161.05-44.18 57.89 34.723 102.34 89.679 123.28 155.15-54.18-32.15-114.18-55.47-178.09-68.04-51.13 54.49-124.02 88.55-204.68 88.55-154.89 0-280.43-125.55-280.43-280.43 0-21.988 2.457-43.398 7.258-63.91-233.08 11.68-439.72 123.36-578.04 293.01-24.141-41.4-37.969-89.567-37.969-140.97 0-97.308 49.489-183.13 124.76-233.44-45.969 1.437-89.218 14.058-127.03 35.078-0.043-1.18-0.043-2.348-0.043-3.52 0-135.9 96.68-249.22 224.96-275-23.512-6.41-48.281-9.8-73.86-9.8-18.089 0-35.628 1.711-52.781 5 35.711-111.41 139.26-192.5 262-194.77-96.058-75.23-216.96-120.04-348.36-120.04-22.621 0-44.961 1.332-66.918 3.91 124.16-79.568 271.55-125.98 429.94-125.98 515.82 0 797.86 427.31 797.86 797.93 0 12.153-0.28 24.223-0.79 36.25 54.77 39.571 102.31 88.95 139.93 145.2' })
-        )
+        { transform: 'scale(.1)' },
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('path', { d: 'm1366.9 989.39c-50.27-22.309-104.33-37.387-161.05-44.18 57.89 34.723 102.34 89.679 123.28 155.15-54.18-32.15-114.18-55.47-178.09-68.04-51.13 54.49-124.02 88.55-204.68 88.55-154.89 0-280.43-125.55-280.43-280.43 0-21.988 2.457-43.398 7.258-63.91-233.08 11.68-439.72 123.36-578.04 293.01-24.141-41.4-37.969-89.567-37.969-140.97 0-97.308 49.489-183.13 124.76-233.44-45.969 1.437-89.218 14.058-127.03 35.078-0.043-1.18-0.043-2.348-0.043-3.52 0-135.9 96.68-249.22 224.96-275-23.512-6.41-48.281-9.8-73.86-9.8-18.089 0-35.628 1.711-52.781 5 35.711-111.41 139.26-192.5 262-194.77-96.058-75.23-216.96-120.04-348.36-120.04-22.621 0-44.961 1.332-66.918 3.91 124.16-79.568 271.55-125.98 429.94-125.98 515.82 0 797.86 427.31 797.86 797.93 0 12.153-0.28 24.223-0.79 36.25 54.77 39.571 102.31 88.95 139.93 145.2' })
       )
     )
   );

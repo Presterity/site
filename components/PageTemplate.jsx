@@ -33,7 +33,7 @@ export default class StandardPage extends Component {
               <div>
                 {props.children}
               </div>
-              <Footer>{props.footer}</Footer>
+              <Footer title={props.title} url={props.url}>{props.footer}</Footer>
             </article>
             <div class="gutter"></div>
           </div>

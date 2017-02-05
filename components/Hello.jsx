@@ -18,6 +18,7 @@ export default class Hello extends Component {
           footer={props.footer}
           navigation={props.navigation}
           title={props.title}
+          url={props.url}
         >
         <p>{props.message}</p>
       </PageTemplate>
