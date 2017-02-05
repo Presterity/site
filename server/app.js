@@ -66,20 +66,17 @@ app.get('*', (request, response, next) => {
   const defaultProps = {
     ancestors: [{ title: 'Home' }],
     baseUrl: baseUrl,
-    message: "Hello, world.",
-    title: "Hello",
     url: url
   };
   const promise = page.asyncProperties || Promise.resolve();
   promise.then(asyncProps => {
-    // const html = render(h(components.AppShell, null, h(page, props)));
     const props = Object.assign({}, defaultProps, asyncProps);
-    const shellProps = {
-      baseUrl: baseUrl,
-      title: props.title,
-      url: url
-    };
-    const rendered = render(h(components.AppShell, shellProps, h(page, props)));
+    const instance = new page(props);
+    console.log(instance.title);
+    const title = instance.title;
+    const shellProps = { baseUrl, title, url };
+    const pageContent = instance.render(props);
+    const rendered = render(h(components.AppShell, shellProps, pageContent));
     const html = `<!DOCTYPE html>${rendered}`;
     response.set({
       'Content-Type': 'text/html'

@@ -13,12 +13,18 @@ export default class Hello extends PageTemplate {
           ancestors={props.ancestors}
           footer={props.footer}
           navigation={props.navigation}
-          title={props.title}
+          title={this.title}
           url={props.url}
         >
-        <p>{props.message}</p>
+        <p>
+          Hello, world.
+        </p>
       </PageTemplate>
     );
+  }
+
+  get title() {
+    return "Hello";
   }
 
 }

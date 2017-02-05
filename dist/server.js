@@ -170,15 +170,19 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default *
         ancestors: props.ancestors,
         footer: props.footer,
         navigation: props.navigation,
-        title: props.title,
+        title: this.title,
         url: props.url
       },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'p',
         null,
-        props.message
+        'Hello, world.'
       )
     );
+  }
+
+  get title() {
+    return "Hello";
   }
 
 }
@@ -897,7 +901,7 @@ class ErrorPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* defau
         ancestors: props.ancestors,
         footer: props.footer,
         navigation: props.navigation,
-        title: 'Oops',
+        title: this.title,
         url: props.url
       },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
@@ -906,6 +910,10 @@ class ErrorPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* defau
         'Sorry, something went wrong. \uD83D\uDE1E'
       )
     );
+  }
+
+  get title() {
+    return "Oops";
   }
 
 }

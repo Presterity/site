@@ -13,7 +13,7 @@ export default class ErrorPage extends PageTemplate {
           ancestors={props.ancestors}
           footer={props.footer}
           navigation={props.navigation}
-          title="Oops"
+          title={this.title}
           url={props.url}
         >
         <p>
@@ -21,6 +21,10 @@ export default class ErrorPage extends PageTemplate {
         </p>
       </PageTemplate>
     );
+  }
+
+  get title() {
+    return "Oops";
   }
 
 }
