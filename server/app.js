@@ -17,7 +17,7 @@ const h = require('preact').h;
 const components = require('../dist/server');
 const newRoutes = components.routes;
 
-const errorPage = require('./pages/errorPage');
+// const errorPage = require('./pages/errorPage');
 const homePage = require('./pages/homePage');
 const robots = require('./pages/robots');
 const searchPage = require('./pages/searchPage');
@@ -34,7 +34,7 @@ const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
 // body of the response.
 //
 const routes = {
-  '/error': errorPage,
+  // '/error': errorPage,
   '/reference/label/:label': wikiLabelPage,
   '/robots.txt': robots,
   '/search': searchPage,

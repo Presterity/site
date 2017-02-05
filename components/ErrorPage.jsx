@@ -3,9 +3,9 @@ import PageTemplate from './PageTemplate';
 
 
 /**
- * Test page
+ * Error page.
  */
-export default class Hello extends PageTemplate {
+export default class ErrorPage extends PageTemplate {
 
   render(props) {
     return (
@@ -13,10 +13,12 @@ export default class Hello extends PageTemplate {
           ancestors={props.ancestors}
           footer={props.footer}
           navigation={props.navigation}
-          title={props.title}
+          title="Oops"
           url={props.url}
         >
-        <p>{props.message}</p>
+        <p>
+          Sorry, something went wrong. 😞
+        </p>
       </PageTemplate>
     );
   }

@@ -161,11 +161,7 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /**
  * Test page
  */
-class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
-
-  static get asyncProperties() {
-    return __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */].asyncProperties;
-  }
+class Hello extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
 
   render(props) {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
@@ -865,15 +861,56 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Hello__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Hello__ = __webpack_require__(4);
+
 
 
 /**
  * Map routes to components.
  */
 /* harmony default export */ __webpack_exports__["a"] = {
-  '/hello': __WEBPACK_IMPORTED_MODULE_0__Hello__["a" /* default */]
+  '/error': __WEBPACK_IMPORTED_MODULE_0__ErrorPage__["a" /* default */],
+  '/hello': __WEBPACK_IMPORTED_MODULE_1__Hello__["a" /* default */]
 };
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(5);
+ // jshint ignore:line
+
+
+/**
+ * Error page.
+ */
+class ErrorPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
+
+  render(props) {
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+      {
+        ancestors: props.ancestors,
+        footer: props.footer,
+        navigation: props.navigation,
+        title: 'Oops',
+        url: props.url
+      },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'p',
+        null,
+        'Sorry, something went wrong. \uD83D\uDE1E'
+      )
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = ErrorPage;
+
 
 /***/ })
 /******/ ]);
