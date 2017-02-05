@@ -7,7 +7,7 @@ const navigationPane = require('../server/pages/navigationPane');
  */
 export default class SideNavigation extends Component {
 
-  static get asyncProperties() {
+  get asyncProperties() {
     return navigationPane()
     .then(html => {
       return {

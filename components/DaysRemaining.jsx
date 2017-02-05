@@ -28,8 +28,8 @@ export default class DaysRemaining extends Component {
       const days = diffDays === 1 ? 'day' : 'days';
       message = (
         <span>
-          There are only
-          <strong>{diffDays}</strong> {days} to go in the Trump administration.
+          There are only <strong>{diffDays}</strong> {days} to go in the Trump
+          administration.
         </span>
       );
     } else {

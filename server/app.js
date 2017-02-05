@@ -61,15 +61,20 @@ app.get('*', (request, response, next) => {
     next();
     return;
   }
+  // HACK until we have route parsing.
+  if (request.url === '/About') {
+    request.params.title = 'About';
+  }
   const baseUrl = `https://${request.hostname}`;
   const shellProps = {
     baseUrl: baseUrl,
-    url: `${baseUrl}${request.url}`
+    url: `${baseUrl}${request.url}`,
+    request: request
   };
-  const promise = page.asyncProperties || Promise.resolve();
+  const instance = new page(shellProps);
+  const promise = instance.asyncProperties || Promise.resolve();
   promise.then(asyncProps => {
     const props = Object.assign({}, shellProps, asyncProps);
-    const instance = new page(props);
     const pageContent = instance.render(props);
 
     shellProps.title = instance.title; // Grab title from page.

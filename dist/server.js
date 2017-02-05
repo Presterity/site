@@ -209,8 +209,8 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default *
  */
 class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
-  static get asyncProperties() {
-    return __WEBPACK_IMPORTED_MODULE_3__SideNavigation__["a" /* default */].asyncProperties;
+  get asyncProperties() {
+    return __WEBPACK_IMPORTED_MODULE_3__SideNavigation__["a" /* default */].prototype.asyncProperties; // Same for all instances.
   }
 
   render(props) {
@@ -278,7 +278,7 @@ const navigationPane = __webpack_require__(9);
  */
 class SideNavigation extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
-  static get asyncProperties() {
+  get asyncProperties() {
     return navigationPane().then(html => {
       return {
         navigation: html
@@ -772,7 +772,7 @@ class DaysRemaining extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
       message = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'span',
         null,
-        'There are only',
+        'There are only ',
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
           'strong',
           null,
@@ -869,6 +869,8 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Hello__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__WikiPage__ = __webpack_require__(19);
+
 
 
 
@@ -879,7 +881,8 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /* harmony default export */ __webpack_exports__["a"] = {
   '/error': __WEBPACK_IMPORTED_MODULE_0__ErrorPage__["a" /* default */],
   '/hello': __WEBPACK_IMPORTED_MODULE_1__Hello__["a" /* default */],
-  '/notfound': __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__["a" /* default */] // TODO: Remove
+  '/notfound': __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__["a" /* default */], // TODO: Remove
+  '/About': __WEBPACK_IMPORTED_MODULE_3__WikiPage__["a" /* default */]
 };
 
 /***/ }),
@@ -977,6 +980,91 @@ class NotFoundPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* de
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = NotFoundPage;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(5);
+ // jshint ignore:line
+
+const wiki = __webpack_require__(8);
+
+/**
+ * A page that renders content from the Atlassian wiki.
+ */
+class WikiPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
+
+  get asyncProperties() {
+    const pagePromise = wiki.wikiPageWithTitle(this.title).then(wikiPage => {
+      return {
+        ancestors: wikiPage.ancestors,
+        body: wikiPage.body
+      };
+    });
+    return Promise.all([super.asyncProperties, pagePromise]).then(results => {
+      return Object.assign.apply({}, results);
+    });
+  }
+
+  render(props) {
+    const footer = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'div',
+      null,
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'p',
+        null,
+        'You can ',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { href: '/Submissions' },
+          'submit news'
+        ),
+        ' on this topic. If something\'s wrong on this page, ',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { href: '/Volunteering' },
+          'help us fix it'
+        ),
+        '.'
+      ),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'p',
+        null,
+        'This work is licensed under a ',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { rel: 'license', href: 'https://creativecommons.org/licenses/by/4.0/' },
+          'Creative Commons Attribution 4.0 International License'
+        ),
+        '.'
+      )
+    );
+
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+      {
+        navigation: props.navigation,
+        title: this.title,
+        url: props.url,
+        footer: footer
+      },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { dangerouslySetInnerHTML: { __html: props.body } })
+    );
+  }
+
+  get title() {
+    const requestTitle = this.props.request.params.title;
+    const title = wiki.unescapePageTitle(requestTitle);
+    return title;
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = WikiPage;
 
 
 /***/ })

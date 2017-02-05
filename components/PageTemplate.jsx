@@ -10,8 +10,8 @@ import TopNavigation from './TopNavigation';
  */
 export default class StandardPage extends Component {
 
-  static get asyncProperties() {
-    return SideNavigation.asyncProperties;
+  get asyncProperties() {
+    return SideNavigation.prototype.asyncProperties; // Same for all instances.
   }
 
   render(props) {
