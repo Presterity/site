@@ -1,4 +1,5 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
 
@@ -8,6 +9,8 @@ module.exports = {
     // client: './client/Client.jsx',
     server: './components/Components.jsx'
   },
+
+  externals: [nodeExternals()],
 
 	module: {
 		loaders: [
@@ -27,6 +30,8 @@ module.exports = {
 
   resolve: {
     extensions: ['.js', '.jsx'],
-  }
+  },
+
+  target: 'node'
 
 };
