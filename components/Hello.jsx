@@ -2,6 +2,9 @@ import { Component, h } from 'preact'; // jshint ignore:line
 import PageTemplate from './PageTemplate';
 
 
+/**
+ * Test page
+ */
 export default class Hello extends Component {
 
   static get asyncProperties() {
@@ -11,9 +14,11 @@ export default class Hello extends Component {
   render(props, state) {
     return (
       <PageTemplate
-          title={props.title}
+          ancestors={props.ancestors}
+          footer={props.footer}
           navigation={props.navigation}
-          ancestors={props.ancestors}>
+          title={props.title}
+        >
         <p>{props.message}</p>
       </PageTemplate>
     );

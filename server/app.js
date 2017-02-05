@@ -58,6 +58,7 @@ app.get('/hello', (request, response) => {
   const page = components.Hello;
   const defaultProps = {
     ancestors: [{ title: 'Home' }],
+    footer: "Footer goes here",
     message: "Hello, world.",
     title: "Hello"
   };

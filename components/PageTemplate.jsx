@@ -1,5 +1,6 @@
 import { Component, h } from 'preact'; // jshint ignore:line
 import BreadcrumbBar from './BreadcrumbBar';
+import Footer from './Footer';
 import SideNavigation from './SideNavigation';
 import TopNavigation from './TopNavigation';
 
@@ -32,13 +33,7 @@ export default class StandardPage extends Component {
               <div>
                 {props.children}
               </div>
-              <footer>
-                <p>tweetHtml...</p>
-                footer...
-                <p id="daysRemainingMessage">
-                  daysRemainingMessage...
-                </p>
-              </footer>
+              <Footer>{props.footer}</Footer>
             </article>
             <div class="gutter"></div>
           </div>

@@ -158,6 +158,9 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
  // jshint ignore:line
 
 
+/**
+ * Test page
+ */
 class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   static get asyncProperties() {
@@ -168,9 +171,11 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
       {
-        title: props.title,
+        ancestors: props.ancestors,
+        footer: props.footer,
         navigation: props.navigation,
-        ancestors: props.ancestors },
+        title: props.title
+      },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'p',
         null,
@@ -191,9 +196,11 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BreadcrumbBar__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SideNavigation__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TopNavigation__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Footer__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SideNavigation__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopNavigation__ = __webpack_require__(7);
  // jshint ignore:line
+
 
 
 
@@ -204,18 +211,18 @@ class Hello extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   static get asyncProperties() {
-    return __WEBPACK_IMPORTED_MODULE_2__SideNavigation__["a" /* default */].asyncProperties;
+    return __WEBPACK_IMPORTED_MODULE_3__SideNavigation__["a" /* default */].asyncProperties;
   }
 
   render(props, state) {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
       { 'class': 'pageWrapper' },
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__SideNavigation__["a" /* default */], { navigation: props.navigation }),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_3__SideNavigation__["a" /* default */], { navigation: props.navigation }),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'div',
         { 'class': 'main' },
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_3__TopNavigation__["a" /* default */], null),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_4__TopNavigation__["a" /* default */], null),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
           'div',
           { 'class': 'breadcrumbBar' },
@@ -242,19 +249,9 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
               props.children
             ),
             __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-              'footer',
+              __WEBPACK_IMPORTED_MODULE_2__Footer__["a" /* default */],
               null,
-              __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-                'p',
-                null,
-                'tweetHtml...'
-              ),
-              'footer...',
-              __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-                'p',
-                { id: 'daysRemainingMessage' },
-                'daysRemainingMessage...'
-              )
+              props.footer
             )
           ),
           __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { 'class': 'gutter' })
@@ -665,7 +662,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const wiki = __webpack_require__(8);
 
 /**
- * Side navigation pane
+ * Breadcrumb bar
  */
 class BreadcrumbBar extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
@@ -692,6 +689,106 @@ class BreadcrumbBar extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = BreadcrumbBar;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DaysRemaining__ = __webpack_require__(13);
+ // jshint ignore:line
+
+
+/**
+ * Standard template footer
+ */
+class Footer extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
+
+  render(props, state) {
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'footer',
+      null,
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'p',
+        null,
+        'tweetHtml...'
+      ),
+      props.children,
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_1__DaysRemaining__["a" /* default */], null)
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Footer;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+ // jshint ignore:line
+
+
+/**
+ * Show a count of the days remaining in the administration.
+ */
+class DaysRemaining extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
+
+  render(props, state) {
+
+    const today = new Date(Date.now());
+    const inaugurationDate = new Date(Date.parse('Mon, Jan 20 2021 12:00:00 EST'));
+
+    // From "a more correct solution" for date diff math:
+    // http://stackoverflow.com/a/15289883/76472.
+    const utc1 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+    const utc2 = Date.UTC(inaugurationDate.getFullYear(), inaugurationDate.getMonth(), inaugurationDate.getDate());
+    const diffMilliseconds = utc2 - utc1;
+    const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+    const diffDays = Math.floor(diffMilliseconds / MILLISECONDS_PER_DAY);
+
+    let message;
+    if (diffDays === 0) {
+      message = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'strong',
+        null,
+        'This is the last day of the Trump administration!'
+      );
+    } else if (diffDays > 0) {
+      const days = diffDays === 1 ? 'day' : 'days';
+      message = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'span',
+        null,
+        'There are only',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'strong',
+          null,
+          diffDays
+        ),
+        ' ',
+        days,
+        ' to go in the Trump administration.'
+      );
+    } else {
+      // Administration is over. Whew.
+      message = '';
+    }
+
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'p',
+      { id: 'daysRemainingMessage' },
+      message
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = DaysRemaining;
 
 
 /***/ })

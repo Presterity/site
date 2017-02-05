@@ -3,7 +3,7 @@ const wiki = require('../server/connectors/wiki');
 
 
 /**
- * Side navigation pane
+ * Breadcrumb bar
  */
 export default class BreadcrumbBar extends Component {
 
