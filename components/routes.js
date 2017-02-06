@@ -1,5 +1,5 @@
 import ErrorPage from './ErrorPage';
-import Hello from './Hello';
+import HomePage from './HomePage';
 import NotFoundPage from './NotFoundPage';
 import WikiPage from './WikiPage';
 
@@ -9,8 +9,8 @@ import WikiPage from './WikiPage';
  */
 export default {
   '/error': ErrorPage,
-  '/hello': Hello,
   '/notfound': NotFoundPage, // TODO: Remove
   '/:title': WikiPage,
-  '/:area/:title': WikiPage
+  '/:area/:title': WikiPage,
+  '/': HomePage
 };

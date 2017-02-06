@@ -107,7 +107,7 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   render(props) {
 
-    const titleBar = props.titleBar || props.title ? `${props.title} - Presterity` : '';
+    const titleBar = props.titleBar || props.title && `${props.title} - Presterity` || '';
 
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'html',
@@ -148,46 +148,7 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(5);
- // jshint ignore:line
-
-
-/**
- * Test page
- */
-class Hello extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
-
-  render(props) {
-    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
-      {
-        navigation: props.navigation,
-        title: this.title,
-        url: props.url
-      },
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-        'p',
-        null,
-        'Hello, world.'
-      )
-    );
-  }
-
-  get title() {
-    return "Hello";
-  }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Hello;
-
-
-/***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -867,7 +828,7 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Hello__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HomePage__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__WikiPage__ = __webpack_require__(19);
 
@@ -880,10 +841,10 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
  */
 /* harmony default export */ __webpack_exports__["a"] = {
   '/error': __WEBPACK_IMPORTED_MODULE_0__ErrorPage__["a" /* default */],
-  '/hello': __WEBPACK_IMPORTED_MODULE_1__Hello__["a" /* default */],
   '/notfound': __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__["a" /* default */], // TODO: Remove
   '/:title': __WEBPACK_IMPORTED_MODULE_3__WikiPage__["a" /* default */],
-  '/:area/:title': __WEBPACK_IMPORTED_MODULE_3__WikiPage__["a" /* default */]
+  '/:area/:title': __WEBPACK_IMPORTED_MODULE_3__WikiPage__["a" /* default */],
+  '/': __WEBPACK_IMPORTED_MODULE_1__HomePage__["a" /* default */]
 };
 
 /***/ }),
@@ -1382,6 +1343,63 @@ function parseLinkTitle(title) {
   }
   return { date, text };
 }
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__BookmarkList__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PageTemplate__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__);
+ // jshint ignore:line
+
+
+
+
+
+
+/**
+ * The Home page.
+ *
+ * This is a variant of the usual wiki page that shows the latest links
+ * instead of links based on their tags.
+ */
+class HomePage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */] {
+
+  render(props) {
+    const body = "This is the Home page.";
+
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */],
+      {
+        ancestors: props.ancestors,
+        navigation: props.navigation,
+        title: this.title,
+        url: props.url
+      },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { dangerouslySetInnerHTML: { __html: body } })
+    );
+  }
+
+  get title() {
+    return "Presterity";
+  }
+
+  get titleBar() {
+    return this.title;
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = HomePage;
+
 
 /***/ })
 /******/ ]);

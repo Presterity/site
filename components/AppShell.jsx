@@ -4,10 +4,10 @@ export default class AppShell extends Component {
 
   render(props) {
 
-    const titleBar = props.titleBar ||
-        props.title ?
-          `${props.title} - Presterity` :
-          '';
+    const titleBar =
+        props.titleBar ||
+        (props.title && `${props.title} - Presterity`) ||
+        '';
 
     return (
       <html lang="en">

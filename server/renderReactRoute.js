@@ -45,9 +45,11 @@ function renderReactRoute(request) {
     const pageContent = instance.render(props);
 
     // Render the shell for the HTML page.
-    // The shell needs the page's title, so grab that from the page instance.
+    // The shell needs the page's title (and titleBar, if defined), so grab
+    // those from the page instance.
     const shellProps = Object.assign({}, initialProps, {
-      title: instance.title
+      title: instance.title,
+      titleBar: instance.titleBar
     });
     const rendered = render(h(components.AppShell, shellProps, pageContent));
 
