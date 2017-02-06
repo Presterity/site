@@ -15,8 +15,10 @@ export default class StandardPage extends Component {
   }
 
   render(props) {
+    const area = getArea(props);
+
     return (
-      <div class="pageWrapper">
+      <div class="pageWrapper" area={area}>
         <SideNavigation navigation={props.navigation}/>
         <div class="main">
           <TopNavigation/>
@@ -42,4 +44,29 @@ export default class StandardPage extends Component {
     );
   }
 
+}
+
+
+// Return the site area in which this page is shown under.
+function getArea(props) {
+  const ancestors = props.ancestors;
+  if (!ancestors) {
+    // Unknown
+    return '';
+  } else if (ancestors.length === 0 && props.title === 'Presterity') {
+    // Home page is in the "Home" area.
+    return 'Home';
+  } else if (ancestors.length === 0) {
+    // Top-level pages (Search, Volunteering, Submissions) are their own areas.
+    return props.title;
+  } else if (ancestors[0].title === 'Home') {
+    // Pages beneath Home area in the "Reference" area.
+    return 'Reference';
+  } else if (ancestors.length > 0) {
+    // Other pages fall under their top ancestor.
+    return ancestors[0].title;
+  } else {
+    // Unknown.
+    return '';
+  }
 }

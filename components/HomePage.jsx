@@ -14,14 +14,52 @@ import wiki from '../server/connectors/wiki';
  */
 export default class HomePage extends PageTemplate {
 
+  get asyncProperties() {
+
+    const title = this.title;
+
+    // Load the wiki page with the given title.
+    const pagePromise = wiki.wikiPageWithTitle(title)
+    .then(wikiPage => {
+      if (!wikiPage) {
+        // If we can't find the Home page, it's an error.
+        throw `Couldn't find the wiki content for a page titled "${title}".`;
+      }
+      return {
+        ancestors: wikiPage.ancestors,
+        body: wikiPage.body
+      };
+    });
+
+    // Load the most recent bookmarks.
+    const requestBookmarkCount = 5;
+    const bookmarksPromise = bookmarks.mostRecentBookmarks(requestBookmarkCount)
+    .then(bookmarks => {
+      return { bookmarks };
+    });
+
+    // Merge the above with the base class' async properties.
+    return Promise.all([super.asyncProperties, pagePromise, bookmarksPromise])
+    .then(results => {
+      return Object.assign.apply({}, results);
+    });
+  }
+
   render(props) {
-    const body = "This is the Home page.";
+
+    // Merge the bookmark list into the wiki page body to construct the final
+    // page body.
+    const bookmarkList = (
+      <BookmarkList bookmarks={props.bookmarks} excludeTag={this.title}/>
+    );
+    const bookmarkListHtml = render(bookmarkList);
+    const body = wiki.replacePlaceholderWithLinks(props.body, bookmarkListHtml);
 
     return (
       <PageTemplate
           ancestors={props.ancestors}
           navigation={props.navigation}
-          title={this.title}
+          title="Presterity"
           url={props.url}
         >
         <div dangerouslySetInnerHTML={{ __html: body }} />
@@ -30,11 +68,11 @@ export default class HomePage extends PageTemplate {
   }
 
   get title() {
-    return "Presterity";
+    return 'Home';
   }
 
   get titleBar() {
-    return this.title;
+    return 'Presterity';
   }
 
 }

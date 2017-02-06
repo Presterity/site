@@ -45,10 +45,7 @@ app.use('/static', express.static(staticPath, {
   maxAge: CACHE_MAX_AGE_SECONDS * 1000 // Convert to milliseconds
 }));
 
-//
-// Specialized route handlers.
-//
-
+// Handle routes that can be rendered by React components.
 app.get('*', (request, response, next) => {
   renderReactRoute(request)
   .then(html => {
@@ -59,11 +56,15 @@ app.get('*', (request, response, next) => {
       });
       response.send(html);
     } else {
-      // Wasn't handled, keep going.
+      // We didn't have a React component for this route; keep looking.
       next();
     }
   });
 });
+
+//
+// Specialized route handlers.
+//
 
 // Serve an image or other page attachment from the wiki.
 app.get('/wiki/download/*', (request, response) => {

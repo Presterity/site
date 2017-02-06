@@ -218,16 +218,16 @@ img {
   margin-right: 20px;
 }
 
-body[area="Search"] #linkSearch {
+.pageWrapper[area="Search"] #linkSearch {
   border-bottom: 1px solid;
 }
-body[area="Submissions"] #linkSubmissions {
+.pageWrapper[area="Submissions"] #linkSubmissions {
   border-bottom: 1px solid;
 }
-body[area="Volunteering"] #linkVolunteering {
+.pageWrapper[area="Volunteering"] #linkVolunteering {
   border-bottom: 1px solid;
 }
-body[area="About"] #linkAbout {
+.pageWrapper[area="About"] #linkAbout {
   border-bottom: 1px solid;
 }
 
@@ -243,7 +243,7 @@ body[area="About"] #linkAbout {
   width: 100%;
   max-width: 350px;
 }
-body[area="Home"] #mobileHomeLogo {
+.pageWrapper[area="Home"] #mobileHomeLogo {
   display: block;
 }
 
@@ -384,13 +384,13 @@ footer p {
   }
 
   /* Home page logo not needed on desktop. */
-  body[area="Home"] #mobileHomeLogo {
+  .pageWrapper[area="Home"] #mobileHomeLogo {
     display: none;
   }
 
   /* Home page table of contents only needed on mobile; hide on desktop. */
-  body[area="Home"] article #Home-Tableofcontents,
-  body[area="Home"] article ul.childpages-macro {
+  .pageWrapper[area="Home"] article #Home-Tableofcontents,
+  .pageWrapper[area="Home"] article ul.childpages-macro {
     display: none;
   }
 }

@@ -24,7 +24,7 @@ export default class AppShell extends Component {
           <meta property="og:url" content={props.url} />
           <meta property="og:image" content={`${props.baseUrl}/static/facebookShare.png`} />
         </head>
-        <body>
+        <body area={props.area}>
           <div id="root">
             {props.children}
           </div>

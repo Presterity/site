@@ -133,7 +133,7 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
       ),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'body',
-        null,
+        { area: props.area },
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
           'div',
           { id: 'root' },
@@ -175,9 +175,11 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
   }
 
   render(props) {
+    const area = getArea(props);
+
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
-      { 'class': 'pageWrapper' },
+      { 'class': 'pageWrapper', area: area },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_3__SideNavigation__["a" /* default */], { navigation: props.navigation }),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'div',
@@ -223,6 +225,30 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = StandardPage;
 
+
+// Return the site area in which this page is shown under.
+function getArea(props) {
+  const ancestors = props.ancestors;
+  if (!ancestors) {
+    // Unknown
+    return '';
+  } else if (ancestors.length === 0 && props.title === 'Presterity') {
+    // Home page is in the "Home" area.
+    return 'Home';
+  } else if (ancestors.length === 0) {
+    // Top-level pages (Search, Volunteering, Submissions) are their own areas.
+    return props.title;
+  } else if (ancestors[0].title === 'Home') {
+    // Pages beneath Home area in the "Reference" area.
+    return 'Reference';
+  } else if (ancestors.length > 0) {
+    // Other pages fall under their top ancestor.
+    return ancestors[0].title;
+  } else {
+    // Unknown.
+    return '';
+  }
+}
 
 /***/ }),
 /* 6 */
@@ -309,16 +335,19 @@ class SideNavigation extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
       { id: "linkAbout", href: "/About" },
       "ABOUT"
     ),
+    "\xA0",
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       "a",
       { id: "linkVolunteering", href: "/Volunteering" },
       "VOLUNTEER"
     ),
+    "\xA0",
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       "a",
       { id: "linkSearch", href: "/search" },
       "SEARCH"
     ),
+    "\xA0",
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       "a",
       { id: "linkSubmissions", href: "/Submissions" },
@@ -631,18 +660,22 @@ class BreadcrumbBar extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   render(props) {
 
-    // TODO: Add ' / ' ::before the breadcrumbs.
-
     // Pages without known ancestors get "Home" as their default ancestor.
     const ancestors = props.ancestors || [{ title: 'Home' }];
 
-    const breadcrumbs = ancestors.map(ancestor => {
+    const breadcrumbs = ancestors.map((ancestor, index) => {
       const title = ancestor.title;
       const siteUrl = wiki.pageTitleToSiteUrl(title);
+      const separator = index > 0 ? ' / ' : '';
       return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-        'a',
-        { href: siteUrl },
-        title
+        'span',
+        null,
+        separator,
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { href: siteUrl },
+          title
+        )
       );
     });
 
@@ -1374,15 +1407,48 @@ function parseLinkTitle(title) {
  */
 class HomePage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */] {
 
+  get asyncProperties() {
+
+    const title = this.title;
+
+    // Load the wiki page with the given title.
+    const pagePromise = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.wikiPageWithTitle(title).then(wikiPage => {
+      if (!wikiPage) {
+        // If we can't find the Home page, it's an error.
+        throw `Couldn't find the wiki content for a page titled "${title}".`;
+      }
+      return {
+        ancestors: wikiPage.ancestors,
+        body: wikiPage.body
+      };
+    });
+
+    // Load the most recent bookmarks.
+    const requestBookmarkCount = 5;
+    const bookmarksPromise = __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks___default.a.mostRecentBookmarks(requestBookmarkCount).then(bookmarks => {
+      return { bookmarks };
+    });
+
+    // Merge the above with the base class' async properties.
+    return Promise.all([super.asyncProperties, pagePromise, bookmarksPromise]).then(results => {
+      return Object.assign.apply({}, results);
+    });
+  }
+
   render(props) {
-    const body = "This is the Home page.";
+
+    // Merge the bookmark list into the wiki page body to construct the final
+    // page body.
+    const bookmarkList = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__BookmarkList__["a" /* default */], { bookmarks: props.bookmarks, excludeTag: this.title });
+    const bookmarkListHtml = __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string___default()(bookmarkList);
+    const body = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.replacePlaceholderWithLinks(props.body, bookmarkListHtml);
 
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */],
       {
         ancestors: props.ancestors,
         navigation: props.navigation,
-        title: this.title,
+        title: 'Presterity',
         url: props.url
       },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('div', { dangerouslySetInnerHTML: { __html: body } })
@@ -1390,11 +1456,11 @@ class HomePage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* defaul
   }
 
   get title() {
-    return "Presterity";
+    return 'Home';
   }
 
   get titleBar() {
-    return this.title;
+    return 'Presterity';
   }
 
 }
