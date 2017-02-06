@@ -103,11 +103,20 @@ module.exports = require("node-fetch");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
  // jshint ignore:line
 
+
 class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   render(props) {
 
     const titleBar = props.titleBar || props.title && `${props.title} - Presterity` || '';
+
+    // JSX gets confused by JavaScript inside a script tag, so we define it as
+    // as a string and inject it below.
+    const analytics = `
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-90582272-1', 'auto');
+      ga('send', 'pageview');
+    `;
 
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'html',
@@ -129,7 +138,9 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { name: 'google-site-verification', content: '4TmUwdRDIEbTE65Bw8HwEyVZqJthy2MvT0S327h_Gdg' }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:title', content: props.title }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:url', content: props.url }),
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:image', content: `${props.baseUrl}/static/facebookShare.png` })
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('meta', { property: 'og:image', content: `${props.baseUrl}/static/facebookShare.png` }),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('script', { dangerouslySetInnerHTML: { __html: analytics } }),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('script', { async: true, src: 'https://www.google-analytics.com/analytics.js' })
       ),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'body',

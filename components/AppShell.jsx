@@ -1,13 +1,22 @@
 import { Component, h } from 'preact'; // jshint ignore:line
 
+
 export default class AppShell extends Component {
 
   render(props) {
 
     const titleBar =
-        props.titleBar ||
-        (props.title && `${props.title} - Presterity`) ||
-        '';
+      props.titleBar ||
+      (props.title && `${props.title} - Presterity`) ||
+      '';
+
+    // JSX gets confused by JavaScript inside a script tag, so we define it as
+    // as a string and inject it below.
+    const analytics = `
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-90582272-1', 'auto');
+      ga('send', 'pageview');
+    `;
 
     return (
       <html lang="en">
@@ -23,6 +32,8 @@ export default class AppShell extends Component {
           <meta property="og:title" content={props.title} />
           <meta property="og:url" content={props.url} />
           <meta property="og:image" content={`${props.baseUrl}/static/facebookShare.png`} />
+          <script dangerouslySetInnerHTML={{ __html: analytics }}></script>
+          <script async src='https://www.google-analytics.com/analytics.js'></script>
         </head>
         <body area={props.area}>
           <div id="root">
