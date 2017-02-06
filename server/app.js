@@ -12,31 +12,14 @@ const port = process.env.PORT || 8000;
 
 const wiki = require('./connectors/wiki');
 
-// const homePage = require('./pages/homePage');
 const robots = require('./pages/robots');
 const renderReactRoute = require('./renderReactRoute');
 // const searchPage = require('./pages/searchPage');
 const sitemap = require('./pages/sitemap');
-// const wikiLabelPage = require('./pages/wikiLabelPage');
-// const wikiPage = require('./pages/wikiPage');
 const wikiResource = require('./pages/wikiResource');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
 const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;
-
-//
-// General route handlers, which map a route to a function that returns the
-// body of the response.
-//
-const routes = {
-  // '/reference/label/:label': wikiLabelPage,
-  '/robots.txt': robots,
-  // '/search': searchPage,
-  '/sitemap.xml': sitemap,
-  // '/:title': wikiPage,
-  // '/:area/:title': wikiPage,
-  // '/': homePage
-};
 
 
 // Tell Express to serve up static content from the ./static folder.
@@ -45,22 +28,6 @@ app.use('/static', express.static(staticPath, {
   maxAge: CACHE_MAX_AGE_SECONDS * 1000 // Convert to milliseconds
 }));
 
-// Handle routes that can be rendered by React components.
-app.get('*', (request, response, next) => {
-  renderReactRoute(request)
-  .then(html => {
-    if (html) {
-      response.set({
-        'Cache-Control': CACHE_CONTROL_VALUE,
-        'Content-Type': 'text/html'
-      });
-      response.send(html);
-    } else {
-      // We didn't have a React component for this route; keep looking.
-      next();
-    }
-  });
-});
 
 //
 // Specialized route handlers.
@@ -81,8 +48,8 @@ app.get('/wiki/download/*', (request, response) => {
 });
 
 // Redirect pages by ID to their title equivalent.
-// There are cases where a wiki page link will refer to a page by ID.
-// This seems to happen if the wiki page title includes punctuation.
+// If a wiki page title includes punctuation, links will refer to it by ID
+// instead of by title.
 app.get('/reference/id/:pageId', (request, response) => {
   redirectIdToTitle(request, response);
 });
@@ -92,34 +59,50 @@ app.get('/reference/', (request, response) => {
   response.redirect('/');
 });
 
-//
-// Wire up general route handlers.
-//
-for (let route in routes) {
-  const renderFunction = routes[route];
-  app.get(route, (request, response) => {
-    renderResponse(request, renderFunction, response);
+// Robots.txt
+app.get('/robots.txt', (request, response) => {
+  const text = robots(request);
+  response.set({
+    'Cache-Control': CACHE_CONTROL_VALUE,
+    'Content-Type': 'text/plain'
   });
-}
+  response.send(text);
+});
 
+// Sitemap
+app.get('/sitemap.xml', (request, response) => {
+  const xml = sitemap(request);
+  response.set({
+    'Cache-Control': CACHE_CONTROL_VALUE,
+    'Content-Type': 'text/xml'
+  });
+  response.send(xml);
+});
+
+
+//
+// General route handler for pages that can be rendered by React components.
+//
+app.get('*', (request, response, next) => {
+  renderReactRoute(request)
+  .then(html => {
+    if (html) {
+      response.set({
+        'Cache-Control': CACHE_CONTROL_VALUE,
+        'Content-Type': 'text/html'
+      });
+      response.send(html);
+    } else {
+      // We didn't have a React component for this route; keep looking.
+      next();
+    }
+  });
+});
 
 
 //
 // Helpers
 //
-
-// Given textual content to return, infer its Content-Type.
-function inferContentType(content) {
-  if (content.startsWith('<!DOCTYPE html>')) {
-    return 'text/html';
-  } else if (content.startsWith('<?xml')) {
-    return 'text/xml';
-  } else if (content.startsWith('{')) {
-    return 'application/json';
-  } else {
-    return 'text/plain';
-  }
-}
 
 // Redirect a request for a page by ID to a request for page by title.
 function redirectIdToTitle(request, response) {
@@ -135,35 +118,15 @@ function redirectIdToTitle(request, response) {
   });
 }
 
-// Handle a web request by returning an instance of the indicated page.
-function renderResponse(request, page, response) {
-  // Render the request as page content, or a promise for content.
-  const result = page(request);
-  // If the result's not already a promise, cast it to a promise.
-  Promise.resolve(result)
-  .then(content => {
-    // Return the page content as the response.
-    response.set({
-      'Cache-Control': CACHE_CONTROL_VALUE,
-      'Content-Type': inferContentType(content)
-    });
-    response.send(content);
-  })
-  .catch(exception => {
-    log(exception);
-    if (page !== errorPage) {
-      renderResponse(request, errorPage, response);
-    }
-  });
-}
-
 // Log an error message.
 function log(exception) {
   console.log(`*** Exception: ${exception}`);
 }
 
 
+//
 // Start the server
+//
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });
