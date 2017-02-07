@@ -69,6 +69,17 @@ function labelToSiteUrl(label) {
 }
 
 /*
+ * Return a promise for a list of pages tagged with the indicated label.
+ */
+function pagesWithLabel(label) {
+  const query = `${SEARCH_URL}label=${label}`;
+  console.log(`Label page: ${query}`);
+  return fetch(query)
+  .then(response => response.json())
+  .then(json => json.results);
+}
+
+/*
  * Return the site URL for the regular page with the given title.
  */
 function pageTitleToSiteUrl(title) {
@@ -114,7 +125,9 @@ function rewriteElementAttribute($element, attributeName) {
   }
 }
 
-// Rewrite HTML for public consumption.
+/*
+ * Rewrite HTML for public consumption.
+ */
 function rewriteHtml(html) {
   const $ = cheerio.load(html); // Parse HTML
 
@@ -142,10 +155,12 @@ function rewriteHtml(html) {
   return $.html(); // Return rewritten HTML
 }
 
-// Return a promise for an array of wiki pages containing the given search text.
-//
-// This constructs a search query in Atlassian Confluence CQL:
-// https://developer.atlassian.com/confdev/confluence-server-rest-api/advanced-searching-using-cql
+/*
+ * Return a promise for an array of wiki pages containing the given search text.
+ *
+ * This constructs a search query in Atlassian Confluence CQL:
+ * https://developer.atlassian.com/confdev/confluence-server-rest-api/advanced-searching-using-cql
+ */
 function search(searchText) {
   const escapedText = encodeURIComponent(searchText);
   const query = `${SEARCH_URL}text~"${escapedText}"`;
@@ -159,9 +174,12 @@ function unescapePageTitle(escapedPageTitle) {
   return escapedPageTitle.replace(/\+/g, ' ');
 }
 
-// Return a promise for the wiki page with the given title.
-// The result is a JSON structured returned by Confluence. Wiki-relative paths
-// in the result will be modified to refer to URLs on our site instead.
+/*
+ * Return a promise for the wiki page with the given title.
+ *
+ * The result is a JSON structured returned by Confluence. Wiki-relative paths
+ * in the result will be modified to refer to URLs on our site instead.
+ */
 function wikiPageWithTitle(title) {
   const query = `${REST_URL}?spaceKey=DB&title=${title}&expand=space,ancestors,body.view`;
   console.log(`Page: ${query}`);
@@ -198,6 +216,7 @@ module.exports = {
   getTitleForPageWithId,
   HOME_PAGE_TITLE,
   labelToSiteUrl,
+  pagesWithLabel,
   pageTitleToSiteUrl,
   replacePlaceholderWithLinks,
   REST_URL,

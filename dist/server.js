@@ -152,6 +152,15 @@ function labelToSiteUrl(label) {
 }
 
 /*
+ * Return a promise for a list of pages tagged with the indicated label.
+ */
+function pagesWithLabel(label) {
+  const query = `${SEARCH_URL}label=${label}`;
+  console.log(`Label page: ${query}`);
+  return fetch(query).then(response => response.json()).then(json => json.results);
+}
+
+/*
  * Return the site URL for the regular page with the given title.
  */
 function pageTitleToSiteUrl(title) {
@@ -197,7 +206,9 @@ function rewriteElementAttribute($element, attributeName) {
   }
 }
 
-// Rewrite HTML for public consumption.
+/*
+ * Rewrite HTML for public consumption.
+ */
 function rewriteHtml(html) {
   const $ = cheerio.load(html); // Parse HTML
 
@@ -225,10 +236,12 @@ function rewriteHtml(html) {
   return $.html(); // Return rewritten HTML
 }
 
-// Return a promise for an array of wiki pages containing the given search text.
-//
-// This constructs a search query in Atlassian Confluence CQL:
-// https://developer.atlassian.com/confdev/confluence-server-rest-api/advanced-searching-using-cql
+/*
+ * Return a promise for an array of wiki pages containing the given search text.
+ *
+ * This constructs a search query in Atlassian Confluence CQL:
+ * https://developer.atlassian.com/confdev/confluence-server-rest-api/advanced-searching-using-cql
+ */
 function search(searchText) {
   const escapedText = encodeURIComponent(searchText);
   const query = `${SEARCH_URL}text~"${escapedText}"`;
@@ -240,9 +253,12 @@ function unescapePageTitle(escapedPageTitle) {
   return escapedPageTitle.replace(/\+/g, ' ');
 }
 
-// Return a promise for the wiki page with the given title.
-// The result is a JSON structured returned by Confluence. Wiki-relative paths
-// in the result will be modified to refer to URLs on our site instead.
+/*
+ * Return a promise for the wiki page with the given title.
+ *
+ * The result is a JSON structured returned by Confluence. Wiki-relative paths
+ * in the result will be modified to refer to URLs on our site instead.
+ */
 function wikiPageWithTitle(title) {
   const query = `${REST_URL}?spaceKey=DB&title=${title}&expand=space,ancestors,body.view`;
   console.log(`Page: ${query}`);
@@ -274,6 +290,7 @@ module.exports = {
   getTitleForPageWithId,
   HOME_PAGE_TITLE,
   labelToSiteUrl,
+  pagesWithLabel,
   pageTitleToSiteUrl,
   replacePlaceholderWithLinks,
   REST_URL,
@@ -629,9 +646,11 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HomePage__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SearchPage__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__WikiPage__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LabelPage__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NotFoundPage__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SearchPage__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__WikiPage__ = __webpack_require__(21);
+
 
 
 
@@ -643,10 +662,11 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
  */
 /* harmony default export */ __webpack_exports__["a"] = {
   '/error': __WEBPACK_IMPORTED_MODULE_0__ErrorPage__["a" /* default */],
-  '/notfound': __WEBPACK_IMPORTED_MODULE_2__NotFoundPage__["a" /* default */], // TODO: Remove
-  '/search': __WEBPACK_IMPORTED_MODULE_3__SearchPage__["a" /* default */],
-  '/:title': __WEBPACK_IMPORTED_MODULE_4__WikiPage__["a" /* default */],
-  '/:area/:title': __WEBPACK_IMPORTED_MODULE_4__WikiPage__["a" /* default */],
+  '/notfound': __WEBPACK_IMPORTED_MODULE_3__NotFoundPage__["a" /* default */], // TODO: Remove
+  '/search': __WEBPACK_IMPORTED_MODULE_4__SearchPage__["a" /* default */],
+  '/reference/label/:label': __WEBPACK_IMPORTED_MODULE_2__LabelPage__["a" /* default */],
+  '/:title': __WEBPACK_IMPORTED_MODULE_5__WikiPage__["a" /* default */],
+  '/:area/:title': __WEBPACK_IMPORTED_MODULE_5__WikiPage__["a" /* default */],
   '/': __WEBPACK_IMPORTED_MODULE_1__HomePage__["a" /* default */]
 };
 
@@ -1607,6 +1627,64 @@ class SearchResultsList extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"
 
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = SearchResultsList;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchResultsList__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__);
+ // jshint ignore:line
+
+
+
+
+/**
+ * A page showing all wiki pages tagged with a given label.
+ */
+class LabelPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
+
+  get asyncProperties() {
+
+    const label = this.props.request.params.label;
+    const searchPromise = __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default.a.pagesWithLabel(label).then(searchResults => {
+      return {
+        results: searchResults
+      };
+    });
+
+    return Promise.all([super.asyncProperties, searchPromise]).then(results => {
+      return Object.assign.apply({}, results);
+    });
+  }
+
+  render(props) {
+    const label = props.request.params.label;
+    const title = `Pages tagged with "${label}"`;
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+      {
+        ancestors: props.ancestors,
+        navigation: props.navigation,
+        title: title,
+        url: props.url
+      },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__SearchResultsList__["a" /* default */], { results: props.results })
+    );
+  }
+
+  get title() {
+    return this.props.request.params.label;
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = LabelPage;
 
 
 /***/ })
