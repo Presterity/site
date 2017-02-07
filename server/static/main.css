@@ -253,6 +253,10 @@ img {
   font-weight: normal;
 }
 
+.pageTitle.disabled {
+  color: #bbb;
+}
+
 .articleContainer {
   display: flex;
 }

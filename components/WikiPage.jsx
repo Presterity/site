@@ -1,6 +1,7 @@
 import { h } from 'preact'; // jshint ignore:line
 import bookmarks from '../server/connectors/bookmarks';
 import BookmarkList from './BookmarkList';
+import NotFoundPage from './NotFoundPage';
 import PageTemplate from './PageTemplate';
 import render from 'preact-render-to-string';
 import wiki from '../server/connectors/wiki';
@@ -18,10 +19,12 @@ export default class WikiPage extends PageTemplate {
     // Load the wiki page with the given title.
     const pagePromise = wiki.wikiPageWithTitle(title)
     .then(wikiPage => {
-      return {
-        ancestors: wikiPage.ancestors,
-        body: wikiPage.body
-      };
+      if (wikiPage) {
+        return {
+          ancestors: wikiPage.ancestors,
+          body: wikiPage.body
+        };
+      }
     });
 
     // Load the bookmarks tagged with the same title.
@@ -38,6 +41,17 @@ export default class WikiPage extends PageTemplate {
   }
 
   render(props) {
+
+    if (!props.body) {
+      // Page wasn't found on wiki; return "Not Found" page instead.
+      return (
+        <NotFoundPage
+          navigation={props.navigation}
+          title={this.title}
+          url={props.url}>
+        </NotFoundPage>
+      );
+    }
 
     // Merge the bookmark list into the wiki page body to construct the final
     // page body.

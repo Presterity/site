@@ -328,6 +328,8 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
   render(props) {
     const area = getArea(props);
+    const titleClass = props.disableTitle ? 'pageTitle disabled' : // For special appearance on "Not Found" page.
+    'pageTitle';
 
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
@@ -354,7 +356,7 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
             __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('img', { id: 'mobileHomeLogo', src: '/static/appIcon.png', alt: 'Presterity logo: a torch and a book' }),
             __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
               'h1',
-              { 'class': 'pageTitle' },
+              { 'class': titleClass },
               props.title
             ),
             __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
@@ -647,10 +649,8 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HomePage__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LabelPage__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NotFoundPage__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__SearchPage__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__WikiPage__ = __webpack_require__(21);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SearchPage__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__WikiPage__ = __webpack_require__(21);
 
 
 
@@ -662,11 +662,10 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
  */
 /* harmony default export */ __webpack_exports__["a"] = {
   '/error': __WEBPACK_IMPORTED_MODULE_0__ErrorPage__["a" /* default */],
-  '/notfound': __WEBPACK_IMPORTED_MODULE_3__NotFoundPage__["a" /* default */], // TODO: Remove
-  '/search': __WEBPACK_IMPORTED_MODULE_4__SearchPage__["a" /* default */],
+  '/search': __WEBPACK_IMPORTED_MODULE_3__SearchPage__["a" /* default */],
   '/reference/label/:label': __WEBPACK_IMPORTED_MODULE_2__LabelPage__["a" /* default */],
-  '/:title': __WEBPACK_IMPORTED_MODULE_5__WikiPage__["a" /* default */],
-  '/:area/:title': __WEBPACK_IMPORTED_MODULE_5__WikiPage__["a" /* default */],
+  '/:title': __WEBPACK_IMPORTED_MODULE_4__WikiPage__["a" /* default */],
+  '/:area/:title': __WEBPACK_IMPORTED_MODULE_4__WikiPage__["a" /* default */],
   '/': __WEBPACK_IMPORTED_MODULE_1__HomePage__["a" /* default */]
 };
 
@@ -1094,10 +1093,9 @@ class NotFoundPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* de
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
       {
-        ancestors: props.ancestors,
-        footer: props.footer,
         navigation: props.navigation,
         title: this.title,
+        disableTitle: true,
         url: props.url
       },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
@@ -1122,9 +1120,7 @@ class NotFoundPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* de
   }
 
   get title() {
-    // TODO: Pass in title when constructing page.
-    // return this.props.title;
-    return "Not Found";
+    return this.props.title;
   }
 
 }
@@ -1311,12 +1307,14 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__BookmarkList__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PageTemplate__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NotFoundPage__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__PageTemplate__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_preact_render_to_string__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_preact_render_to_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_preact_render_to_string__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki__);
  // jshint ignore:line
+
 
 
 
@@ -1326,18 +1324,20 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 /**
  * A page that renders content from the Atlassian wiki.
  */
-class WikiPage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */] {
+class WikiPage extends __WEBPACK_IMPORTED_MODULE_4__PageTemplate__["a" /* default */] {
 
   get asyncProperties() {
 
     const title = this.title;
 
     // Load the wiki page with the given title.
-    const pagePromise = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.wikiPageWithTitle(title).then(wikiPage => {
-      return {
-        ancestors: wikiPage.ancestors,
-        body: wikiPage.body
-      };
+    const pagePromise = __WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki___default.a.wikiPageWithTitle(title).then(wikiPage => {
+      if (wikiPage) {
+        return {
+          ancestors: wikiPage.ancestors,
+          body: wikiPage.body
+        };
+      }
     });
 
     // Load the bookmarks tagged with the same title.
@@ -1353,11 +1353,19 @@ class WikiPage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* defaul
 
   render(props) {
 
+    if (!props.body) {
+      // Page wasn't found on wiki; return "Not Found" page instead.
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_3__NotFoundPage__["a" /* default */], {
+        navigation: props.navigation,
+        title: this.title,
+        url: props.url });
+    }
+
     // Merge the bookmark list into the wiki page body to construct the final
     // page body.
     const bookmarkList = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__BookmarkList__["a" /* default */], { bookmarks: props.bookmarks, excludeTag: this.title });
-    const bookmarkListHtml = __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string___default()(bookmarkList);
-    const body = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.replacePlaceholderWithLinks(props.body, bookmarkListHtml);
+    const bookmarkListHtml = __WEBPACK_IMPORTED_MODULE_5_preact_render_to_string___default()(bookmarkList);
+    const body = __WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki___default.a.replacePlaceholderWithLinks(props.body, bookmarkListHtml);
 
     const footer = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
@@ -1393,7 +1401,7 @@ class WikiPage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* defaul
     );
 
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* default */],
+      __WEBPACK_IMPORTED_MODULE_4__PageTemplate__["a" /* default */],
       {
         ancestors: props.ancestors,
         navigation: props.navigation,
@@ -1407,7 +1415,7 @@ class WikiPage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* defaul
 
   get title() {
     const requestTitle = this.props.request.params.title;
-    const title = __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default.a.unescapePageTitle(requestTitle);
+    const title = __WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki___default.a.unescapePageTitle(requestTitle);
     return title;
   }
 

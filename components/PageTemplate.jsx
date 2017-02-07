@@ -16,6 +16,9 @@ export default class StandardPage extends Component {
 
   render(props) {
     const area = getArea(props);
+    const titleClass = props.disableTitle ?
+      'pageTitle disabled' : // For special appearance on "Not Found" page.
+      'pageTitle';
 
     return (
       <div class="pageWrapper" area={area}>
@@ -31,7 +34,7 @@ export default class StandardPage extends Component {
             <div class="gutter"></div>
             <article class="wikiContent">
               <img id="mobileHomeLogo" src="/static/appIcon.png" alt="Presterity logo: a torch and a book"/>
-              <h1 class="pageTitle">{props.title}</h1>
+              <h1 class={titleClass}>{props.title}</h1>
               <div>
                 {props.children}
               </div>

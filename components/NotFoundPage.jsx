@@ -10,10 +10,9 @@ export default class NotFoundPage extends PageTemplate {
   render(props) {
     return (
       <PageTemplate
-          ancestors={props.ancestors}
-          footer={props.footer}
           navigation={props.navigation}
           title={this.title}
+          disableTitle={true}
           url={props.url}
         >
         <p>
@@ -28,9 +27,7 @@ export default class NotFoundPage extends PageTemplate {
   }
 
   get title() {
-    // TODO: Pass in title when constructing page.
-    // return this.props.title;
-    return "Not Found";
+    return this.props.title;
   }
 
 }
