@@ -42,8 +42,13 @@ app.get('/wiki/download/*', (request, response) => {
     response.send(buffer);
   })
   .catch(exception => {
-    log(exception);
+    logException(exception);
   });
+});
+
+// Favicon.
+app.get('/favicon.ico', (request, response) => {
+  response.redirect('/static/favicon.ico');
 });
 
 // Redirect pages by ID to their title equivalent.
@@ -83,8 +88,19 @@ app.get('/sitemap.xml', (request, response) => {
 // General route handler for pages that can be rendered by React components.
 //
 app.get('*', (request, response, next) => {
-  renderReactRoute(request)
-  .then(html => {
+
+  let renderPromise;
+  try {
+    renderPromise = renderReactRoute(request);
+  } catch(exception) {
+    // Catch exceptions during creation of the promise.
+    logException(exception);
+    request.url = '/error';
+    next();
+    return;
+  }
+
+  renderPromise.then(html => {
     if (html) {
       response.set({
         'Cache-Control': CACHE_CONTROL_VALUE,
@@ -92,10 +108,32 @@ app.get('*', (request, response, next) => {
       });
       response.send(html);
     } else {
-      // We didn't have a React component for this route; keep looking.
+      // We didn't have a React component for this route; shouldn't happen.
       next();
     }
+  })
+  .catch(exception => {
+    // Catch exceptions during resolution of the promise.
+    logException(exception);
+    request.url = '/error';
+    next();
   });
+
+});
+
+// Error handler.
+app.get('/error', (request, response, next) => {
+  renderReactRoute(request)
+  .then(html => {
+    if (html) {
+      response.set({
+        'Content-Type': 'text/html'
+      });
+      response.status(500);
+      response.send(html);
+    }
+  });
+  // Don't catch exceptions.
 });
 
 
@@ -113,12 +151,12 @@ function redirectIdToTitle(request, response) {
     response.redirect(url);
   })
   .catch(exception => {
-    log(exception);
+    logException(exception);
   });
 }
 
 // Log an error message.
-function log(exception) {
+function logException(exception) {
   console.log(`*** Exception: ${exception}`);
 }
 

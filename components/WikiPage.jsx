@@ -41,7 +41,6 @@ export default class WikiPage extends PageTemplate {
   }
 
   render(props) {
-
     if (!props.body) {
       // Page wasn't found on wiki; return "Not Found" page instead.
       return (

@@ -1352,7 +1352,6 @@ class WikiPage extends __WEBPACK_IMPORTED_MODULE_4__PageTemplate__["a" /* defaul
   }
 
   render(props) {
-
     if (!props.body) {
       // Page wasn't found on wiki; return "Not Found" page instead.
       return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_3__NotFoundPage__["a" /* default */], {
