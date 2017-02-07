@@ -14,7 +14,6 @@ const wiki = require('./connectors/wiki');
 
 const robots = require('./pages/robots');
 const renderReactRoute = require('./renderReactRoute');
-// const searchPage = require('./pages/searchPage');
 const sitemap = require('./pages/sitemap');
 const wikiResource = require('./pages/wikiResource');
 

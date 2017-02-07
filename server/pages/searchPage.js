@@ -14,21 +14,6 @@ const wiki = require('../connectors/wiki');
  */
 module.exports = (request) => {
 
-  // Construct a search query in Atlassian Confluence CQL.
-  // https://developer.atlassian.com/confdev/confluence-server-rest-api/advanced-searching-using-cql
-  // TODO: move creation of this wiki-specific query to the wiki connector.
-  const searchText = request.query.q;
-  let searchPromise;
-  const isNewSearch = typeof searchText === 'undefined';
-  if (isNewSearch) {
-    searchPromise = Promise.resolve({});
-  } else {
-    const escapedText = encodeURIComponent(searchText);
-    const query = `${wiki.SEARCH_URL}text~"${escapedText}"`;
-    console.log(`Search for: ${query}`);
-    searchPromise = fetch(query).then(response => response.json());
-  }
-
   return searchPromise
   .then(json => {
 

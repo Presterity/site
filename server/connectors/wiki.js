@@ -142,6 +142,19 @@ function rewriteHtml(html) {
   return $.html(); // Return rewritten HTML
 }
 
+// Return a promise for an array of wiki pages containing the given search text.
+//
+// This constructs a search query in Atlassian Confluence CQL:
+// https://developer.atlassian.com/confdev/confluence-server-rest-api/advanced-searching-using-cql
+function search(searchText) {
+  const escapedText = encodeURIComponent(searchText);
+  const query = `${SEARCH_URL}text~"${escapedText}"`;
+  console.log(`Search for: ${query}`);
+  return fetch(query)
+  .then(response => response.json())
+  .then(json => json.results);
+}
+
 function unescapePageTitle(escapedPageTitle) {
   return escapedPageTitle.replace(/\+/g, ' ');
 }
@@ -189,7 +202,7 @@ module.exports = {
   replacePlaceholderWithLinks,
   REST_URL,
   rewriteHtml,
-  SEARCH_URL,
+  search,
   unescapePageTitle,
   wikiPageWithTitle
 };
