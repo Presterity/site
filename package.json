@@ -2,21 +2,19 @@
   "name": "site",
   "repository": "git@github.com:Presterity/site.git",
   "version": "0.0.1",
-  "devDependencies": {
+  "dependencies": {
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-react-jsx": "^6.22.0",
-    "webpack": "^2.2.1",
-    "webpack-node-externals": "^1.5.4"
-  },
-  "dependencies": {
     "cheerio": "^0.22.0",
     "express": "^4.14.0",
     "node-fetch": "^1.6.3",
-    "preact": "^6.0.0",
     "preact-render-to-string": "^3.5.0",
-    "route-parser": "^0.0.5"
+    "preact": "^6.0.0",
+    "route-parser": "^0.0.5",
+    "webpack-node-externals": "^1.5.4",
+    "webpack": "^2.2.1"
   },
   "engines": {
     "node": "7.0.0",
