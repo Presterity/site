@@ -16,6 +16,7 @@ export default class StandardPage extends Component {
 
   render(props) {
     const area = getArea(props);
+    const ancestors = getAncestors(props);
     const titleClass = props.disableTitle ?
       'pageTitle disabled' : // For special appearance on "Not Found" page.
       'pageTitle';
@@ -27,7 +28,7 @@ export default class StandardPage extends Component {
           <TopNavigation/>
           <div class="breadcrumbBar">
             <div class="gutter"></div>
-            <BreadcrumbBar ancestors={props.ancestors}/>
+            <BreadcrumbBar ancestors={ancestors}/>
             <div class="gutter"></div>
           </div>
           <div class="articleContainer">
@@ -50,18 +51,30 @@ export default class StandardPage extends Component {
 }
 
 
+function getAncestors(props) {
+  const ancestors = props.ancestors;
+  if (ancestors && ancestors.length > 0) {
+    // Page with regular ancestors
+    return ancestors;
+  } else if (props.title === 'Presterity') {
+    // Home page has no ancestors;
+    return [];
+  } else {
+    // Other top-level page are made to appear under Home.
+    // This ensures mobile users have a breadcrumb to take them back to Home.
+    return [{ title: 'Home' }];
+  }
+}
+
 // Return the site area in which this page is shown under.
 function getArea(props) {
   const ancestors = props.ancestors;
-  if (!ancestors) {
-    // Unknown
-    return '';
-  } else if (ancestors.length === 0 && props.title === 'Presterity') {
-    // Home page is in the "Home" area.
-    return 'Home';
-  } else if (ancestors.length === 0) {
-    // Top-level pages (Search, Volunteering, Submissions) are their own areas.
-    return props.title;
+  if (!ancestors || ancestors.length === 0) {
+    return props.title === 'Presterity' ?
+      // Home page is in the "Home" area.
+      'Home' :
+      // Other top-level pages (Search, etc.) are their own areas.
+      props.title;
   } else if (ancestors[0].title === 'Home') {
     // Pages beneath Home area in the "Reference" area.
     return 'Reference';

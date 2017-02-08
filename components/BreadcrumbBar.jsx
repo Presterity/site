@@ -8,10 +8,8 @@ const wiki = require('../connectors/wiki');
 export default class BreadcrumbBar extends Component {
 
   render(props) {
-
-    // Pages without known ancestors get "Home" as their default ancestor.
-    const ancestors = props.ancestors || [{ title: 'Home' }];
-
+    
+    const ancestors = props.ancestors || [];
     const breadcrumbs = ancestors.map((ancestor, index) => {
       const title = ancestor.title;
       const siteUrl = wiki.pageTitleToSiteUrl(title);
