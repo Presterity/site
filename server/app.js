@@ -10,12 +10,12 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8000;
 
-const wiki = require('./connectors/wiki');
+const wiki = require('../connectors/wiki');
 
-const robots = require('./pages/robots');
+const robots = require('./routes/robots');
 const renderReactRoute = require('./renderReactRoute');
-const sitemap = require('./pages/sitemap');
-const wikiResource = require('./pages/wikiResource');
+const sitemap = require('./routes/sitemap');
+const wikiResource = require('./routes/wikiResource');
 
 const CACHE_MAX_AGE_SECONDS = 300; // Cache for 5 minutes
 const CACHE_CONTROL_VALUE = `public,max-age=${CACHE_MAX_AGE_SECONDS}`;

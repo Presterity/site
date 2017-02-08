@@ -1,5 +1,5 @@
 import { Component, h } from 'preact'; // jshint ignore:line
-const wiki = require('../server/connectors/wiki');
+const wiki = require('../connectors/wiki');
 
 
 /**

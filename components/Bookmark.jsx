@@ -1,5 +1,5 @@
 import { Component, h } from 'preact'; // jshint ignore:line
-import wiki from '../server/connectors/wiki';
+import wiki from '../connectors/wiki';
 
 
 /**

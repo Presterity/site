@@ -12,4 +12,3 @@ not have a built-in model for dealing with that. Our convention is to do this:
 3. When the `asyncProperties` promise resolves, merge the resulting properties
    with the initial properties to construct a final property set.
 4. Render the component using the final property set.
-

@@ -1,9 +1,9 @@
 import { h } from 'preact'; // jshint ignore:line
-import bookmarks from '../server/connectors/bookmarks';
+import bookmarks from '../connectors/bookmarks';
 import BookmarkList from './BookmarkList';
 import PageTemplate from './PageTemplate';
 import render from 'preact-render-to-string';
-import wiki from '../server/connectors/wiki';
+import wiki from '../connectors/wiki';
 
 
 /**

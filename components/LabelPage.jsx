@@ -1,7 +1,7 @@
 import { h } from 'preact'; // jshint ignore:line
 import PageTemplate from './PageTemplate';
 import SearchResultsList from './SearchResultsList';
-import wiki from '../server/connectors/wiki';
+import wiki from '../connectors/wiki';
 
 
 /**
