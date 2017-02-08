@@ -1,1 +1,0 @@
-This folder contains JavaScript files that return pages and other UI widgets.
