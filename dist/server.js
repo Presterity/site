@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("preact"), require("node-fetch"), require("cheerio"), require("preact-render-to-string")) : factory(root["preact"], root["node-fetch"], root["cheerio"], root["preact-render-to-string"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -95,7 +95,7 @@ module.exports = require("preact");
  */
 
 // Cheerio is a server-side HTML jQuery-style parser/manipulator.
-const cheerio = __webpack_require__(6);
+const cheerio = __webpack_require__(7);
 const fetch = __webpack_require__(3);
 
 const BASE_URL = 'https://presterity.atlassian.net';
@@ -307,10 +307,10 @@ module.exports = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BreadcrumbBar__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Footer__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SideNavigation__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopNavigation__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BreadcrumbBar__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Footer__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SideNavigation__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TopNavigation__ = __webpack_require__(21);
  // jshint ignore:line
 
 
@@ -333,7 +333,7 @@ class StandardPage extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
       'div',
-      { 'class': 'pageWrapper', area: area },
+      { 'class': 'pageWrapper', area: area, page: props.title },
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_3__SideNavigation__["a" /* default */], { navigation: props.navigation }),
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
         'div',
@@ -417,7 +417,7 @@ module.exports = require("node-fetch");
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Bookmark__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Bookmark__ = __webpack_require__(11);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
  // jshint ignore:line
@@ -443,6 +443,48 @@ class BookmarkList extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 /***/ }),
 /* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+ // jshint ignore:line
+const wiki = __webpack_require__(1);
+
+/*
+ * Given Atlassian Confluence search results, return them as a bulleted list of
+ * clickable links.
+ */
+class SearchResultsList extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
+
+  render(props) {
+    const links = props.results && props.results.map(result => {
+      const title = result.title;
+      const escaped = wiki.escapePageTitle(title);
+      const href = `/reference/${escaped}`;
+      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'li',
+        null,
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+          'a',
+          { href: href },
+          title
+        )
+      );
+    });
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      'ul',
+      null,
+      links
+    );
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = SearchResultsList;
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -566,19 +608,19 @@ module.exports = {
 };
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("cheerio");
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = require("preact-render-to-string");
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -615,6 +657,7 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
           titleBar
         ),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('link', { rel: 'stylesheet', href: '/static/main.css' }),
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('script', { src: '/static/client.js', async: true }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('link', { rel: 'shortcut icon', href: '/static/favicon.ico', type: 'image/x-icon' }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('link', { rel: 'apple-touch-icon', sizes: '144x144', href: '/static/appIcon.png' }),
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('link', { rel: 'manifest', href: '/static/manifest.json' }),
@@ -642,15 +685,15 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HomePage__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LabelPage__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SearchPage__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__WikiPage__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ErrorPage__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HomePage__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LabelPage__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__SearchPage__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__WikiPage__ = __webpack_require__(24);
 
 
 
@@ -670,7 +713,7 @@ class AppShell extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 };
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -795,7 +838,7 @@ function parseLinkTitle(title) {
 }
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -842,7 +885,7 @@ class BreadcrumbBar extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -908,7 +951,7 @@ class DaysRemaining extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -948,14 +991,14 @@ class ErrorPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* defau
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DaysRemaining__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TweetButton__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DaysRemaining__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TweetButton__ = __webpack_require__(22);
  // jshint ignore:line
 
 
@@ -984,17 +1027,17 @@ class Footer extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__BookmarkList__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PageTemplate__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_preact_render_to_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_preact_render_to_string__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__server_connectors_wiki__);
@@ -1074,7 +1117,65 @@ class HomePage extends __WEBPACK_IMPORTED_MODULE_3__PageTemplate__["a" /* defaul
 
 
 /***/ }),
-/* 16 */
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchResultsList__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__);
+ // jshint ignore:line
+
+
+
+
+/**
+ * A page showing all wiki pages tagged with a given label.
+ */
+class LabelPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
+
+  get asyncProperties() {
+
+    const label = this.props.request.params.label;
+    const searchPromise = __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default.a.pagesWithLabel(label).then(searchResults => {
+      return {
+        results: searchResults
+      };
+    });
+
+    return Promise.all([super.asyncProperties, searchPromise]).then(results => {
+      return Object.assign.apply({}, results);
+    });
+  }
+
+  render(props) {
+    const label = props.request.params.label;
+    const title = `Pages tagged with "${label}"`;
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+      {
+        ancestors: props.ancestors,
+        navigation: props.navigation,
+        title: title,
+        url: props.url
+      },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__SearchResultsList__["a" /* default */], { results: props.results })
+    );
+  }
+
+  get title() {
+    return this.props.request.params.label;
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = LabelPage;
+
+
+/***/ }),
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1128,14 +1229,90 @@ class NotFoundPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* de
 
 
 /***/ }),
-/* 17 */
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchResultsList__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__);
+ // jshint ignore:line
+
+
+
+
+/**
+ * The Search page, withour search results (new search) or with results.
+ */
+class SearchPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
+
+  get asyncProperties() {
+
+    const searchText = this.props.request.query.q;
+
+    const isNewSearch = typeof searchText === 'undefined';
+    const searchPromise = isNewSearch ? Promise.resolve() : // Don't need to search
+    __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default.a.search(searchText).then(searchResults => {
+      return {
+        results: searchResults
+      };
+    });
+
+    return Promise.all([super.asyncProperties, searchPromise]).then(results => {
+      return Object.assign.apply({}, results);
+    });
+  }
+
+  render(props) {
+
+    const searchText = props.request.query.q;
+    const searchHeader = !props.results ? null : props.results.length > 0 ? `Pages containing "${searchText}"` : `No pages found`;
+
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
+      {
+        ancestors: props.ancestors,
+        navigation: props.navigation,
+        title: this.title,
+        url: props.url
+      },
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'form',
+        null,
+        'Search for:\xA0',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('input', { name: 'q', type: 'text', value: searchText, style: 'max-width: 50%;' }),
+        '\xA0',
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('input', { type: 'submit', value: 'Search' })
+      ),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
+        'h3',
+        null,
+        searchHeader
+      ),
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__SearchResultsList__["a" /* default */], { results: props.results })
+    );
+  }
+
+  get title() {
+    return "Search";
+  }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = SearchPage;
+
+
+/***/ }),
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
  // jshint ignore:line
-const navigationPane = __webpack_require__(22);
+const navigationPane = __webpack_require__(25);
 
 /**
  * Side navigation pane
@@ -1188,7 +1365,7 @@ class SideNavigation extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1235,13 +1412,13 @@ class SideNavigation extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 );
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TwitterIcon__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TwitterIcon__ = __webpack_require__(23);
  // jshint ignore:line
 
 
@@ -1268,7 +1445,7 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1298,18 +1475,18 @@ class TweetButton extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
 };
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__server_connectors_bookmarks__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__BookmarkList__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NotFoundPage__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__NotFoundPage__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__PageTemplate__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_preact_render_to_string__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_preact_render_to_string__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_preact_render_to_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_preact_render_to_string__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__server_connectors_wiki__);
@@ -1423,10 +1600,10 @@ class WikiPage extends __WEBPACK_IMPORTED_MODULE_4__PageTemplate__["a" /* defaul
 
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const cheerio = __webpack_require__(6);
+const cheerio = __webpack_require__(7);
 const fetch = __webpack_require__(3);
 const wiki = __webpack_require__(1);
 
@@ -1501,13 +1678,13 @@ function getNavigationFromWiki() {
 }
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__AppShell__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__AppShell__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes__ = __webpack_require__(10);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "AppShell", function() { return __WEBPACK_IMPORTED_MODULE_0__AppShell__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "routes", function() { return __WEBPACK_IMPORTED_MODULE_1__routes__["a"]; });
 
@@ -1516,182 +1693,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /**
  * Single export for all components.
  */
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchResultsList__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__);
- // jshint ignore:line
-
-
-
-
-/**
- * The Search page, withour search results (new search) or with results.
- */
-class SearchPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
-
-  get asyncProperties() {
-
-    const searchText = this.props.request.query.q;
-
-    const isNewSearch = typeof searchText === 'undefined';
-    const searchPromise = isNewSearch ? Promise.resolve() : // Don't need to search
-    __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default.a.search(searchText).then(searchResults => {
-      return {
-        results: searchResults
-      };
-    });
-
-    return Promise.all([super.asyncProperties, searchPromise]).then(results => {
-      return Object.assign.apply({}, results);
-    });
-  }
-
-  render(props) {
-
-    const searchText = props.request.query.q;
-    const searchHeader = !props.results ? null : props.results.length > 0 ? `Pages containing "${searchText}"` : `No pages found`;
-
-    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
-      {
-        ancestors: props.ancestors,
-        navigation: props.navigation,
-        title: this.title,
-        url: props.url
-      },
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-        'form',
-        null,
-        'Search for:\xA0',
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('input', { name: 'q', type: 'text', value: searchText, style: 'max-width: 50%;' }),
-        '\xA0',
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])('input', { type: 'submit', value: 'Search' })
-      ),
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-        'h3',
-        null,
-        searchHeader
-      ),
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__SearchResultsList__["a" /* default */], { results: props.results })
-    );
-  }
-
-  get title() {
-    return "Search";
-  }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = SearchPage;
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
- // jshint ignore:line
-const wiki = __webpack_require__(1);
-
-/*
- * Given Atlassian Confluence search results, return them as a bulleted list of
- * clickable links.
- */
-class SearchResultsList extends __WEBPACK_IMPORTED_MODULE_0_preact__["Component"] {
-
-  render(props) {
-    const links = props.results && props.results.map(result => {
-      const title = result.title;
-      const escaped = wiki.escapePageTitle(title);
-      const href = `/reference/${escaped}`;
-      return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-        'li',
-        null,
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-          'a',
-          { href: href },
-          title
-        )
-      );
-    });
-    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      'ul',
-      null,
-      links
-    );
-  }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = SearchResultsList;
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_preact___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_preact__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageTemplate__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__SearchResultsList__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki__);
- // jshint ignore:line
-
-
-
-
-/**
- * A page showing all wiki pages tagged with a given label.
- */
-class LabelPage extends __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */] {
-
-  get asyncProperties() {
-
-    const label = this.props.request.params.label;
-    const searchPromise = __WEBPACK_IMPORTED_MODULE_3__server_connectors_wiki___default.a.pagesWithLabel(label).then(searchResults => {
-      return {
-        results: searchResults
-      };
-    });
-
-    return Promise.all([super.asyncProperties, searchPromise]).then(results => {
-      return Object.assign.apply({}, results);
-    });
-  }
-
-  render(props) {
-    const label = props.request.params.label;
-    const title = `Pages tagged with "${label}"`;
-    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(
-      __WEBPACK_IMPORTED_MODULE_1__PageTemplate__["a" /* default */],
-      {
-        ancestors: props.ancestors,
-        navigation: props.navigation,
-        title: title,
-        url: props.url
-      },
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_preact__["h"])(__WEBPACK_IMPORTED_MODULE_2__SearchResultsList__["a" /* default */], { results: props.results })
-    );
-  }
-
-  get title() {
-    return this.props.request.params.label;
-  }
-
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = LabelPage;
 
 
 /***/ })

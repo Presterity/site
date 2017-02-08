@@ -20,7 +20,9 @@ function highlightSideNavigation(pageTitle) {
 
 window.addEventListener('load', function() {
   // For reference pages, highlight the current page in the side navigation.
-  var pageTitle = document.body.getAttribute('page');
-  highlightSideNavigation(pageTitle);
+  var pageWrapper = document.querySelector('.pageWrapper');
+  var pageTitle = pageWrapper && pageWrapper.getAttribute('page');
+  if (pageTitle) {
+    highlightSideNavigation(pageTitle);
+  }
 });
-

@@ -21,7 +21,7 @@ export default class StandardPage extends Component {
       'pageTitle';
 
     return (
-      <div class="pageWrapper" area={area}>
+      <div class="pageWrapper" area={area} page={props.title}>
         <SideNavigation navigation={props.navigation}/>
         <div class="main">
           <TopNavigation/>
