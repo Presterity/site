@@ -24,6 +24,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "postinstall": "webpack",
     "watch": "webpack --watch"
   }
 }
