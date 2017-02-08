@@ -1,5 +1,5 @@
 import { Component, h } from 'preact'; // jshint ignore:line
-const navigationPane = require('../server/pages/navigationPane');
+import wiki from '../connectors/wiki';
 
 
 /**
@@ -8,7 +8,7 @@ const navigationPane = require('../server/pages/navigationPane');
 export default class SideNavigation extends Component {
 
   get asyncProperties() {
-    return navigationPane()
+    return wiki.navigation()
     .then(html => {
       return {
         navigation: html
