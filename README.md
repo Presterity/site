@@ -2,19 +2,19 @@
 
 This is the source for the [Presterity](https://presterity.org/) web site.
 
-This is a very simple web server that retrieves pages from the
+This is a static web server that retrieves pages from the
 [Presterity wiki](https://presterity.atlassian.net/wiki/discover/all-updates)
-and renders them in a page template.
+and renders them on the server-side using React components.
 
-At the moment, all pages are rendered on the server.
-There is, as yet, no client-side JavaScript.
+At the moment, all pages are rendered nearly entirely on the server.
 
 # To run locally
 
 We prefer using [Yarn](https://yarnpkg.com/) for installs.
 
 1. `yarn install` (preferred) or `npm install`
-2. `node server/app`
+2. `yarn build` (or `yarn watch`, for watched builds)
+3. `node server/app`
 
 This will run the site at http://localhost:8000/.
 
