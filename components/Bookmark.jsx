@@ -56,12 +56,15 @@ export default class Bookmark extends Component {
       ) :
       null;
 
+    // Note: Spans with spaces exist to preserve significant whitespace in JSX.
     return (
       <tr>
         <td>{date}</td>
         <td>
-          {text}&nbsp;
-          <a href={props.link}>{domain}</a>&nbsp;
+          {text}
+          <span> </span>
+          <a href={props.link}>{domain}</a>
+          <span> </span>
           {seeAlsoSection}
           {excerpt}
         </td>
