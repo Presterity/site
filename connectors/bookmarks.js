@@ -33,6 +33,19 @@ const PRESTERITY_BOOKMARK_COLLECTION_ID = 2021037;
 const RAINDROP_REST_URL = `https://raindrop.io/api/raindrops/${PRESTERITY_BOOKMARK_COLLECTION_ID}`;
 const MAX_BOOKMARKS_PER_PAGE = 40; // Limit imposed by Raindrop.
 
+// Blacklist of individual tags for internal use only, and which will be removed
+// before display. Keep these lowercase for easier comparison.
+const hideTags = [
+  'reviewed'
+];
+
+// Blacklist of tags that indicate a bookmark should be hidden from view.
+// Keep these lowercase for easier comparison.
+const hideBookmarksWithTags = [
+  'assessments',
+  'hold'
+];
+
 
 /*
  * Return a promise for the complete set of bookmarks on the given topic.
@@ -68,8 +81,10 @@ function bookmarksForTopic(topic) {
       bookmarks = bookmarks.concat(resultPage.items);
     });
 
+    const filtered = filterBookmarks(bookmarks);
+
     // Raindrop's sorting facilities are limited, so we sort ourselves.
-    const sorted = bookmarks.sort(compareBookmarks);
+    const sorted = filtered.sort(compareBookmarks);
 
     return sorted;
   });
@@ -88,6 +103,27 @@ function compareBookmarks(bookmark1, bookmark2) {
   return 0;
 }
 
+// Return a filtered array of bookmarks:
+// * Hide bookmarks that aren't ready to be shown.
+// * Hide individual bookmark tags which are only meant for internal use.
+function filterBookmarks(bookmarks) {
+  // Filter out bookmarks which have a tag on the blacklist.
+  const filtered = bookmarks.filter(bookmark => {
+    return !bookmark.tags.find(tag =>
+      hideBookmarksWithTags.includes(tag.toLowerCase())
+    );
+  });
+
+  // Filter out tags which shouldn't appear on the site.
+  filtered.forEach(bookmark => {
+    bookmark.tags = bookmark.tags && bookmark.tags.filter(tag =>
+      !hideTags.includes(tag.toLowerCase())
+    );
+  });
+
+  return filtered;
+}
+
 // Return a promise for the indicated page of results for the given topic.
 function getResultsForPage(topic, pageNumber) {
   const escapedTopic = encodeURIComponent(topic);
@@ -104,7 +140,10 @@ function mostRecentBookmarks(count = 10) {
   console.log(`Latest bookmarks: ${url}`);
   return fetch(url)
   .then(response => response.json())
-  .then(json => json.items);
+  .then(json => {
+    const filtered = filterBookmarks(json.items);
+    return filtered;
+  });
 }
 
 // Return a promise for pages 1..pageCount of bookmarks for the given topic.
