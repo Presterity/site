@@ -1,0 +1,14 @@
+#configure the build environment
+language: node_js
+
+node_js:
+  - 4.2.3
+
+#Ensure dependencies install successfully.
+build:
+  ci:
+    - npm install
+
+#TODO: `npm run tests`
+
+#TODO: Auto-deploy after build
