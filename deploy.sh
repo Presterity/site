@@ -1,1 +1,1 @@
-git push -f git@heroku.com:presteritytest.git master
+git push -f git@heroku.com:presteritytest.git $BRANCH:master
