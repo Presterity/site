@@ -11,4 +11,4 @@ build:
 
 #TODO: `npm run tests`
 
-#TODO: Auto-deploy after build
+after_success: . ./deploy.sh

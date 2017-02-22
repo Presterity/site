@@ -1,0 +1,1 @@
+git push -f git@heroku.com:presteritytest.git master
