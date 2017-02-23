@@ -1,11 +1,12 @@
 #Configure the build environment
 language: node_js
 
+node_js:
+  - 7.6.0
+
 #Ensure dependencies install successfully.
 build:
   ci:
-    - nvm install
-    - nvm use
     - npm install
 
 #TODO: `npm run tests`
