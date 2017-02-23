@@ -13,7 +13,7 @@ const Route = require('route-parser');
  * handled, return null.
  *
  */
-function renderReactRoute(request) {
+async function renderReactRoute(request) {
 
   const page = matchRoute(request);
   if (!page) {
@@ -37,25 +37,24 @@ function renderReactRoute(request) {
 
   // Now that the component knows what's being asked of it, evaluate its async
   // properties (if any).
-  const promise = instance.asyncProperties || Promise.resolve();
-  return promise.then(asyncProps => {
+  const promise = instance.asyncProperties;
+  const asyncProps = promise ? await promise : {};
 
-    // Combine the async properties with the initial properties and render.
-    const props = Object.assign({}, initialProps, asyncProps);
-    const pageContent = instance.render(props);
+  // Combine the async properties with the initial properties and render.
+  const props = Object.assign({}, initialProps, asyncProps);
+  const pageContent = instance.render(props);
 
-    // Render the shell for the HTML page.
-    // The shell needs some properties from the page instance.
-    const shellProps = Object.assign({}, initialProps, {
-      title: instance.title,
-      titleBar: instance.titleBar
-    });
-    const rendered = render(h(components.AppShell, shellProps, pageContent));
-
-    // Prepend DOCTYPE processing instruction, which React can't render.
-    const html = `<!DOCTYPE html>${rendered}`;
-    return html;
+  // Render the shell for the HTML page.
+  // The shell needs some properties from the page instance.
+  const shellProps = Object.assign({}, initialProps, {
+    title: instance.title,
+    titleBar: instance.titleBar
   });
+  const rendered = render(h(components.AppShell, shellProps, pageContent));
+
+  // Prepend DOCTYPE processing instruction, which React can't render.
+  const html = `<!DOCTYPE html>${rendered}`;
+  return html;
 
 }
 

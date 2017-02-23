@@ -33,17 +33,16 @@ app.use('/static', express.static(staticPath, {
 //
 
 // Serve an image or other page attachment from the wiki.
-app.get('/wiki/download/*', (request, response) => {
-  wikiResource(request)
-  .then(buffer => {
+app.get('/wiki/download/*', async (request, response) => {
+  try {
+    const buffer = await wikiResource(request);
     response.set({
       'Cache-Control': CACHE_CONTROL_VALUE
     });
     response.send(buffer);
-  })
-  .catch(exception => {
+  } catch(exception) {
     logException(exception);
-  });
+  }
 });
 
 // Favicon.
@@ -87,20 +86,9 @@ app.get('/sitemap.xml', (request, response) => {
 //
 // General route handler for pages that can be rendered by React components.
 //
-app.get('*', (request, response, next) => {
-
-  let renderPromise;
+app.get('*', async (request, response, next) => {
   try {
-    renderPromise = renderReactRoute(request);
-  } catch(exception) {
-    // Catch exceptions during creation of the promise.
-    logException(exception);
-    request.url = '/error';
-    next();
-    return;
-  }
-
-  renderPromise.then(html => {
+    const html = await renderReactRoute(request);
     if (html) {
       response.set({
         'Cache-Control': CACHE_CONTROL_VALUE,
@@ -111,29 +99,24 @@ app.get('*', (request, response, next) => {
       // We didn't have a React component for this route; shouldn't happen.
       next();
     }
-  })
-  .catch(exception => {
-    // Catch exceptions during resolution of the promise.
+  } catch(exception) {
     logException(exception);
     request.url = '/error';
     next();
-  });
-
+  }
 });
 
 // Error handler.
 app.get('/error', (request, response, next) => {
-  renderReactRoute(request)
-  .then(html => {
-    if (html) {
-      response.set({
-        'Content-Type': 'text/html'
-      });
-      response.status(500);
-      response.send(html);
-    }
-  });
   // Don't catch exceptions.
+  const html = renderReactRoute(request);
+  if (html) {
+    response.set({
+      'Content-Type': 'text/html'
+    });
+    response.status(500);
+    response.send(html);
+  }
 });
 
 
@@ -142,17 +125,16 @@ app.get('/error', (request, response, next) => {
 //
 
 // Redirect a request for a page by ID to a request for page by title.
-function redirectIdToTitle(request, response) {
-  const pageId = request.params.pageId;
-  wiki.getTitleForPageWithId(pageId)
-  .then(title => {
+async function redirectIdToTitle(request, response) {
+  try {
+    const pageId = request.params.pageId;
+    const title = await wiki.getTitleForPageWithId(pageId);
     console.log(`Redirecting page by ID ${pageId} to title "${title}"`);
     const url = `/reference/${title}`;
     response.redirect(url);
-  })
-  .catch(exception => {
+  } catch (exception) {
     logException(exception);
-  });
+  }
 }
 
 // Log an error message.

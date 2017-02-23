@@ -1,9 +1,9 @@
 const fetch = require('node-fetch');
 const wiki = require('../../connectors/wiki');
 
-module.exports = (request) => {
+module.exports = async (request) => {
   const url = `${wiki.BASE_URL}${request.url}`;
   console.log(`Download: ${url}`);
-  return fetch(url)
-  .then(result => result.buffer());
+  const result = await fetch(url);
+  return result.buffer();
 };
