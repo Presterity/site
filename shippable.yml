@@ -1,4 +1,4 @@
-#configure the build environment
+#Configure the build environment
 language: node_js
 
 node_js:
@@ -11,4 +11,4 @@ build:
 
 #TODO: `npm run tests`
 
-after_success: . ./deploy.sh
+after_success: git push -f git@heroku.com:presteritytest.git $BRANCH:master

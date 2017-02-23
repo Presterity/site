@@ -1,1 +1,0 @@
-git push -f git@heroku.com:presteritytest.git $BRANCH:master
