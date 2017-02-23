@@ -11,4 +11,4 @@ build:
 
 #TODO: `npm run tests`
 
-after_success: git push -f git@heroku.com:presteritytest.git $BRANCH:master
+after_success: git push -f git@heroku.com:presteritytest.git master
