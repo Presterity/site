@@ -24,6 +24,9 @@ const labelUrlRegex = new RegExp(`${BASE_URL}/wiki/label/DB/([^"]+)`);
 // Replace links to regular pages with equivalent site URLs.
 const pageUrlRegex = /\/wiki\/display\/DB\/([^"]+)/;
 
+// Replace image downloads with equivalent site URLs.
+const downloadUrlRegex = new RegExp(`${BASE_URL}/wiki/download/([^"]+)`);
+
 // Replace links to viewpage.action URLs.
 // Confluence uses such links if a page's title contains odd characters.
 const viewpageUrlRegex = /\/wiki\/pages\/viewpage\.action\?pageId=(\d+)/;
@@ -194,6 +197,14 @@ function rewriteElementAttribute($element, attributeName) {
     return;
   }
 
+  const downloadUrlMatch = downloadUrlRegex.exec(attributeValue);
+  if (downloadUrlMatch) {
+    const path = downloadUrlMatch[1];
+    const rewritten = `/wiki/download/${path}`;
+    $element.attr(attributeName, rewritten);
+    return;
+  }
+
   const viewpageUrlMatch = viewpageUrlRegex.exec(attributeValue);
   if (viewpageUrlMatch) {
     const pageId = viewpageUrlMatch[1];
@@ -211,6 +222,19 @@ function rewriteHtml(html) {
   // Rewrite wiki-relative links in `href` attributes.
   $('a[href]').each((index, element) => {
     rewriteElementAttribute($(element), 'href');
+  });
+
+  // Rewrite wiki-relative download links.
+  $('img[src]').each((index, element) => {
+    rewriteElementAttribute($(element), 'src');
+  });
+
+  // Remove unnecessary data attributes that expose our wiki URL.
+  $('[data-base-url]').each((index, element) => {
+    $(element).removeAttr('data-base-url');
+  });
+  $('[data-image-src]').each((index, element) => {
+    $(element).removeAttr('data-image-src');
   });
 
   // Remove internal project notes.
