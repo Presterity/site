@@ -22,7 +22,8 @@ const LINKS_PLACEHOLDER = `(Topic links will automatically appear here.)`;
 const labelUrlRegex = new RegExp(`${BASE_URL}/wiki/label/DB/([^"]+)`);
 
 // Replace links to regular pages with equivalent site URLs.
-const pageUrlRegex = /\/wiki\/display\/DB\/([^"]+)/;
+const pageUrlRegex1 = /\/wiki\/display\/DB\/([^"]+)/;
+const pageUrlRegex2 = /\/wiki\/spaces\/DB\/pages\/(?:[^\/]+)\/([^"]+)/;
 
 // Replace image downloads with equivalent site URLs.
 const downloadUrlRegex = new RegExp(`${BASE_URL}/wiki/download/([^"]+)`);
@@ -189,11 +190,19 @@ function rewriteElementAttribute($element, attributeName) {
     return; // No more processing necessary.
   }
 
-  const pageUrlMatch = pageUrlRegex.exec(attributeValue);
-  if (pageUrlMatch) {
-    const title = pageUrlMatch[1];
-    const rewritten = pageTitleToSiteUrl(title);
-    $element.attr(attributeName, rewritten);
+  const pageUrlMatch1 = pageUrlRegex1.exec(attributeValue);
+  if (pageUrlMatch1) {
+    const title1 = pageUrlMatch1[1];
+    const rewritten1 = pageTitleToSiteUrl(title1);
+    $element.attr(attributeName, rewritten1);
+    return;
+  }
+
+  const pageUrlMatch2 = pageUrlRegex2.exec(attributeValue);
+  if (pageUrlMatch2) {
+    const title2 = pageUrlMatch2[1];
+    const rewritten2 = pageTitleToSiteUrl(title2);
+    $element.attr(attributeName, rewritten2);
     return;
   }
 
