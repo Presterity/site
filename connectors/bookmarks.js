@@ -142,7 +142,11 @@ function mostRecentBookmarks(count = 10) {
   .then(response => response.json())
   .then(json => {
     const filtered = filterBookmarks(json.items);
-    return filtered;
+    // As of 7 Aug 2017, Raindrop seems to ignore the perpage parameter, and
+    // returns more results than requested. Truncate to the number of results we
+    // actually want.
+    const constrained = filtered.slice(0, count);
+    return constrained;
   });
 }
 
