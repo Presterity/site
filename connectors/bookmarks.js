@@ -31,7 +31,9 @@ const fetch = require('node-fetch');
 
 const PRESTERITY_BOOKMARK_COLLECTION_ID = 2021037;
 const RAINDROP_REST_URL = `https://raindrop.io/api/raindrops/${PRESTERITY_BOOKMARK_COLLECTION_ID}`;
-const MAX_BOOKMARKS_PER_PAGE = 40; // Limit imposed by Raindrop.
+
+// Limit imposed by Raindrop. See note below at getBookmarksStartingFromPage.
+const MAX_BOOKMARKS_PER_PAGE = 25;
 
 // Blacklist of individual tags for internal use only, and which will be removed
 // before display. Keep these lowercase for easier comparison.
@@ -55,39 +57,12 @@ const hideBookmarksWithTags = [
  * titles with a date in YYYY.MM.DD format, the bookmarks will also be sorted
  * by date.
  */
-function bookmarksForTopic(topic) {
-
-  let bookmarks;
-
-  // Fetch the initial results: page 0.
-  return getResultsForPage(topic, 0)
-  .then(resultPage0 => {
-
-    // Save the page 0 bookmarks.
-    bookmarks = resultPage0.items;
-
-    // The results include a `count` property that gives the total number of
-    // bookmarks. Use this to calculate how many more pages we need fetch.
-    const bookmarkCount = resultPage0.count;
-    const pageCount = Math.ceil(bookmarkCount / MAX_BOOKMARKS_PER_PAGE);
-
-    // Now get pages 1..pageCount.
-    return getResultsForPages(topic, pageCount);
-  })
-  .then(additionalResultPages => {
-
-    // Combine bookmarks from additional pages (if any) with set from page 0.
-    additionalResultPages.forEach(resultPage => {
-      bookmarks = bookmarks.concat(resultPage.items);
-    });
-
-    const filtered = filterBookmarks(bookmarks);
-
-    // Raindrop's sorting facilities are limited, so we sort ourselves.
-    const sorted = filtered.sort(compareBookmarks);
-
-    return sorted;
-  });
+async function bookmarksForTopic(topic) {
+  const bookmarks = await getBookmarkStartingFromPage(topic, 0);
+  const filtered = filterBookmarks(bookmarks);
+  // Raindrop's sorting facilities are limited, so we sort ourselves.
+  const sorted = filtered.sort(compareBookmarks);
+  return sorted;
 }
 
 // Sort two bookmarks by title.
@@ -124,13 +99,34 @@ function filterBookmarks(bookmarks) {
   return filtered;
 }
 
-// Return a promise for the indicated page of results for the given topic.
-function getResultsForPage(topic, pageNumber) {
+// Return a promise for the bookmarks starting with the given page of bookmarks.
+// If we get a full page of bookmarks back, recursively request the remaining
+// pages of bookmarks and return the combined result. If we get less than a full
+// page of bookmarks, return that set (which may be empty). The result is that
+// we sequentially fetch all pages and return the combined set.
+//
+// NOTE: Raindrop has, on at least one occasion, reduced the number of results
+// returned per page (from 40 to 25). If they do that again, our logic is such
+// that we'd only return the first page of bookmarks requested. If we wanted to
+// be more thorough, we could keep requesting pages until a request returned
+// zero results -- but that would add an extra fetch, and this sequential
+// routine is already slow.
+async function getBookmarkStartingFromPage(topic, pageNumber) {
   const escapedTopic = encodeURIComponent(topic);
   const url = `${RAINDROP_REST_URL}?search=[{"key":"tag","val":"${escapedTopic}"}]&perpage=${MAX_BOOKMARKS_PER_PAGE}&page=${pageNumber}`;
   console.log(`Bookmarks: ${url}`);
-  return fetch(url)
-  .then(response => response.json());
+  const response = await fetch(url);
+  const results = await response.json();
+  const bookmarks = results && results.items;
+  const bookmarkCount = bookmarks ? bookmarks.length : 0;
+  if (bookmarkCount < MAX_BOOKMARKS_PER_PAGE) {
+    // No more results.
+    return bookmarks;
+  } else {
+    // Get remaining results and add them to our set.
+    const remainingBookmarks = await getBookmarkStartingFromPage(topic, pageNumber + 1);
+    return bookmarks.concat(remainingBookmarks);
+  }
 }
 
 // Return the latest bookmarks, up to a maximum of count (but no more than 40).
@@ -150,17 +146,6 @@ function mostRecentBookmarks(count = 10) {
   });
 }
 
-// Return a promise for pages 1..pageCount of bookmarks for the given topic.
-// This does *not* get the bookmarks on page 0. We handle those separately.
-// Accordingly, if pageCount is 0 or 1, this returns a resolved promise for
-// an empty array.
-function getResultsForPages(topic, pageCount) {
-  let promises = [];
-  for (let page = 1; page < pageCount; page++) {
-    promises = promises.concat(getResultsForPage(topic, page));
-  }
-  return Promise.all(promises);
-}
 
 module.exports = {
   bookmarksForTopic,
